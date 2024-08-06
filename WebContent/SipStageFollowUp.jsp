@@ -841,14 +841,14 @@ function getData(details){
 				}
 				 output +='<thead>'+       		
 		 			'<tr>	'+	        			 
-		 			'<th width="10%">Sales Eng.</th><th width="10%">SO Dt.</th><th width="10%">SO Code-No.</th><th width="10%">Customer</th><th width="10%">Project</th><th width="10%">Balance Value</th><th width="10%">Exp.Billing Date</th><th width="10%">Short Close</th><th width="10%">Reminders</th>'+	
-		 			'<th width="10%">Items</th>'+      
+		 			'<th width="7%">Sales Eng.</th><th width="5%">SO Dt.</th><th width="5%">SO Code-No.</th><th width="8%">Customer</th><th width="8%">Project</th><th width="5%">Balance Value</th><th width="5%">Exp.Billing Date</th><th width="3%">Short Close</th><th width="5%">Reminders</th>'+	
+		 			'<th width="3%">Items</th>'+      
 		 			'</tr></thead><tbody>'; 
 		 		 outputReport += '<table id="stage_detail_report" class="display nowrap" >'+
 					'<thead>'+       		
 		 			'<tr>	'+	        			 
-		 			'<th>Sales Eng.</th><th>SO Dt.</th><th>SO Code-No.</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Balance Value</th>'+	
-		 			'<th>Delivery Dt.</th><th>Item Code</th><th>Item Desc</th><th>SO UOM</th><th>Balance Quantity</th>'+   
+		 			'<th>Sales Eng.</th><th>SO Dt.</th><th>SO Code-No.</th><th>Customer</th><th>Project</th><th>Consultant</th><th th width="60px>Balance Value</th>'+	
+		 			'<th >Delivery Dt.</th><th>Item Code</th><th>Item Desc</th><th>SO UOM</th><th>Balance Quantity</th>'+   
 		 			'<th>Material Status</th><th>Payment Status</th><th>Readyness Staus</th><th>Updated On</th>'+  
 		 			'</tr></thead><tbody>'; 
 				 if(data){
@@ -865,9 +865,13 @@ function getData(details){
 					 '<td width="25%">'+$.trim(data[i].projectName)+'</td>'+ 
 					 '<td align ="right">'+$.trim(formatNumber(data[i].amount))+'</td>';
 					  output +=  '<td>'+$.trim(data[i].expLOIDate)+'<br/>';					 
-						 if(showUpdateBtn){   
-							 output += '<input type="radio" id="ExpBD'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpBD\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>';
-						 }
+						// if(showUpdateBtn){   
+						///	 output += '<input type="radio" id="ExpBD'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpBD\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>';
+						// }
+						 if(showUpdateBtn){ 
+					 		 	output += '<label style="color:blue;text-transform: uppercase;"><input type="radio" name="poupdate" id="ExpBD'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpBD\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>'	 		 
+					 		  			 '</label>';
+					 		   }
 					  output +=  ' </td>';	
 					  output +=  ' <td>';
 						 if(showUpdateBtn){   
@@ -913,7 +917,7 @@ function getData(details){
 				 output +='<thead>'+       		
 		 			'<tr>	'+	        			 
 		 			'<th>Sales Eng.</th><th>Qtn Dt.</th><th>Qtn No.-Code</th><th>Cons<br> Win %</th> <th>Cont <br> Win %</th><th>Total Win % <a href= "#" data-toggle="modal" data-target="#help-modaltotalwinning"> <i class="fa fa-info-circle pull-right" style="color: #2196f3;font-size: 15px;margin-top: 4px;"></i></a></th><th>SE WIN%</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Amount</th><th style="display: none;"></th><th>Follow-Up <br> Status</th><th>Follow-Up <br> Remark</th><th>Focus List</th>'+	
-		 			'<th>Exp.PODate</th><th>Exp. InvDate</th><th width="100px">Lost <br>Hold<br>  Status</th><th>Reminders</th>'+      
+		 			'<th>Exp.PODate</th><th>Exp. InvDate</th><th width="60px">Lost <br>Hold<br>  Status</th><th>Reminders</th>'+      
 		 			'</tr></thead><tbody>'; 
 				 if(data){
 					 stage23List = data; 
@@ -1025,7 +1029,7 @@ function getData(details){
 				 output +='<thead>'+       		
 		 			'<tr>	'+	        			 
 		 			'<th>Sales Eng.</th><th>Qtn Dt.</th><th>Qtn<br/> Code-No</th><th>Cons<br/> Win %</th> <th>Cont<br/> Win %</th><th>Total<br/> Win % <a href= "#" data-toggle="modal" data-target="#help-modaltotalwinning"> <i class="fa fa-info-circle pull-right" style="color: #2196f3;font-size: 15px;margin-top: 4px;"></i></a></th><th>SE WIN%</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Product is Specified</th><th>Amount</th><th style="width: 0.1px; border: none; padding: 0; display: none;"></th><th>Follow-Up <br> Status</th><th>Follow-Up <br> Remarks</th><th>Focus List</th>'+	
-		 			'<th>Exp.LOI Date</th><th width="80px">Lost <br> Hold <br> Status</th><th>Submittal Status</th><th>Reminder</th>'+      
+		 			'<th>Exp.LOI Date</th><th width="60px">Lost <br> Hold <br> Status</th><th>Submittal Status</th><th>Reminder</th>'+      
 		 			'</tr></thead><tbody>'; 
 				 if(data){
 					 stage23List = data; 
@@ -1116,9 +1120,13 @@ function getData(details){
 					 totalAmount = totalAmount+Math.round(data[i].qtnAmount);
 					 
 					 output +=  '<td>'+$.trim(data[i].expLOIDate) +'<br/>';					 
-					 if(showUpdateBtn){   
-						 output += '<input type="radio" id="ExpLOI'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpLOI\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>';
-					 }
+					// if (showUpdateBtn) {
+					//	    output += '<input type="radio" name="poupdate" id="ExpLOI'  + $.trim(data[i].cqhSysId) + '" onClick="openLostHoldStg3Window(event,\'' + $.trim(data[i].cqhSysId) + '\',\'' + $.trim(data[i].qtnCode) + '\',\'' + $.trim(data[i].qtnNo) + '\',\'ExpLOI\',\'' + $.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/") + '\',\'' + $.trim(data[i].seCode) + '\')">';
+					//	}
+					 if(showUpdateBtn){ 
+				 		 	output += '<label style="color:blue;text-transform: uppercase;"><input type="radio" name="poupdate" id="ExpLOI'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpLOI\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Update'	 		 
+				 		  			 '</label>';
+				 		   }
 					 output +=  ' </td>';					 
 					
 					 output +=  ' <td>';
@@ -2814,8 +2822,9 @@ function updatePODetails(obj,loiAmount){
 	 // var qtnCode = document.getElementById("qtnCode").value;
 	 // var qtnNo = document.getElementById("qtnNo").value;
 	  if(!poDate){
-		  alert("Please select Expected PO date");
-		  return false;
+		 // alert("Please select Expected PO date");
+		  //return false;
+		  poDate='';
 	     }
 		   	$.ajax({
 		   		type: 'POST', 
@@ -2827,6 +2836,7 @@ function updatePODetails(obj,loiAmount){
 				 if(parseInt(data)=== 1){
 					 reasonBox.style.display ="none";
 					 document.getElementById("po"+qtnId+"").parentElement.parentElement.innerHTML = poDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='po"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"PO\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
+					 closeLostHoldStg3RequestWindow();
 					 return true;					 
 				 }else{		
 					 alert("Something went wrong. Please refresh the page and try again")
@@ -2857,8 +2867,14 @@ function updateExpLOIDetails(obj,loiAmount){
 		   		success: function(data) {
 				 if(parseInt(data)=== 1){
 					 reasonBox.style.display ="none";
-					 //document.getElementById("ExpLOI"+qtnId+"").parentElement.parentElement.innerHTML = poDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpLOI"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
-					  title.innerHTML="<strong>Updated! Please refresh the page</strong>";
+					 document.getElementById("ExpLOI"+qtnId+"").parentElement.parentElement.innerHTML = expLOIDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpLOI"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
+			      //	 title.innerHTML = "<strong>Updated! Please refresh the page</strong>";
+
+                    // var expLOIElement = document.getElementById("ExpLOI" + qtnId).parentElement.parentElement.innerHTML;
+                    //expLOIElement = expLOIDate + "<input type='radio' name='poupdate' id='ExpLOI" + qtnId + "' onclick='openLostHoldStg3Window(event,\"" + qtnId + "\",\"" + data.qtnCode + "\",\"" + data.qtnNo + "\",\"ExpLOI\",\"" + data.qtnDt.substring(0, 10).split("-").reverse().join("/") + "\",\"" + segsalescode + "\")'> Update";
+         
+					 //title.innerHTML="<strong>Updated! Please refresh the page</strong>";
+					 expLOIDateUpdaterequestWindow.style.display = "none";
 					 return true;					 
 				 }else{		
 					 alert("Something went wrong. Please refresh the page and try again")
@@ -2873,6 +2889,7 @@ function updateExpLOIDetails(obj,loiAmount){
 			});
 
 }
+
 function updateExpOrderDetails(obj,loiAmount){
 	  var expOrderDate= document.getElementById('datepicker-18').value;		
 	  var title = document.getElementById("expOrderDateUpdatereasonheading");	
@@ -2908,7 +2925,11 @@ function updateExpBillingDetails(obj,loiAmount){
 	  var title = document.getElementById("expBillingDateUpdatereasonheading");	
 	  var reasonBox = document.getElementById("expBillingDateUpdatereasonbox");	  
 	  var segsalescode = document.getElementById("segsalescode").value;
-	
+	  if(!expBillingDate){
+			 // alert("Please select Expected PO date");
+			  //return false;
+			  expBillingDate='';
+		     }
 		   	$.ajax({
 		   		type: 'POST', 
 		   		url: 'SipStageFollowUpController',
@@ -2918,7 +2939,9 @@ function updateExpBillingDetails(obj,loiAmount){
 				 if(parseInt(data)=== 1){
 					 reasonBox.style.display ="none";
 					 //document.getElementById("ExpLOI"+qtnId+"").parentElement.parentElement.innerHTML = poDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpLOI"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
-					  title.innerHTML="<strong>Updated! Please refresh the page</strong>";
+					  title.innerHTML="<strong>Updated</strong>";
+					 document.getElementById("ExpBD"+qtnId+"").parentElement.parentElement.innerHTML = expBillingDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpBD"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'> </label>";
+					 expBillingDateUpdaterequestWindow.style.display = "none";
 					 return true;					 
 				 }else{		
 					 alert("Something went wrong. Please refresh the page and try again")
@@ -2979,8 +3002,9 @@ function updateINVDetails(obj,loiAmount){
 	  var reasonBox = document.getElementById("invUpdaterequestWindow");	  
 	  var segsalescode = document.getElementById("segsalescode").value;
 	  if(!invDate){
-		  alert("Please select Expected Invoice date");
-		  return false;
+		/*   alert("Please select Expected Invoice date");
+		  return false; */
+		  invDate='';
 	     }
 		   	$.ajax({
 		   		type: 'POST', 

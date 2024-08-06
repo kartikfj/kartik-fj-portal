@@ -116,10 +116,12 @@ public class Leave {
 	public String getLeaveStatusOfDay(Date sd) {
 		String status = "";
 		try {
+			System.out.println("try====== ");
 			for (Object o : this.apprleaveapplications) {
+				System.out.println("for====== ");
 				LeaveApplication lv = (LeaveApplication) o;
 				if (sd.getTime() >= lv.getFromdate().getTime() && sd.getTime() <= lv.getTodate().getTime()) {
-					System.out.println("Date== " + sd);
+					System.out.println("Date====== " + sd);
 					status = lv.getLeavetype();
 					return status;
 				}
