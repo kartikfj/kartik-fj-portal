@@ -191,9 +191,9 @@ public class salesManagerPerfController extends HttpServlet {
 			String result = sipChartDbUtil.checkSalesMgrPerfTabisAllowed(smEmpCode);
 			// Fetch data from the database
 			if (fjtuser.getSalesDMYn() >= 1 || result.equals("Yes")) {
-				theStage5DtList = sipChartDbUtil.stage5SummaryDetailsForPerf(smEmpCode);
+				theStage5DtList = sipChartDbUtil.stage5SummaryBillingDetailsForPerf(smEmpCode);
 			} else {
-				theStage5DtList = sipChartDbUtil.stage5SummaryDetailsForSE(smCode);
+				theStage5DtList = sipChartDbUtil.stage5SummaryBillingDetailsForSE(smCode);
 			}
 			// Set response content type and write JSON
 			response.setContentType("application/json");
@@ -227,9 +227,9 @@ public class salesManagerPerfController extends HttpServlet {
 			// Fetch data from the database
 
 			if (fjtuser.getSalesDMYn() >= 1 || result.equals("Yes")) {
-				theStage5DtList = sipChartDbUtil.stage3SummaryDetailsss(smEmpCode);
+				theStage5DtList = sipChartDbUtil.stage3SummaryBookingDetailsForPerf(smEmpCode);
 			} else {
-				theStage5DtList = sipChartDbUtil.stage3SummaryDetailsForSEE(smCode);
+				theStage5DtList = sipChartDbUtil.stage3SummaryBookingDetailsForSE(smCode);
 			}
 			// Set response content type and write JSON
 			response.setContentType("application/json");
