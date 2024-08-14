@@ -345,9 +345,9 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 	       
 	 var data = google.visualization.arrayToDataTable(getSalesGraphRemoveYTD(bookings, '${MTH}')); 
           // Set chart options
-        
+        // Monthly Target - <c:forEach var="ytm_tmp" items="${YTM_BOOK}"> <fmt:formatNumber type="number"   value="${ytm_tmp.monthly_target}"/> :
           var options = {
-						  'title':'Monthly Target - <c:forEach var="ytm_tmp" items="${YTM_BOOK}"> <fmt:formatNumber type="number"   value="${ytm_tmp.monthly_target}"/> : Yearly Target - <fmt:formatNumber type="number"   value="${ytm_tmp.yr_total_target}"/>\r\n YTD Actual -    <fmt:formatNumber type="number"   value="${ytm_tmp.ytm_actual}"/> : YTD Target - <fmt:formatNumber type="number"   value="${ytm_tmp.ytm_target}"/></c:forEach>.',				 
+						  'title':'Booking Analysis - ${syrtemp}, ('+durationFltr+'). \r\n  Yearly Target - <fmt:formatNumber type="number"   value="${ytm_tmp.yr_total_target}"/>\r\n YTD Actual -    <fmt:formatNumber type="number"   value="${ytm_tmp.ytm_actual}"/>      ||    YTD Target - <fmt:formatNumber type="number"   value="${ytm_tmp.ytm_target}"/></c:forEach>.',				 
 						 
 						  'vAxis': {title: 'Amount (In Millions)',titleTextStyle: {italic: false},viewWindow:{ min:0},format: 'short'},
 		                  'is3D':true,
@@ -372,7 +372,7 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 						        width: '100%'
 						      },
 						      pointSize:4,
-						      bar: { groupWidth: "10%" },
+						      bar: { groupWidth: "25%" },
 						      'height': 240,
 						      'legend': {
 						        position: 'top'
@@ -403,7 +403,7 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 	    } 
 	 var data = google.visualization.arrayToDataTable(getSalesGraphRemoveYTD(billing, '${MTH}'));	
      // Set chart options
-     var options = {'title':'Monthly Target - <c:forEach var="ytm_tmp" items="${YTM_BILL}"> <fmt:formatNumber type="number"   value="${ytm_tmp.monthly_target}" /> : Yearly Target - <fmt:formatNumber type="number"   value="${ytm_tmp.yr_total_target}" />\r\n YTD Actual - <fmt:formatNumber type="number"   value="${ytm_tmp.ytm_actual}"/> : YTD Target - <fmt:formatNumber type="number"   value="${ytm_tmp.ytm_target}"/></c:forEach>  ',	
+     var options = {    'title': 'Billing Analysis - ${syrtemp}, (' + durationFltr + ').\r\n Yearly Target - <c:forEach var="ytm_tmp" items="${YTM_BILL}"> <fmt:formatNumber type="number" value="${ytm_tmp.yr_total_target}" />\r\n YTD Actual - <fmt:formatNumber type="number" value="${ytm_tmp.ytm_actual}" /> || YTD Target - <fmt:formatNumber type="number" value="${ytm_tmp.ytm_target}" /></c:forEach>',
    		  'vAxis': {title: 'Amount (In Millions)',titleTextStyle: {italic: false},viewWindow:{ min:0},format: 'short'}, 
    		
    		         'is3D':true,
@@ -427,7 +427,7 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 					        width: '100%'
 					      },
 					      pointSize:4,
-					      bar: { groupWidth: "10%" },
+					      bar: { groupWidth: "25%" },
 					      'height': 240,
 					      'legend': {
 					        position: 'top'
@@ -547,8 +547,9 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 					        height: '100%',
 					        width: '100%'
 					      },
+					   //   bar: { groupWidth: "25%" },
 					      pointSize:4,
-					      bar: { groupWidth: "10%" },
+					     bar: { groupWidth: "25%" },
 					      'height': 240,
 					      'legend': {
 					        position: 'top'
@@ -725,8 +726,9 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 				        height: '100%',
 				        width: '100%'
 				      },
+				     // bar: { groupWidth: "25%" },
 				      pointSize:4,
-				      bar: { groupWidth: "10%" },	
+				      bar: { groupWidth: "25%" },	
 				      'height': 240,
 				      'legend': {
 				        position: 'top'
@@ -1404,10 +1406,10 @@ $('#mrInfJihLstGrpTbl').DataTable( {
            <div class="box-header with-border">			
 			<c:choose>
  				<c:when test="${syrtemp < CURR_YR}">
- 					<h3 class="box-title" >Booking Target Vs Actual Booking - ${syrtemp},(FY)</h3>
+ 				 <%-- 	<h4 class="box-title" >Booking Target ${syrtemp},(FY)</h4>  --%>
  				</c:when>
  				<c:otherwise>
- 					<h3 class="box-title" >Booking Target Vs Actual Booking - ${syrtemp},(YTD)</h3>
+ 					<%--  <h4 class="box-title" >Booking Target ${syrtemp},(YTD)</h4>  --%>
  				</c:otherwise>
  			</c:choose>
 			<div class="help-right-lost" id="help-bkngvsblng">
@@ -1423,33 +1425,10 @@ $('#mrInfJihLstGrpTbl').DataTable( {
             <!-- /.box-body -->
           </div>
          
-          <!-- /.box -->  
-   
-   	    <!-- box -->  
-             <div class="box box-danger" style="margin-bottom: 8px;border-color:#607d8b;">
-           <div class="box-header with-border">
-			 <c:choose>
-					<c:when test="${syrtemp < CURR_YR}">
-						<h3 class="box-title" id="blng-graph-title">Billing Target Vs Monthly Orders Received(Stage3 to 4) - ${syrtemp},(FY)</h3>
-					</c:when>
-					<c:otherwise>
-						<h3 class="box-title" id="blng-graph-title">Billing Target Vs Monthly Orders Received(Stage3 to 4) - ${syrtemp},(YTD)</h3>
-					</c:otherwise>
-				</c:choose>
-			</div>
-            <div class="box-body">
-                <div class="chart">
-                    <div id="prf_billings4_ytd" style="height:230px;margin-top:-5px;"></div>  <br/>
-               <div class="overlay">
-				<a href="#" data-toggle="modal" data-target="#bngs4_moreinfo_modal">More info
-				 <i class="fa fa-arrow-circle-right"></i></a> </div> 
-              </div> 
-            </div>
-            <!-- /.box-body -->
-          </div>
-                 
+          <!-- /.box -->
+         
                <!-- box -->    
-            <div class="box box-danger" style="margin-bottom: 8px;border-color:#607d8b;">  
+                <div class="box box-danger" style="margin-bottom: 8px;border-color:#607d8b;">  
             <div class="box-body">
                 <div class="chart">
                     <div id="cv_pfm_ytd" style="height:230px;margin-top:-10px;"></div>  <br/>
@@ -1463,6 +1442,23 @@ $('#mrInfJihLstGrpTbl').DataTable( {
           <!-- /.box --> 
 				
 	   
+   
+             <!-- Billing Last 3 years chart CHART -->
+  
+      <div class="box box-danger" style="margin-bottom: 8px;border-color:#607d8b;right:10px;">
+           <div class="box-header with-border">
+			<h3 class="box-title" >Billing  3 Years Analysis of ${selected_salesman_code} -(YTD)</h3>
+			</div>
+            <div class="box-body">
+              <div id="blng_sum_3_yr" style="height:230px;margin-top:-10px;"></div>  <br/>
+               <div class="overlay">
+				<a href="#" data-toggle="modal" data-target="#blng3yr_moreinfo_modal">More info
+				 <i class="fa fa-arrow-circle-right"></i></a> </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+         
+          <!-- /.box -->
         </div>
         
         <!-- /.col (LEFT) -->
@@ -1560,15 +1556,40 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 			 	</c:otherwise>
 	 		</c:choose>
      </h3>
-     <h6>YTD Booking Target : <fmt:formatNumber type="number"   value="${guage_bkng_ytd_target}"/>   || YTD Billing Target : <fmt:formatNumber type="number"   value="${guage_blng_ytd_target}"/> </h6>
-     <h6>YTD Booking Actual : <fmt:formatNumber type="number"   value="${actual}"/>    || YTD Billing Actual : <fmt:formatNumber type="number"   value="${actualbl}"/>  </h6> 
+     <style>
+  .bg-color-1 {
+    background-color: #ff9999; /* Change to your desired color */
+  }
+  
+  .bg-color-3 {
+    background-color: #99ff99; /* Change to your desired color */
+  }
+ 
+</style>
+     
+ <h6>
+    <span class="bg-color-1">YTD Booking Target: <fmt:formatNumber type="number" value="${guage_bkng_ytd_target}"/></span>
+    &nbsp; &nbsp; &nbsp; ||
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <span class="bg-color-3">YTD Billing Target: <fmt:formatNumber type="number" value="${guage_blng_ytd_target}"/></span>
+  </h6>
+  
+  <h6>
+    <span class="bg-color-1">YTD Booking Actual: <fmt:formatNumber type="number" value="${actual}"/></span>
+    &nbsp; &nbsp; &nbsp; ||
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <span class="bg-color-3">YTD Billing Actual: <fmt:formatNumber type="number" value="${actualbl}"/></span>
+  </h6>
       </div>		
 	   <div class="row">
 	   			 <div class="col-lg-1 col-xs-0" ></div>
 	   			 
-	   			 <div class="col-lg-5 col-xs-6  sep" ><div id="guage_test_booking"></div> </div>
+	   			<div class="col-lg-5 col-xs-6 sep">
+    <div id="guage_test_booking" style="background-color: #ff9999;"></div>
+</div>
+	   			
 	   		
-       	          <div class="col-lg-5 col-xs-6"> <div id="guage_test_billing"></div>
+       	          <div class="col-lg-5 col-xs-6"> <div id="guage_test_billing" style="background-color: #99ff99;"></div>
 		          </div><div class="col-lg-1 col-xs-0" ></div>
 		          </div>
      </div>
@@ -1581,21 +1602,21 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 
         
          <!-- BILLING CHART -->
-          <div class="box box-success" style="margin-bottom: 8px;border-color:#607d8b;right:10px;">
+          <div class="box box-success" style="margin-bottom: 8px;border-color:#607d8b;right:5px;">
                <div class="box-header with-border">						 
 						 <c:choose>
 							<c:when test="${syrtemp < CURR_YR}">
-								<h3 class="box-title" id="blng-graph-title">Billing Target Vs Actual Billing - ${syrtemp},(FY)</h3>
+								<%-- <h4 class="box-title" id="blng-graph-title">Billing Target - ${syrtemp},(FY)</h4> --%>
 							</c:when>
 							<c:otherwise>
-								<h3 class="box-title" id="blng-graph-title">Billing Target Vs Actual Billing - ${syrtemp},(YTD)</h3>
+							 <%-- 	<h4 class="box-title" id="blng-graph-title">Billing Target - ${syrtemp},(YTD)</h4>  --%>
 							</c:otherwise>
 						</c:choose>
               </div>
             <div class="box-body" id="blng_box_body">
 	           <div id="blngs-dt" class="tab-pane fade  in active" >
 	              <div class="chart">
-	                <div id="prf_summ_billing_ytd" style="height:225px;margin-top:-5px;"></div> 
+	                <div id="prf_summ_billing_ytd" style="height:230px;margin-top:-4px;"></div> 
 	                 <br/>
 	               <div class="overlay">
 					<a href="#" data-toggle="modal" data-target="#billing_moreinfo_modal">More info
@@ -1608,29 +1629,10 @@ $('#mrInfJihLstGrpTbl').DataTable( {
           <!-- /.billing box -->
           
           
-          <!-- /.box --> 
-          
-    <!-- Billing Last 3 years chart CHART -->  
-      <div class="box box-danger" style="margin-bottom: 8px;border-color:#607d8b;right:10px;">
-           <div class="box-header with-border">
-			<h3 class="box-title" >Billing  3 Years Analysis of ${selected_salesman_code} -(YTD)</h3>
-			</div>
-            <div class="box-body">
-              <div id="blng_sum_3_yr" style="height:235px;margin-top:-10px;"></div>  <br/>
-               <div class="overlay">
-				<a href="#" data-toggle="modal" data-target="#blng3yr_moreinfo_modal">More info
-				 <i class="fa fa-arrow-circle-right"></i></a> </div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-         
           <!-- /.box -->
           
-         
-          <!-- /.box -->
-          
-               <!-- JIH Qtn lost analysis box -->  
-           <div class="box box-danger" style="margin-bottom: 8px;border-color:#607d8b;right:10px;">
+                  <!-- box -->  
+             <div class="box box-danger" style="margin-bottom: 8px;border-color:#607d8b;">
            <div class="box-header with-border">
 			<h3 class="box-title" >JIH Qtn. Lost Analysis - ${syrtemp} </h3>
 			</div>
@@ -1639,6 +1641,30 @@ $('#mrInfJihLstGrpTbl').DataTable( {
                     <div id="jihLostCountAnlysys" style="height:200px;margin-top:-20px;"></div>  <br/>
                <div class="overlay">
 				<a href="#" data-toggle="modal" data-target="#jihLostModalGraph">More info
+				 <i class="fa fa-arrow-circle-right"></i></a> </div> 
+              </div> 
+            </div>
+            <!-- /.box-body -->
+          </div>
+         
+          <!-- /.box -->
+            <!-- box -->  
+             <div class="box box-danger" style="margin-bottom: 8px;border-color:#607d8b;">
+           <div class="box-header with-border">
+			 <c:choose>
+					<c:when test="${syrtemp < CURR_YR}">
+						<h3 class="box-title" id="blng-graph-title">Billing Target Vs Stage-4(SO) Amount - ${syrtemp},(FY)</h3>
+					</c:when>
+					<c:otherwise>
+						<h3 class="box-title" id="blng-graph-title">Billing Target Vs Stage-4(SO) Amount - ${syrtemp},(YTD)</h3>
+					</c:otherwise>
+				</c:choose>
+			</div>
+            <div class="box-body">
+                <div class="chart">
+                    <div id="prf_billings4_ytd" style="height:230px;margin-top:-5px;"></div>  <br/>
+               <div class="overlay">
+				<a href="#" data-toggle="modal" data-target="#bngs4_moreinfo_modal">More info
 				 <i class="fa fa-arrow-circle-right"></i></a> </div> 
               </div> 
             </div>
@@ -2714,7 +2740,14 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 <!-- Bootstrap 3.3.7 -->
 
 <!-- ChartJS -->
-
+<style>
+.no-select {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+</style>
 <!-- FastClick -->
 <script src="resources/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -3017,48 +3050,59 @@ function changeTitle(title){
 	$('#jihlost-title').html(title);
 }
 function showstage3Jobs(){
-	 $('#laoding').show();
+    $('#laoding').show();
 
-	  
-	 var ttl="<b>Details of Job Moved  from Stage 2 to Stage 3</b> ";
-	 var exclTtl="Details of Job Moved  from Stage 2 to Stage 3";
-	 $("#job_moved_dtls_main .modal-title").html(ttl); $.ajax({ type: 'POST',url: 'sip',  data: {fjtco: "3sdvmboj"}, dataType: "json",
-	 success: function(data) {
-		
-		 $('#laoding').hide();
-		
-		 var output="<table id='job_moved_dtls_excl' class='table table-bordered small'><thead><tr>"+ "<th>#</th><th>Week<br/>(Based on LOI Date)</th><th>Sales Egr: Code</th><th>Sales Egr: Name</th><th>Project Code</th><th>Qtn-Code</th><th>Qtn Number</th><th>Qtn-Date</th>"+
-	 "<th>LOI Date</th><th>Product</th><th>Region</th><th>Cusomer Name</th><th>Contact Person</th><th>Contact Number</th><th>Consultant</th></tr></thead><tbody>";
-	 
-	 var j=0; for (var i in data) { j=j+1;
-	 
-	 output+="<tr><td>"+j+"</td><td>" + data[i].d1 + "</td>"+"<td>" + data[i].d2 + "</td><td>" + data[i].d3+ "</td>"+ "<td>" + data[i].d4 + "</td><td>" + data[i].d5 + "</td>"+
-	 "<td>" + data[i].d6 + "</td><td>" + $.trim(data[i].d7.substring(0, 10)).split("-").reverse().join("/") + "</td>"+ "<td>" + $.trim(data[i].d8.substring(0, 10)).split("-").reverse().join("/") + "</td><td>" + data[i].d9 + "</td>"+ "<td>" + data[i].d10 + "</td><td>" + data[i].d11 + "</td>"+
-	 "<td>" +data[i].d12 + "</td><td>" + data[i].d13 + "</td>"+ "<td>" + data[i].d14 + "</td></tr>"; } //output+="<tr><td colspan='17'><b>Total</b></td><td><b style='color:blue;'>"+str+"</b></td></tr>"; 
-	 output+="</tbody></table>";
-	 
+    var ttl = "<b>Details of Job Moved from Stage 2 to Stage 3</b>";
+    var exclTtl = "Details of Job Moved from Stage 2 to Stage 3";
+    $("#job_moved_dtls_main .modal-title").html(ttl);
 
-	 $("#job_moved_dtls_main .modal-body").html(output);$("#job_moved_dtls_main").modal("show");	
-	 
-		    $('#job_moved_dtls_excl').DataTable( {
-		        dom: 'Bfrtip',  
-		        "columnDefs" : [{"targets":[7,8], "type":"date-eu"}],
-		        buttons: [
-		            {
-		                extend: 'excelHtml5',
-		                text:      '<i class="fa fa-file-excel-o" style="color: green; font-size: 2em;"></i>',
-		                filename: exclTtl,
-		                title: exclTtl,
-		                messageTop: 'File Processed on : ${currCal} ,The information in this file is copyright to Faisal Jassim Group.'
-		                
-		                
-		            }
-		          
-		           
-		        ]
-		    } );
-		},error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
-	
+    $.ajax({
+        type: 'POST',
+        url: 'sip',
+        data: { fjtco: "3sdvmboj" },
+        dataType: "json",
+        success: function(data) {
+            $('#laoding').hide();
+
+            var output = "<table id='job_moved_dtls_excl' class='table table-bordered small no-select'><thead><tr>" + 
+                "<th>#</th><th>Week<br/>(Based on LOI Date)</th><th>Sales Egr: Code</th><th>Sales Egr: Name</th><th>Project Code</th><th>Qtn-Code</th><th>Qtn Number</th><th>Qtn-Date</th>" +
+                "<th>LOI Date</th><th>Product</th><th>Region</th><th>Cusomer Name</th><th>Contact Person</th><th>Contact Number</th><th>Consultant</th></tr></thead><tbody>";
+
+            var j = 0;
+            for (var i in data) {
+                j = j + 1;
+                output += "<tr><td>" + j + "</td><td>" + data[i].d1 + "</td><td>" + data[i].d2 + "</td><td>" + data[i].d3 + "</td>" +
+                    "<td>" + data[i].d4 + "</td><td>" + data[i].d5 + "</td>" +
+                    "<td>" + data[i].d6 + "</td><td>" + $.trim(data[i].d7.substring(0, 10)).split("-").reverse().join("/") + "</td>" +
+                    "<td>" + $.trim(data[i].d8.substring(0, 10)).split("-").reverse().join("/") + "</td><td>" + data[i].d9 + "</td>" +
+                    "<td>" + data[i].d10 + "</td><td>" + data[i].d11 + "</td>" +
+                    "<td>" + data[i].d12 + "</td><td>" + data[i].d13 + "</td>" +
+                    "<td>" + data[i].d14 + "</td></tr>";
+            }
+            output += "</tbody></table>";
+
+            $("#job_moved_dtls_main .modal-body").html(output);
+            $("#job_moved_dtls_main").modal("show");
+
+            $('#job_moved_dtls_excl').DataTable({
+                dom: 'frtip', // Exclude 'B' to remove buttons
+                "columnDefs": [{ "targets": [7, 8], "type": "date-eu" }],
+                /*buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel-o" style="color: green; font-size: 2em;"></i>',
+                        filename: exclTtl,
+                        title: exclTtl,
+                        messageTop: 'File Processed on : ${currCal} ,The information in this file is copyright to Faisal Jassim Group.'
+                    }
+                ]*/
+            });
+        },
+        error: function(data, status, er) {
+            $('#laoding').hide();
+            alert("please click again");
+        }
+    });
 }
 function show2ndLayerQtnLost(agingHeader,agingVal) { 
 	 $('#laoding').show();
@@ -3385,7 +3429,7 @@ function sm_performance_details(){
 		$('#laoding').hide();
 		var outrecv = 0, bookingTarget = 0, bookingActual = 0, gpTarget = 0, gpActual = 0,  billingTarget = 0, billingActual = 0, prcntgeBilling = 0, stage2JIH = 0, stage3LOI = 0, stage4LPO = 0, stage5LOI = 0, weekBkTarget = 0, prcntgeBooking = 0,  prcntgeBilling = 0 , prcntgeGp = 0;
 		var ytdTargetBkng = 0, ytdTargetBlng = 0 , ytdTargetGp = 0 , ytdPrcntgeBkng = 0, ytdPrcntgeBlng = 0, ytdPrcntgeGp = 0, weekBlngTarget,  stage1TENDER = 0, stage3LOI = 0, actualweeklyBilling = 0 , actualweeklyBooking = 0, totalstage3and4 = 0 , stage3and4vsyearlybillingtarget = 0,converratio=0;
-		var ytdVistactuals = 0,ytdCustVistit = 0, totJIHLostVal = 0 ,JIHLostNoRepse = 0,avgweeklyorders=0,totpercentageachievedcustvisit = 0;
+		var ytdVistactuals = 0,ytdCustVistit = 0, totJIHLostVal = 0 ,JIHLostNoRepse = 0,avgweeklyorders=0;
 		for(var i in data){
 		 
 		
@@ -3519,12 +3563,7 @@ function sm_performance_details(){
 		}else{
 			billingactualtotalper=0;
 		}
-		var weeklytarget = ${WKLYTRGT};
-		if(weeklytarget > 0){
-			totpercentageachievedcustvisit = (percentageachievedcustvisit*5)/100;
-		}else{
-			totpercentageachievedcustvisit = 5;
-		}
+		
 		var output= "<table id='salesman_performance_table' style='text-align:center; margin-left: auto; margin-right: auto;width: auto;'><thead ><tr>"
     		   +"<th class='se-brr'>Performance Title</th><th>Yearly Target</th><th>YTD Target</th><th>Actual</th><th>Yearly %</th><th>YTD %</th><th>% Achieved </th><th>Weightage</th><th>Total %</th></tr></thead><tbody>";
     	output+= "<tr><td style='text-align:left;'class='se-brr'>TENDER</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage1TENDER))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
@@ -3537,7 +3576,7 @@ function sm_performance_details(){
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(avgweeklyorders))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Billing </td><td style='text-align:right;'>"+formatNumber(Math.round(billingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBlng))+"</td><td style='text-align:right;background-color:#F08080;font-weight: bold'>"+ formatNumber(Math.round(billingActual)) + "</td><td>"+formatNumber(prcntgeBilling)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBlng+ "</td><td style='text-align:right;'>"+percentageachievedbilling+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbilling*5)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Billing</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBilling))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
-				 +	"<tr><td style='text-align:left;' class='se-brr'>Customer Visit</td><td>-</td><td style='text-align:right;'>"+${WKLYTRGT*currWeek}+ "</td><td style='text-align:right;'>"+formatNumber(ytdVistactuals)+ "</td><td>-</td><td>"+formatNumber(ytdCustVistit)+"</td><td style='text-align:right;'>"+percentageachievedcustvisit+ "</td><td style='text-align:right;'>"+5+"</td><td style='text-align:right;'>"+totpercentageachievedcustvisit+"</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Customer Visit</td><td>-</td><td style='text-align:right;'>"+${WKLYTRGT*currWeek}+ "</td><td style='text-align:right;'>"+formatNumber(ytdVistactuals)+ "</td><td>-</td><td>"+formatNumber(ytdCustVistit)+"</td><td style='text-align:right;'>"+percentageachievedcustvisit+ "</td><td style='text-align:right;'>"+5+"</td><td style='text-align:right;'>"+(percentageachievedcustvisit*5)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Total JIH Lost</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(totJIHLostVal))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;width:35%;' class='se-brr'>JIH Lost with NR</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(JIHLostNoRepse))+ "</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;'>"+10+"</td><td style='text-align:right;'><a href='#' data-toggle='modal' data-target='#help-modaljihnoresp'> <i class='fa fa-info-circle pull-right' style='color: #2196f3;font-size: 15px;margin-top: 4px;'></i></a>"+jihpercentageval+"</td></tr>"
 				 +  "<tr><td style='text-align:left;'class='se-brr'>Gross Profit </td><td style='text-align:right;'>"+formatNumber(Math.round(gpTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetGp))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(gpActual))+ "</td><td>"+formatNumber(prcntgeGp)+ "</td><td style='text-align:right;'>"+ytdPrcntgeGp+ "</td><td style='text-align:right;'>"+percentageachievedgeGp+ "</td><td style='text-align:right;'>"+50+ "</td><td style='text-align:right;'>"+(percentageachievedgeGp*50)/100+"</td></tr>"
@@ -3545,7 +3584,7 @@ function sm_performance_details(){
 				// +	"<tr><td style='text-align:left;' class='se-bbr'></td><td style='text-align:left;' > <90 Days </td><td>-</td><td>-</td><td style='text-align:right;'><fmt:formatNumber pattern='#,###' value='${aging30 + aging3060 + aging6090}' /></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				// +	"<tr><td style='text-align:left;' class='se-bbtr'>OUTSTANDING-RECV </td><td style='text-align:left;' > >90 Days </td><td>-</td><td>-</td><td style='text-align:right;'><fmt:formatNumber pattern='#,###' value='${aging90120}' /></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;background-color:#F08080;font-weight: bold;' >Outstanding-Recv >120 Days </td><td style='background-color:#F08080'>-</td><td style='background-color:#F08080'>-</td><td style='text-align:right;background-color:#F08080;font-weight: bold;'><fmt:formatNumber pattern='#,###' value='${aging120180 + aging181}' /></td><td style='background-color:#F08080'>-</td><td style='background-color:#F08080'>-</td><td style='background-color:#F08080'>-</td><td style='text-align:right;background-color:#F08080'>"+20+"</td><td style='text-align:right;background-color:#F08080'><a href='#' data-toggle='modal' data-target='#help-modalfor120days'> <i class='fa fa-info-circle pull-right' style='color: #2196f3;font-size: 15px;margin-top: 4px;'></i></a>"+billingactualtotalper+"</td></tr>"
-				 +	"<tr><td style='text-align:left;font-weight: bold;'> Total %</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;font-weight: bold;'>"+Math.round((((percentageachievedbooking*10)/100)+((percentageachievedbilling*5)/100)+(totpercentageachievedcustvisit)+((percentageachievedgeGp*50)/100)+billingactualtotalper+jihpercentageval))+"</td></tr>";
+				 +	"<tr><td style='text-align:left;font-weight: bold;'> Total %</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;font-weight: bold;'>"+Math.round((((percentageachievedbooking*10)/100)+((percentageachievedbilling*5)/100)+((percentageachievedcustvisit*5)/100)+((percentageachievedgeGp*50)/100)+billingactualtotalper+jihpercentageval))+"</td></tr>";
 				 
     			output+="</tbody></table>"; 
     			var subTtl1 =  'Conversion Ratio - '+formatNumber(converratio) +"<a href='#' data-toggle='modal' data-target='#help-modal'> <i class='fa fa-info-circle pull-right' style='color: #2196f3;font-size: 15px;padding-right: 75%;'></i></a>";
