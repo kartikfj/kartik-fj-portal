@@ -25,6 +25,71 @@ table.dataTable thead th,table.dataTable thead td {
  @page { height: 842px;   width: 595px;  margin-left: auto;   margin-right: auto; margin-bottom:-50px;} 
 }
 </style>
+<style>
+.bg-color-1 {
+    background-color: #ff9999; /* Booking color */
+    padding: 1px;
+    border-radius: 6px;
+    display: inline-block;
+    margin: 1px 0;
+    width: calc(50% - 20px); /* Adjust width as needed */
+}
+
+.bg-color-3 {
+    background-color: #99ff99; /* Billing color */
+    padding: 1px;
+    border-radius: 6px;
+    display: inline-block;
+    margin: 1px 0;
+    width: calc(50% - 20px); /* Adjust width as needed */
+}
+
+.align-right {
+    display: inline-block;
+    text-align: right;
+    width: 100px; /* Adjust width as needed */
+}
+
+.info-section {
+    margin-bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the left */
+    gap: 2px;
+}
+
+.info-section h6 {
+    margin: 1px 0;
+}
+
+.gauge-container {
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    align-items: center;
+    margin-top: 1px;
+    padding: 10px;
+}
+
+.gauge-box {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 1px;
+    padding: 0px;
+    width: 100px; /* Adjusted width for smaller size */
+    height: 100px; /* Adjusted height for smaller size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gauge-booking {
+    background-color: #ff9999;
+}
+
+.gauge-billing {
+    background-color: #99ff99;
+}
+</style>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
  <script type="text/javascript">
@@ -37,7 +102,7 @@ table.dataTable thead th,table.dataTable thead td {
  var salesEngsList = <%=new Gson().toJson(request.getAttribute("SEngLst"))%>; 
  $(document).ready(function() {  $('.select2').select2();  });  
 
- 
+ const seList   =  <%=new Gson().toJson(request.getAttribute("s_engList"))%>;
   </script> 
 
 
@@ -176,9 +241,9 @@ table.dataTable thead th,table.dataTable thead td {
       			</c:if>
                  <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>
                  <c:if test="${isAllowed eq 'Yes' || fjtuser.salesDMYn ge 1}">
-      		 		<li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
+      		 		<li class="active"><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
       			</c:if>
-				 <li class="active"><a href="DisionInfo.jsp"><i class="fa fa-line-chart"></i><span>Sub Division Performance</span></a></li>
+				 <li><a href="DisionInfo.jsp"><i class="fa fa-line-chart"></i><span>Sub Division Performance</span></a></li>
 				 <li><a href="CompanyInfo.jsp?empcode=${DFLTDMCODE}"><i class="fa fa-pie-chart"></i><span>Division 	Performance</span></a></li>
 				 <li><a href="SipUserActivity"><i class="fa fa-table"></i><span>SE Activity History</span></a></li>
 <!-- 				 <li><a href="SipJihDues"><i class="fa fa-table"></i><span>JIH Dues</span></a></li> -->
@@ -189,7 +254,10 @@ table.dataTable thead th,table.dataTable thead td {
 				 <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>  
                </c:when>
                <c:otherwise>
-				  <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li> 
+				  <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>
+				  <c:if test="${isAllowed eq 'Yes' || fjtuser.salesDMYn ge 1}">
+      		 		<li class="active"><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
+      		 	  </c:if>  
 <!-- 				  <li><a href="SipJihDues"><i class="fa fa-table"></i><span>JIH Dues</span></a></li> -->
 <!-- 				  <li><a href="SipLOIDues"><i class="fa fa-table"></i><span>LOI Duesgh</span></a></li> -->				  
 				  <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li>
@@ -217,48 +285,91 @@ table.dataTable thead th,table.dataTable thead td {
     <!-- Main content -->
     <div class="row">
     <div class="col-md-8 form-group">
-  <form class="form-inline" method="post" action="sip"> 
-  <br/>
-  <c:set var="sales_egr_code" value="${selected_salesman_code}" scope="page" /> 
-  <select class="form-control form-control-sm select2" name="scode" id="scode" required>  
-   <c:if test="${fjtuser.role ne 'mg' and fjtuser.salesDMYn eq 0}">  
-		 <option ${fjtuser.emp_code  == selected_salesman_code ? 'selected':''} value="${fjtuser.emp_code}">${fjtuser.uname} </option>
-	</c:if>	
-    <c:if test="${fjtuser.role eq 'mg' or fjtuser.salesDMYn ge 1}">  
-	 <option value="0">Select Sales Manager</option>
-	</c:if>
-   	<c:forEach var="s_engList"  items="${SEngLst}" >
-	  	<c:choose>
-	  			<c:when test="${fjtuser.role eq 'mg'}">	  					  				
-					<option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code  == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
-	  			</c:when>
-	  			<c:when test="${fjtuser.salesDMYn ge 1 and fjtuser.role ne 'mg'}">
-	  				<option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code  == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
-	  			</c:when>
-	  			<c:otherwise>		  			
-	  				<option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_code  == selected_salesman_code ? 'selected':''} role="${s_engList.salesman_code}">${s_engList.salesman_name} -(${s_engList.salesman_code})</option>	  				
-	  			</c:otherwise>
-	 		 </c:choose>
-  		</c:forEach> 	
-  			<!--<c:choose>
-	  			<c:when test="${fjtuser.role eq 'mg'}">	
-	  			  	<c:forEach var="s_engList"  items="${SEngLst}" >
-	  			  	<option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_code  == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name} -(${s_engList.salesman_code})</option>
-	  			  	</c:forEach>
-	  			</c:when>
-	  			<c:otherwise>
-	  				<option selected value="${fjtuser.emp_code}">${fjtuser.sales_code} - ${fjtuser.uname}</option>
-	  			</c:otherwise>					
-	  	   </c:choose>-->
-	</select>
-						
-				
-						
-					 <input type="hidden" name="fjtco" value="salesChart" />
-   					<!--  <button type="submit" id="sf" class="btn btn-sm btn-primary" onclick="preLoader();">View</button>-->
-					<button type="button"  id="seperfdiv" class="btn btn-sm btn-primary"   onclick="sm_performance_details();"><i class="fa fa-share" aria-hidden="true"></i> PERFORMANCE</button>
-				</form> 
-				 </div>
+<form class="form-inline" method="post" action="sip"> 
+    <br/>
+    <c:set var="sales_egr_code" value="${selected_salesman_code}" scope="page" /> 
+    <select class="form-control form-control-sm select2" name="scode" id="scode" required onchange="sm_performance_booking()">
+        <c:if test="${fjtuser.role ne 'mg' and fjtuser.salesDMYn eq 0}">  
+            <option ${fjtuser.emp_code  == selected_salesman_code ? 'selected':''} value="${fjtuser.emp_code}">${fjtuser.uname}</option>
+        </c:if>
+        <c:if test="${fjtuser.role eq 'mg' or fjtuser.salesDMYn ge 1}">  
+            <option value="0">Select Sales Manager</option>
+        </c:if>
+        <c:forEach var="s_engList" items="${SEngLst}">
+            <c:choose>
+                <c:when test="${fjtuser.role eq 'mg'}">
+                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code  == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
+                </c:when>
+                <c:when test="${fjtuser.salesDMYn ge 1 and fjtuser.role ne 'mg'}">
+                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code  == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
+                </c:when>
+                <c:otherwise>
+                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_code  == selected_salesman_code ? 'selected':''} role="${s_engList.salesman_code}">${s_engList.salesman_name} -(${s_engList.salesman_code})</option>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+    </select>
+    
+    <input type="hidden" name="fjtco" value="salesChart" />
+
+    <button type="button" id="seperfdiv" class="btn btn-sm btn-primary" onclick="sm_performance_details();">
+        <i class="fa fa-share" aria-hidden="true"></i> PERFORMANCE
+    </button>
+</form>
+</div>
+
+
+
+</div>
+<div id="bb1-meter" class="tab-pane fade in active" style="padding-left: 10px; box-sizing: border-box;">
+    <div class="row" style="margin-left: 0;">
+        <div class="box-header with-border" style="margin-top: 30px; text-align: left; padding-left: 0;">
+            <h1 class="box-title" style="display: inline-block; margin: 0;">
+               <h4> Target Vs Actual Achieved % for  
+                <c:choose>
+                    <c:when test="${syrtemp lt CURR_YR}">
+                        (FY)
+                    </c:when>
+                    <c:otherwise>
+                        (YTD)
+                    </c:otherwise>
+                </c:choose>
+                </h4>
+            </h1>
+            
+            <div class="info-section" style="text-align: left; padding-left: 0;">
+                <h6>
+                    <span class="bg-color-1">Booking Target: <span class="align-right" id="bookingTargetValue">0</span></span>
+                    &nbsp;&nbsp; || &nbsp;&nbsp;
+                    <span class="bg-color-3">Billing Target: <span class="align-right" id="billingTargetValue">0</span></span>
+                    &nbsp;&nbsp; &nbsp;&nbsp;
+                </h6>
+                <h6>
+                    <span class="bg-color-1">Booking Actual: <span class="align-right" id="bookingActualValue">0</span></span>
+                    &nbsp;&nbsp; || &nbsp;&nbsp;
+                    <span class="bg-color-3">Billing Actual: <span class="align-right" id="billingActualValue">0</span></span>
+                    &nbsp;&nbsp; &nbsp;&nbsp;
+                </h6>
+            </div>
+            <div class="gauge-container row" style="margin-top: 15px; padding: 0;">
+                <div class="col-md-3">
+                    <div id="guage_test_booking" class="gauge-box gauge-booking"></div>
+                </div>
+                                <div id="button-container"></div>
+                <div class="col-md-3">
+                    <div id="guage_test_billing" class="gauge-box gauge-billing"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    google.charts.setOnLoadCallback(function() { drawGuageGraph(${actual}, ${guage_bkng_ytd_target}, 'guage_test_booking', 'Booking'); });
+    google.charts.setOnLoadCallback(function() { drawGuageGraph(${actualbl}, ${guage_blng_ytd_target}, 'guage_test_billing', 'Billing'); });
+</script>
+
+
 
 	
 	  <div class="modal fade" id="salesmanager_performance_modal" role="dialog"> 			  
@@ -303,7 +414,7 @@ table.dataTable thead th,table.dataTable thead td {
 		 </div>
 	</div>
 	
-			  	<div class="modal fade" id="help-modal"  role="dialog" style="width: 80%;">
+	<div class="modal fade" id="help-modal"  role="dialog" style="width: 80%;">
 		 <div class="modal-dialog  modal-sm"  >
 			<div class="modal-content" style="height:min-content;width: max-content !important;">
 				 <div class="modal-header">
@@ -398,6 +509,41 @@ table.dataTable thead th,table.dataTable thead td {
 				</div>
 							<!-- /.modal-dialog -->
 			</div>
+					
+					<div class="modal fade" id="s5-modal-graph" role="dialog" >
+					
+					        <div class="modal-dialog" style="width:97%;">
+					     		<!-- Modal content-->
+							      	<div class="modal-content">
+								        	<div class="modal-header">
+								         	 <button type="button" class="close" data-dismiss="modal">&times;</button>
+								          		<h4 class="modal-title">Billing Details </h4>
+								        	</div>
+								        	<div class="modal-body small"> </div>
+									        <div class="modal-footer">
+									          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									        </div>
+								     </div>
+						   	 </div>   	 		   	 
+		 			</div>
+		 	<div class="modal fade" id="s3-modal-graph" role="dialog" >
+                  <div class="modal-dialog" style="width:97%;">
+                           <!-- Modal content-->
+                        <div class="modal-content">
+                              <div class="modal-header">
+                               <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                     <h4 class="modal-title">Booking Details </h4>
+                              </div>
+                              <div class="modal-body small"> </div>
+                               <div class="modal-footer">
+                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                               </div>
+                         </div> 
+                  </div>  
+          </div>
+		  <div id="performance_container"></div>
+	  
+
   <!-- /.content-wrapper -->
 <!--   <footer class="main-footer">
     <div class="pull-right hidden-xs">
@@ -626,17 +772,18 @@ function showSalesEngineerPerf(salesCode,smName,smPage) {
 		}else{
 			billingactualtotalper=0;
 		}
+		//const showUpdateBtn = (getSalesEngineerDetails(data[i].seCode)[0].salesman_emp_code === loggedEmp) ? true : false; 
 		var output= "<table id='salesman_performance_table' style='text-align:center; margin-left: auto; margin-right: auto;width: auto;'><thead ><tr>"
     		   +"<th class='se-brr'>Performance Title</th><th>Yearly Target</th><th>YTD Target</th><th>Actual</th><th>Yearly %</th><th>YTD %</th><th>% Achieved </th><th>Weightage</th><th>Total %</th></tr></thead><tbody>";
     	output+="<tr><td style='text-align:left;'class='se-brr'>Tender</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage1TENDER))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>JIH</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage2JIH))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				// +	"<tr><td style='text-align:left;'class='se-brr'>Stage-3(LOI)</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage3LOI))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"				 
 				//+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-5-(BILLING) </td><td class='se-blr'></td><td style='text-align:right;'></td><td style='text-align:right;'>"+formatNumber(stage5LOI)+ "</td><td></td></tr>"
-				 +  "<tr><td style='text-align:left;' class='se-brr'>Booking </td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "</td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td></tr>"
+				 +  "<tr><td style='text-align:left;' class='se-brr'>Booking </td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(stage3LOI)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBookingCodes(\""+$.trim(data[i].smCode)+"\", \"SC\")'><i class='fa fa-file-excel-o' aria-hidden='true'></a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Booking</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBooking))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(avgweeklyorders))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
-				 +	"<tr><td style='text-align:left;' class='se-brr'>Billing </td><td style='text-align:right;'>"+formatNumber(Math.round(billingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBlng))+"</td><td style='text-align:right;background-color:#F08080;font-weight: bold'>"+ formatNumber(Math.round(billingActual)) + "</td><td>"+formatNumber(prcntgeBilling)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBlng+ "</td><td style='text-align:right;'>"+percentageachievedbilling+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbilling*5)/100+"</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Billing</td><td style='text-align:right;'>"+formatNumber(Math.round(billingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBlng))+"</td><td style='text-align:right;background-color:#F08080;font-weight: bold'>"+ formatNumber(Math.round(billingActual))  + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBillingCodes(\""+$.trim(data[i].smCode)+"\", \"SC\")'><i class='fa fa-file-excel-o' aria-hidden='true'></i></a></td><td>"+formatNumber(prcntgeBilling)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBlng+ "</td><td style='text-align:right;'>"+percentageachievedbilling+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbilling*5)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Billing</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBilling))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Customer Visit</td><td>-</td><td style='text-align:right;'>"+formatNumber(ytdVisttarget*currWeek)+ "</td><td style='text-align:right;'>"+formatNumber(ytdVistactuals)+ "</td><td>-</td><td>"+formatNumber(ytdCustVistit)+"</td><td style='text-align:right;'>"+percentageachievedcustvisit+ "</td><td style='text-align:right;'>"+5+"</td><td style='text-align:right;'>"+(percentageachievedcustvisit*5)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Total JIH Lost</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(totJIHLostVal))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
@@ -694,6 +841,300 @@ function showSalesEngineerPerf(salesCode,smName,smPage) {
 	},error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
 }
 
+//sales booking perf
+function sm_performance_booking(){
+	var BookingActuals=0;
+	var BillingActuals=0;
+	var BookingTarget=0;
+	var BillingTarget0;
+	console.log(BookingActuals);
+	$('#laoding').show(); 
+	var smCodeName = $("#scode option:selected").text(); 
+	var smCode = $("#scode option:selected").val(); 
+	selectElement = document.querySelector('#scode');
+    output = selectElement.options[selectElement.selectedIndex].value;
+    salesCode = selectElement.options[selectElement.selectedIndex].role;
+    var currWeek = ${currWeek};
+ 	if(smCode == "0"){
+ 		alert("Please select any Sales Manager");
+ 		return false;
+ 	}
+ 	
+ 	if(salesCode != null){
+ 		showSalesEngineerPerf(salesCode,smCodeName,"1");
+ 		return;
+ 	}
+	 $("#salesmanager_performance_modal .modal-title").html(smCodeName);  	  
+	var exTtl = 'Sales Manager Performance - '+smCodeName;
+	var subTtl = 'Current week - '+${currWeek}  + ' and Year - '+${CURR_YR};
+	var ttl = 'Sales Manager Performance '+smCodeName +' and Current week - '+${currWeek} + ' and Year - '+${CURR_YR}; 
+	var printttl = 'Sales Manager Performance '+smCodeName +'<br/>  Week - '+${currWeek} + ' and Year - '+${CURR_YR} +'<br/>';
+	var fileName = 'Sales Manager Performance '+smCodeName;
+	$("#salesmanager_performance_modal .modal-title").html(exTtl);
+	$("#salesmanager_performance_modal .modal-subtitle").html(subTtl);
+	$.ajax({ 
+	type: 'POST',
+	url: 'salesManagerPerf',  
+ 	data :{
+ 			fjtco:"sm_perf" ,
+ 			c1 : smCode
+ 			},
+	dataType: "json",
+	 
+	success : function(data){
+	//	alert(data);
+		$('#laoding').hide();
+		var outrecv = 0, bookingTarget = 0, bookingActual = 0, gpTarget = 0, gpActual = 0,  billingTarget = 0, billingActual = 0, prcntgeBilling = 0, stage2JIH = 0, stage3LOI = 0, stage4LPO = 0, stage5LOI = 0, weekBkTarget = 0, prcntgeBooking = 0,  prcntgeBilling = 0 , prcntgeGp = 0;
+		var ytdTargetBkng = 0, ytdTargetBlng = 0 , ytdTargetGp = 0 , ytdPrcntgeBkng = 0, ytdPrcntgeBlng = 0, ytdPrcntgeGp = 0, weekBlngTarget,  stage1TENDER = 0, stage3LOI = 0, actualweeklyBilling = 0 , actualweeklyBooking = 0, totalstage3and4 = 0 , stage3and4vsyearlybillingtarget = 0,converratio=0;
+		var smName=""; var list = [],agingbelow90 = 0 , agingabove90 = 0, agingabove120 = 0,avgweeklyorders=0,ytdVisttarget = 0;
+		for(var i in data){		
+		
+		switch ($.trim(data[i].srNo)) {
+		  case "1.0": // total billing target			 
+			  billingTarget = data[i].yrTot;
+			   break; 
+		  case "1.1": // billing gp target
+			  gpTarget = data[i].yrTot;
+		  case "1.2": // weekly billing target
+			  weekBlngTarget = data[i].yrTot;
+		    break; 
+		  case "1.3": // actual weekly Billing
+			  actualweeklyBilling = data[i].yrTot;
+		    break; 
+		  case "1.4": // YTD Billing target
+			  ytdTargetBlng = data[i].yrTot;
+		    break; 
+		  case "1.5": // YTD Billing GP target
+			  ytdTargetGp = data[i].yrTot;
+		    break; 
+		  case "2.0":// Total Booking Target
+			  bookingTarget = data[i].yrTot;			 
+		    break; 
+		  case "2.1": // Weekly Booking Target
+			  weekBkTarget = data[i].yrTot;
+		    break; 
+		  case "2.2": // actual weekly booking
+			  actualweeklyBooking = data[i].yrTot;
+		    break; 
+		  case "2.3": // YTD Booking Target
+			  ytdTargetBkng = data[i].yrTot;
+		    break; 
+		  case "3": // STAGE 1(Tender)
+			  stage1TENDER = data[i].yrTot;
+		    break;
+		  case "3.1": // STAGE 2(JIH)
+			  stage2JIH = data[i].yrTot;
+		    break;
+		  case "4": // STAGE3 (LOI)
+			  stage3LOI = data[i].yrTot;
+			  bookingActual = data[i].yrTot;			 
+		    break;
+		/*  case "4.1": // YTD Booking Perc
+			  ytdPrcntgeBkng = data[i].yrTot; 
+		    break;*/
+		  case "5": // STAGE3 (LOI)
+			  stage3LOI = data[i].yrTot;
+		    break;
+		  case "5.1": // Stage 4 (LPO)
+			  stage4LPO = data[i].yrTot;
+		    break;
+		  case "5.2": // total stage 3 & 4
+			  totalstage3and4 = data[i].yrTot;
+		    break;
+		  case "5.3": // Stage 3 & 4 vs yearly billing target
+			  stage3and4vsyearlybillingtarget = data[i].yrTot;
+		    break;
+		  case "5.4": //average weekly orders(s4)
+			  avgweeklyorders = data[i].yrTot;
+		    break;
+		  case "6": // stage 5 ytd
+			  stage5LOI = data[i].yrTot;
+			  billingActual = data[i].yrTot;
+		    break;
+		  case "6.1": 
+			  gpActual = data[i].yrTot;
+		    break; 
+		 /* case "6.2":
+			  ytdPrcntgeBlng = data[i].yrTot;
+		    break; */
+		  case "7": 
+			  outrecv = data[i].yrTot;
+			  break;
+		  case "7.1": 
+			  agingbelow90 = data[i].yrTot;
+			  break;
+		  case "7.2": 
+			  agingabove90 = data[i].yrTot;
+			  break;
+		  case "7.3": 
+			  agingabove120 = data[i].yrTot;
+			  break;
+	       break; 
+		  case "8": // Conversion Ratio
+			  converratio = data[i].yrTot;
+		  break;
+		  case "9": // customer visit actuals
+			  ytdVistactuals = data[i].yrTot;			 
+		  break;
+		  case "9.1": // customer visit weekly target
+			  ytdVisttarget = data[i].yrTot;
+		  break;
+		  case "10": // total JIH LOST VALUE
+			  totJIHLostVal = data[i].yrTot;
+		  break;
+		  case "10.1": // total JIH LOST VALUE with no reason
+			  JIHLostNoRepse = data[i].yrTot;
+		  break;
+		  case "11": 			
+			  var footerout="";			 
+			  for (var key in data[i].salesEnglist) {				  
+				     footerout += "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='showSalesEngineerPerf(\""+key+"\", \""+data[i].salesEnglist[key]+"\")'>"+data[i].salesEnglist[key]+"</a>";			     	
+				   }
+		  break;
+
+		 
+		  default:				 
+			     break;
+		}
+	} 
+		   document.getElementById('bookingTargetValue').innerHTML = formatNumber(ytdTargetBkng);
+           document.getElementById('bookingActualValue').innerHTML = formatNumber(bookingActual);
+           document.getElementById('billingTargetValue').innerHTML = formatNumber(ytdTargetBlng);
+           document.getElementById('billingActualValue').innerHTML = formatNumber(billingActual);
+
+		 drawGuageGraph(bookingActual, ytdTargetBkng, 'guage_test_booking', 'Booking');
+         drawGuageGraph(billingActual, ytdTargetBlng, 'guage_test_billing', 'Billing');
+
+		prcntgeBooking = percentageCal(bookingActual, bookingTarget);
+		ytdPrcntgeBkng = percentageCal(bookingActual, ytdTargetBkng);
+		prcntgeBilling = percentageCal(billingActual, billingTarget);
+		ytdPrcntgeBlng = percentageCal(billingActual, ytdTargetBlng);
+		prcntgeGp = percentageCal(gpActual, gpTarget);
+		ytdPrcntgeGp = percentageCal(gpActual, ytdTargetGp);
+		
+		ytdCustVistit = percentageCal(ytdVistactuals,(ytdVisttarget*currWeek));
+		if(ytdPrcntgeBkng >= 100){
+			percentageachievedbooking = 100;
+		}else{
+			percentageachievedbooking = Math.round(percentageCal(ytdPrcntgeBkng,100));
+		}
+		if(ytdPrcntgeBlng >= 100){
+			percentageachievedbilling = 100;
+		}else{
+			percentageachievedbilling = Math.round(percentageCal(ytdPrcntgeBlng,100));
+		}
+		if(ytdPrcntgeGp >= 100){
+			percentageachievedgeGp = 100;
+		}else{
+			percentageachievedgeGp =  Math.round(percentageCal(ytdPrcntgeGp,100));
+		}
+		var billing120actual = ${aging90120 + aging120180 + aging181};
+		var billingactual = (billing120actual/billingActual)*100;
+		if(billingactual <= 5){
+			billingactualtotalper= 20;
+		}else{
+			billingactualtotalper=0;
+		}
+		var jihpercentage = totJIHLostVal !== 0 ? (JIHLostNoRepse / totJIHLostVal) * 100 : 0;
+		if (totJIHLostVal == 0 && JIHLostNoRepse == 0) {
+		    jihpercentage = 0; 
+		}
+		if(jihpercentage <= 10){
+			jihpercentageval= 10;
+		}else{
+			jihpercentageval=0;
+		}if(ytdCustVistit >= 100){
+			percentageachievedcustvisit = 100;
+		}else{
+			percentageachievedcustvisit = Math.round(percentageCal(ytdCustVistit,100));
+		}
+		var output= "<table id='salesmanager_performance_table' style='text-align:center; margin-left: auto; margin-right: auto;width: auto;'><thead ><tr>"
+			     +"<th class='se-brr'>Performance Title</th><th>Yearly Target</th><th>YTD Target</th><th>Actual</th><th>Yearly %</th><th>YTD %</th><th>% Achieved </th><th>Weightage</th><th>Total %</th></tr></thead><tbody>";
+    	output+= "<tr><td style='text-align:left;'class='se-brr'>Tender</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage1TENDER))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>JIH</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage2JIH))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				// +	"<tr><td style='text-align:left;'class='se-brr'>Stage-3(LOI)</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage3LOI))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 //+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-4-(LPO) </td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td></tr>"
+				//+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-5-(BILLING) </td><td class='se-blr'></td><td style='text-align:right;'></td><td style='text-align:right;'>"+formatNumber(stage5LOI)+ "</td><td></td></tr>"
+				 //+  "<tr><td style='text-align:left;' class='se-brr'>Booking sdf</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerCodes(\""+smCode+"\")'>Show All</a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td></tr>"
+				  +  "<tr><td style='text-align:left;' class='se-brr'>Booking sdf</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBookingCodes(\""+$.trim(data[i].smCode)+"\", \"SC\")'>Show All</a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*5)/100+"</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Booking</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBooking))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(avgweeklyorders))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Billing</td><td style='text-align:right;'>"+formatNumber(Math.round(billingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBlng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(billingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBillingCodes(\""+smCode+"\")'>Show All</a></td><td>"+formatNumber(prcntgeBilling)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBlng+ "</td><td style='text-align:right;'>"+percentageachievedbilling+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbilling*5)/100+"</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Billing</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBilling))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Customer Visit</td><td>-</td><td style='text-align:right;'>"+formatNumber(ytdVisttarget*currWeek)+ "</td><td style='text-align:right;'>"+formatNumber(ytdVistactuals)+ "</td><td>-</td><td>"+formatNumber(ytdCustVistit)+"</td><td style='text-align:right;'>"+percentageachievedcustvisit+ "</td><td style='text-align:right;'>"+5+"</td><td style='text-align:right;'>"+(percentageachievedcustvisit*5)/100+"</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Total JIH Lost</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(totJIHLostVal))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;width:35%;' class='se-brr'>JIH Lost with NR</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(JIHLostNoRepse))+ "</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;'>"+10+"</td><td style='text-align:right;'><a href='#' data-toggle='modal' data-target='#help-modaljihnoresp'> <i class='fa fa-info-circle pull-right' style='color: #2196f3;font-size: 15px;margin-top: 4px;'></i></a>"+jihpercentageval+"</td></tr>"
+				 +	"<tr><td style='text-align:left;'class='se-brr'>Gross Profit</td><td style='text-align:right;'>"+formatNumber(Math.round(gpTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetGp))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(gpActual))+ "</td><td>"+formatNumber(prcntgeGp)+ "</td><td style='text-align:right;'>"+ytdPrcntgeGp+ "</td><td style='text-align:right;'>"+percentageachievedgeGp+ "</td><td style='text-align:right;'>"+50+ "</td><td style='text-align:right;'>"+(percentageachievedgeGp*50)/100+"</td></tr>"
+				// +  "<tr><td style='text-align:left;font-weight: bold;' class='se-brr'>CONVERSION RATIO  <a href='#' data-toggle='modal' data-target='#help-modal'> <i class='fa fa-info-circle pull-right' style='color: #2196f3;font-size: 15px;margin-top: 4px;'></i></a></td><td class='se-blr'></td><td>-</td><td>-</td><td style='text-align:right;font-weight: bold'>"+formatNumber(converratio)+ "</td><td>-</td><td>-</td></tr>"
+				// +	"<tr><td style='text-align:left;' class='se-bbr'></td><td style='text-align:left;' > <90 Days </td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(agingbelow90))+"</td><td>-</td><td>-</td></tr>"
+				// +	"<tr><td style='text-align:left;' class='se-bbtr'>OUTSTANDING-RECV </td><td style='text-align:left;font-weight: bold;background-color:#F08080;' > >90 Days </td><td style='background-color:#F08080'>-</td><td style='background-color:#F08080;'>-</td><td style='text-align:right;font-weight: bold;background-color:#F08080'>"+formatNumber(agingabove90)+"</td><td style='background-color:#F08080'>-</td><td style='background-color:#F08080'>-</td></tr>"
+				 +	"<tr><td style='text-align:left;background-color:#F08080;font-weight: bold;' >Outstanding-Recv >120 Days </td><td style='background-color:#F08080'>-</td><td style='background-color:#F08080'>-</td><td style='text-align:right;background-color:#F08080;font-weight: bold;'>"+formatNumber(Math.round(agingabove120))+"</td><td style='background-color:#F08080'>-</td><td style='background-color:#F08080'>-</td><td style='background-color:#F08080'>-</td><td style='text-align:right;background-color:#F08080'>"+20+"</td><td style='text-align:right;background-color:#F08080'><a href='#' data-toggle='modal' data-target='#help-modalfor120days'> <i class='fa fa-info-circle pull-right' style='color: #2196f3;font-size: 15px;margin-top: 4px;'></i></a>"+billingactualtotalper+"</td></tr>"
+				// +	"<tr><td class='se-btr'></td><td style='text-align:left;' > Total </td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(outrecv)+ "</td><td>-</td><td>-</td></tr>";
+ 
+    			output+="</tbody></table>"; 
+    			var subTtl1 =  'Conversion Ratio - '+formatNumber(converratio) +"<a href='#' data-toggle='modal' data-target='#help-modal'> <i class='fa fa-info-circle pull-right' style='color: #2196f3;font-size: 15px;padding-right: 70%;'></i></a><button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>";
+    			/* $("#salesmanager_performance_modal .modal-body").html(output);  
+    			$("#salesmanager_performance_modal .modal-subtitle3").html(subTtl1);
+    			$("#salesmanager_performance_modal .modal-footer").html(footerout);  
+    			$("#salesmanager_performance_modal").modal("show");
+    			
+ */
+				  // Jquery draggable
+				/*   $('.modal-dialog').draggable({
+				      handle: ".modal-header"
+				  });
+    	 */
+    	    var buttonHtmlBooking = "<div class='col-sm-3'><button type='button' class='btn btn-primary btn-block' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
+
+    		// Define the button HTML for billing details
+    		//var buttonHtmlBilling = "<div class='col-sm-3'><button type='button' class='btn btn-primary btn-block' onclick='printAllSalesEngineerBillingCodes(\"" + $.trim(data[i].smCode)+"\", \"SC\")'>Billing Details</button></div>";
+    	    var buttonHtmlBilling = "<div class='col-sm-3'><button type='button' class='btn btn-primary btn-block' onclick='printAllSalesEngineerBillingCodes(\"" + smCode + "\")'>Billing Details</button></div>";
+
+    		// Combine both button HTMLs within a Bootstrap row
+    		var combinedButtonsHtml = "<div class='row'>" + buttonHtmlBooking + buttonHtmlBilling + "</div>";
+
+    		// Insert the combined buttons into the container
+    		$("#performance_container").html(combinedButtonsHtml);
+
+    			$("#salesmanager_performance_tables").DataTable( {
+    				dom: 'Bfrtip',
+    				searching: false,
+    			    ordering:  false,
+    			    paging: false,
+    			    info: false,
+    			     buttons: [
+    			         {
+    			            extend: 'excelHtml5',
+    			             text:      '<i class="fa fa-file-excel-o" style="color: #1979a9; font-size: 1em;">Export</i>',
+    			             filename: fileName,
+    			             title: ttl,
+    			             messageTop: 'File Processed on : ${currCal} ,The information in this file is copyright to Faisal Jassim Group.'
+    			            
+    			            
+    			         },
+    			         {
+ 			        	    extend: 'print', 
+ 			        	    text:      '<i class="fa fa-print" style="color: #1979a9; font-size: 1em;">Print</i>',    			        	  
+ 			        	    title: printttl + " Conversion Ratio: "+formatNumber(converratio),
+			        	    customize: (win) => {
+			        	    	$(win.document.head).append('<style>h1 { font-size: 14px; }</style>'); // Adjust the font size of the title
+			        	    	$(win.document.body)    			        	        
+	                            .css("height", "auto")
+		        	            .css("min-height", "0");
+			        	        $(win.document.body).find( 'table' )
+			                    .addClass( 'compact' )
+			                    .css( 'font-size', 'inherit' );
+			        	        $(win.document.body).find('table').css('border-collapse', 'collapse');
+			        	        $(win.document.body).find('th, td').css('border', '1px solid black');
+			        	        $(win.document.body).find('title').css('font-size', '1px');
+			        	    }
+ 			         }
+    			    ]
+    			 } );
+		
+	},error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
+}
 
 
 //sales performance summary
@@ -836,10 +1277,11 @@ function sm_performance_details(){
 		  break;
 		  case "11": 			
 			  var footerout="";			 
-			  for (var key in data[i].salesEnglist) {
-				      footerout += "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='showSalesEngineerPerf(\""+key+"\", \""+data[i].salesEnglist[key]+"\")'>"+data[i].salesEnglist[key]+"</a>";			     	
-				   }		 
+			  for (var key in data[i].salesEnglist) {				  
+				     footerout += "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='showSalesEngineerPerf(\""+key+"\", \""+data[i].salesEnglist[key]+"\")'>"+data[i].salesEnglist[key]+"</a>";			     	
+				   }
 		  break;
+
 		 
 		  default:				 
 			     break;
@@ -896,11 +1338,12 @@ function sm_performance_details(){
 				// +	"<tr><td style='text-align:left;'class='se-brr'>Stage-3(LOI)</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage3LOI))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 //+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-4-(LPO) </td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td></tr>"
 				//+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-5-(BILLING) </td><td class='se-blr'></td><td style='text-align:right;'></td><td style='text-align:right;'>"+formatNumber(stage5LOI)+ "</td><td></td></tr>"
-				 +  "<tr><td style='text-align:left;' class='se-brr'>Booking </td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "</td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td></tr>"
+				 //+  "<tr><td style='text-align:left;' class='se-brr'>Booking sdf</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerCodes(\""+smCode+"\")'>Show All</a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td></tr>"
+				  +  "<tr><td style='text-align:left;' class='se-brr'>Booking</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBookingCodes(\""+$.trim(data[i].smCode)+"\", \"SC\")'><i class='fa fa-file-excel-o' aria-hidden='true'></a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*5)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Booking</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBooking))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(avgweeklyorders))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
-				 +	"<tr><td style='text-align:left;' class='se-brr'>Billing</td><td style='text-align:right;'>"+formatNumber(Math.round(billingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBlng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(billingActual)) + "</td><td>"+formatNumber(prcntgeBilling)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBlng+ "</td><td style='text-align:right;'>"+percentageachievedbilling+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbilling*5)/100+"</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Billing</td><td style='text-align:right;'>"+formatNumber(Math.round(billingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBlng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(billingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBillingCodes(\""+smCode+"\")'><i class='fa fa-file-excel-o' aria-hidden='true'></a></td><td>"+formatNumber(prcntgeBilling)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBlng+ "</td><td style='text-align:right;'>"+percentageachievedbilling+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbilling*5)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Billing</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBilling))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Customer Visit</td><td>-</td><td style='text-align:right;'>"+formatNumber(ytdVisttarget*currWeek)+ "</td><td style='text-align:right;'>"+formatNumber(ytdVistactuals)+ "</td><td>-</td><td>"+formatNumber(ytdCustVistit)+"</td><td style='text-align:right;'>"+percentageachievedcustvisit+ "</td><td style='text-align:right;'>"+5+"</td><td style='text-align:right;'>"+(percentageachievedcustvisit*5)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Total JIH Lost</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(totJIHLostVal))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
@@ -964,6 +1407,118 @@ function sm_performance_details(){
 	},error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
 }
 
+function printAllSalesEngineerBillingCodes(smCode,datatype) {
+    console.log("All Sales Engineer Codes: "+ smCode);
+    var ttl="<b>Billing Details </i></strong></b>";
+    var excelTtl="Billing Details"
+    $("#s5-modal-graph .modal-title").html(ttl);
+    $.ajax({ 
+    	type: 'POST',
+    	url: 'salesManagerPerf',  
+     	data :{
+     			fjtco:"allse_perf" ,
+     			c1 : smCode,
+     			c2 : datatype
+     			},
+     	traditional: true,
+    	dataType: "json",
+        success: function(data) {
+            $('#loading').hide();          
+            var output="<table id='s5-excl' class='table table-bordered small'><thead><tr>"+"<th>#</th><th>Comp Code</th><th>Week</th><th>Doc ID</th><th>Doc Date</th><th>Sm Code</th>"+
+            "<th>Sm Name</th><th>Party Name</th><th>Contact</th><th>Contact No</th><th>Project Name</th>"+ " <th>Zone</th><th>Currency</th><th>Amount</th> </tr></thead><tbody>";
+            var j=0;for (var i in data) { j=j+1; output+="<tr><td>"+j+"</td><td><span>" + $.trim(data[i].d1)+ "</span></td>"+
+            "<td>" + $.trim(data[i].d2)+ "</td><td>" + $.trim(data[i].d3) + "</td>"+ "<td>" +$.trim(data[i].d4.substring(0, 10)).split("-").reverse().join("/")+ "</td><td>"  + $.trim(data[i].d5 )+ "</td>"+
+            "<td>" + $.trim(data[i].d6 )+ "</td><td>" +$.trim( data[i].d7 )+ "</td>"+ "<td>" + $.trim(data[i].d8 )+ "</td><td>" + $.trim(data[i].d9 )+ "</td>"+ "<td>" + $.trim(data[i].d10 )+ "</td><td>" + $.trim(data[i].d12 )+ "</td>"+
+            "<td>" + $.trim(data[i].d13 )+ "</td><td>" + $.trim(data[i].d14 )+ "</td></tr>"; } 
+            //output+="<tr><td colspan='16'><b>Total</b></td><td><b>"+val+"</b></td></tr>"; 
+            output+="</tbody></table>";  $("#s5-modal-graph .modal-body").html(output);$("#s5-modal-graph").modal("show");
+            $('#s5-excl').DataTable( {
+                dom: 'Bfrtip',  
+                "columnDefs" : [{"targets":[1, 10], "type":"date-eu"}],
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o" style="color: green; font-size: 2em;"></i>',
+                        filename: excelTtl,
+                        title: excelTtl,
+                        messageTop: 'File Processed on : ${currCal} ,The information in this file is copyright to Faisal Jassim Group.'
+                        
+                        
+                    }
+                  
+                   
+                ]
+            } );
+            
+            },error:function(data,status,er) { $('#laoding').hide(); alert("please click again");} });} 
+            
+function printAllSalesEngineerBookingCodes(smCode) {	
+    $('#loading').show(); // Ensure loading indicator is shown    
+    // Create a title for the modal
+    var ttl = "<b>Booking Details <strong style='color:blue;'></strong></b>";
+    var excelTtl = "Booking Details ";
+    
+    $("#s3-modal-graph .modal-title").html(ttl);
+    
+    $.ajax({
+        type: 'POST',
+        url: 'salesManagerPerf',
+        data: {
+            fjtco: "allse_perfBooking",
+            c1:smCode,
+            //c2 : datatype
+            // s1: JSON.stringify(bookingCode) // Send multiple codes as an array
+        },
+        dataType: "json",
+        success: function(data) {
+            $('#loading').hide(); // Hide loading indicator
+            
+            // Construct the HTML table
+            var output = "<table id='s3-excl' class='table table-bordered small'><thead><tr>" +
+                "<th>#</th><th>Week</th><th>Zone</th><th>Sales Code</th>" +
+                "<th>Project Name</th><th>Consultant</th><th>Doc Date</th><th>Doc ID</th>" +
+                "<th>LOI Received Date</th><th>Amount</th></tr></thead><tbody>";
+            
+            var j = 0;
+            for (var i in data) {
+                j = j + 1;
+                output += "<tr><td>" + j + "</td>" +
+                    "<td>" + $.trim(data[i].d1) + "</td>" +
+                    "<td>" + $.trim(data[i].d2) + "</td>" +
+                    "<td>" + $.trim(data[i].d3) + "</td>" +
+                    "<td>" + $.trim(data[i].d4) + "</td>" +
+                    "<td>" + $.trim(data[i].d5) + "</td>" +
+                    "<td>" + $.trim(data[i].d6.substring(0, 10)).split("-").reverse().join("/") + "</td>" +
+                    "<td>" + $.trim(data[i].d7) + "</td>" +        
+                    "<td>" + $.trim(data[i].d8.substring(0, 10)).split("-").reverse().join("/") + "</td>" +
+                    "<td>" + $.trim(data[i].d12) + "</td>" +                    
+                    "</tr>";
+            }
+            
+            output += "</tbody></table>";
+            $("#s3-modal-graph .modal-body").html(output);
+            $("#s3-modal-graph").modal("show");
+            
+            // Initialize DataTable with Excel export button
+            $('#s3-excl').DataTable({
+                dom: 'Bfrtip',             
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel-o" style="color: green; font-size: 2em;"></i>',
+                        filename: excelTtl,
+                        title: excelTtl,
+                        messageTop: 'File Processed on : ${currCal} ,The information in this file is copyright to Faisal Jassim Group.'
+                    }
+                ]
+            });
+        },
+        error: function(data, status, er) {
+            $('#loading').hide(); // Hide loading indicator
+            alert("Please click again");
+        }
+    });
+}
   
 </script> 
 <!-- page script -->

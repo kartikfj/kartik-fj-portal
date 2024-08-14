@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -2279,9 +2280,12 @@ public class SipChartDbUtil {
 		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
 		try {
 			myCon = orcl.getOrclConn();
-			// ----listing of Stage5 transactions for a given Sales Egr, as on Current
-			// running date
-			String sql = "SELECT * FROM SIP_SM_BLNG_TBL WHERE SM_CODE =  ?  AND TO_CHAR(DOC_DATE,'YYYY') = TO_CHAR(SYSDATE,'YYYY') order by DOC_DATE";
+			int currentYear = LocalDate.now().getYear();
+			// Extract the last two digits
+			String lastTwoDigits = String.valueOf(currentYear).substring(2);
+
+			String sql = "SELECT * FROM ORION.SIP_SM_BLNG_TBL WHERE SM_CODE =  ?  AND TO_CHAR(DOC_DATE,'YYYY') = TO_CHAR(SYSDATE,'YYYY') AND WEEK LIKE'"
+					+ lastTwoDigits + "-%' order by DOC_DATE";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, sales_man_code);
 
@@ -2314,4 +2318,249 @@ public class SipChartDbUtil {
 			orcl.closeConnection();
 		}
 	}
+
+	public List<Stage5Details> stage5SummaryBillingDetailsForPerf(String smCode) throws SQLException {
+		List<Stage5Details> s5DetailsList = new ArrayList<>();
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+
+		try {
+			int currentYear = LocalDate.now().getYear();
+			// Extract the last two digits
+			String lastTwoDigits = String.valueOf(currentYear).substring(2);
+			myCon = orcl.getOrclConn();
+			// Build SQL query with IN clause for multiple salesperson codes
+			String sql = "SELECT * FROM ORION.SIP_SM_BLNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN  WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND TO_CHAR(DOC_DATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') AND WEEK LIKE '"
+					+ lastTwoDigits + "-%' ORDER BY DOC_DATE";
+
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, smCode);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				// Extract data and add to list
+				String comp_code = myRes.getString(1);
+				String week = myRes.getString(2);
+				String doc_id = myRes.getString(3);
+				String doc_date = myRes.getString(4);
+				String sm_code = myRes.getString(5);
+				String sm_name = myRes.getString(6);
+				String partyName = myRes.getString(7);
+				String contact = myRes.getString(8);
+				String phone = myRes.getString(9);
+				String projectName = myRes.getString(10);
+				String product = myRes.getString(11);
+				String zone = myRes.getString(12);
+				String currency = myRes.getString(13);
+				int balance_value = myRes.getInt(14);
+
+				Stage5Details temp = new Stage5Details(comp_code, week, doc_id, doc_date, sm_code, sm_name, partyName,
+						contact, phone, projectName, product, zone, currency, balance_value);
+				s5DetailsList.add(temp);
+			}
+			return s5DetailsList;
+		} finally {
+			// Close JDBC objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
+
+	public List<Stage5Details> stage5SummaryBillingDetailsForSE(String smCode) throws SQLException {
+		List<Stage5Details> s5DetailsList = new ArrayList<>();
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+
+		try {
+			int currentYear = LocalDate.now().getYear();
+			String lastTwoDigits = String.valueOf(currentYear).substring(2);
+			myCon = orcl.getOrclConn();
+			// Build SQL query with IN clause for multiple salesperson codes
+			String sql = "SELECT * FROM SIP_SM_BLNG_TBL WHERE SM_CODE = ? AND TO_CHAR(DOC_DATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') AND WEEK LIKE '"
+					+ lastTwoDigits + "-%' ORDER BY DOC_DATE";
+
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, smCode);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				// Extract data and add to list
+				String comp_code = myRes.getString(1);
+				String week = myRes.getString(2);
+				String doc_id = myRes.getString(3);
+				String doc_date = myRes.getString(4);
+				String sm_code = myRes.getString(5);
+				String sm_name = myRes.getString(6);
+				String partyName = myRes.getString(7);
+				String contact = myRes.getString(8);
+				String phone = myRes.getString(9);
+				String projectName = myRes.getString(10);
+				String product = myRes.getString(11);
+				String zone = myRes.getString(12);
+				String currency = myRes.getString(13);
+				int balance_value = myRes.getInt(14);
+
+				Stage5Details temp = new Stage5Details(comp_code, week, doc_id, doc_date, sm_code, sm_name, partyName,
+						contact, phone, projectName, product, zone, currency, balance_value);
+				s5DetailsList.add(temp);
+			}
+			return s5DetailsList;
+		} finally {
+			// Close JDBC objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
+
+	public List<Stage3Details> stage3SummaryBookingDetailsForPerf(String sales_man_code) throws SQLException {
+		List<Stage3Details> s3DetailsList = new ArrayList<>();
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+
+		try {
+			myCon = orcl.getOrclConn();
+
+			// Log the input parameter
+			System.out.println("Fetching Stage 3 details for Salesman Code: " + sales_man_code);
+			int currentYear = LocalDate.now().getYear();
+			// Extract the last two digits
+			String lastTwoDigits = String.valueOf(currentYear).substring(2);
+			// SQL Query
+			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT, "
+					+ "  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED "
+					+ "  FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND WEEK LIKE '"
+					+ lastTwoDigits + "-%'";
+
+			System.out.println("query in stage3SummaryDetailsss " + sql);
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, sales_man_code);
+
+			myRes = myStmt.executeQuery();
+
+			int rowCount = 0;
+
+			while (myRes.next()) {
+				rowCount++;
+				String week = myRes.getString(1);
+				String zone = myRes.getString(2);
+				String sales_eg_code = myRes.getString(3);
+				String prjct_name = myRes.getString(4);
+				String consultnt = myRes.getString(5);
+				String doc_dt = myRes.getString(6);
+				String doc_id = myRes.getString(7);
+				String loi_recd_date = myRes.getString(8);
+				int amount = myRes.getInt(9);
+
+				Stage3Details temp = new Stage3Details(week, zone, sales_eg_code, prjct_name, consultnt, doc_dt, doc_id,
+						loi_recd_date, amount);
+				s3DetailsList.add(temp);
+			}
+
+			// Log the number of rows added to the list
+			System.out.println("Number of Stage 3 details fetched: " + rowCount);
+
+			return s3DetailsList;
+		} catch (SQLException e) {
+			System.err.println("SQL error occurred while fetching Stage 3 details: " + e.getMessage());
+			throw e; // rethrow the exception for higher-level handling
+		} finally {
+			// Close JDBC resources
+			if (myRes != null) {
+				try {
+					myRes.close();
+				} catch (SQLException e) {
+					System.err.println("Error closing ResultSet: " + e.getMessage());
+				}
+			}
+			if (myStmt != null) {
+				try {
+					myStmt.close();
+				} catch (SQLException e) {
+					System.err.println("Error closing PreparedStatement: " + e.getMessage());
+				}
+			}
+			if (myCon != null) {
+				orcl.closeConnection();
+			}
+		}
+	}
+
+	public List<Stage3Details> stage3SummaryBookingDetailsForSE(String salesManCode) throws SQLException {
+		List<Stage3Details> s3DetailsList = new ArrayList<>();
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		try {
+			myCon = orcl.getOrclConn();
+
+			// Log the input parameter
+			System.out.println("Fetching Stage 3 details for Salesman Code: " + salesManCode);
+			int currentYear = LocalDate.now().getYear();
+			// Extract the last two digits
+			String lastTwoDigits = String.valueOf(currentYear).substring(2);
+			// SQL Query
+			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT, "
+					+ "  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED "
+					+ "  FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE = ? AND WEEK LIKE '" + lastTwoDigits + "-%'";
+
+			System.out.println("query in stage3SummaryDetailsss " + sql);
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, salesManCode);
+
+			myRes = myStmt.executeQuery();
+
+			int rowCount = 0;
+
+			while (myRes.next()) {
+				rowCount++;
+				String week = myRes.getString(1);
+				String zone = myRes.getString(2);
+				String sales_eg_code = myRes.getString(3);
+				String prjct_name = myRes.getString(4);
+				String consultnt = myRes.getString(5);
+				String doc_dt = myRes.getString(6);
+				String doc_id = myRes.getString(7);
+				String loi_recd_date = myRes.getString(8);
+				int amount = myRes.getInt(9);
+
+				Stage3Details temp = new Stage3Details(week, zone, sales_eg_code, prjct_name, consultnt, doc_dt, doc_id,
+						loi_recd_date, amount);
+				s3DetailsList.add(temp);
+			}
+
+			// Log the number of rows added to the list
+			System.out.println("Number of Stage 3 details fetched: " + rowCount);
+
+			return s3DetailsList;
+		} catch (SQLException e) {
+			System.err.println("SQL error occurred while fetching Stage 3 details: " + e.getMessage());
+			throw e; // rethrow the exception for higher-level handling
+		} finally {
+			// Close JDBC resources
+			if (myRes != null) {
+				try {
+					myRes.close();
+				} catch (SQLException e) {
+					System.err.println("Error closing ResultSet: " + e.getMessage());
+				}
+			}
+			if (myStmt != null) {
+				try {
+					myStmt.close();
+				} catch (SQLException e) {
+					System.err.println("Error closing PreparedStatement: " + e.getMessage());
+				}
+			}
+			if (myCon != null) {
+				orcl.closeConnection();
+			}
+		}
+
+	}
+
 }

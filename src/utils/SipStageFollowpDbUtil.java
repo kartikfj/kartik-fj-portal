@@ -154,7 +154,7 @@ public class SipStageFollowpDbUtil {
 			}
 			StringBuilder sqlQuery = new StringBuilder(
 					"SELECT  CQHSYSID, SALES_EGR_CODE, SALES_ENG_NAME, QTN_DT, QTN_CODE, QTN_NO, CUST_NAME, PROJECT_NAME, CONSULTANT, QTN_AMOUNT,  QTN_PRI, QTN_STAT, QTN_REMARKS, QTN_MOD_BY,  QTN_MOD_DT, CONSULTANTWIN, CONTRACTORWIN, TOTALWIN, (SELECT COUNT(1) FROM  SIP_REMINDER WHERE H_SYS_ID = ST2.CQHSYSID) REMINDERCNT,  "
-							+ " EXP_LOI_DT, SALESWIN,SUB_STATUS_CODE,APPR_CONS 	 FROM FJT_SM_STG2_TBL ST2 WHERE  SALES_EGR_CODE  IN ("
+							+ " EXP_LOI_DT, SALESWIN,SUB_STATUS_CODE,APPR_CONS,LH_STATUS 	 FROM FJT_SM_STG2_TBL ST2 WHERE  SALES_EGR_CODE  IN ("
 							+ seCode + ")  ");
 			int counter = 1;
 			if (!priority.equalsIgnoreCase("-")) {
@@ -260,10 +260,11 @@ public class SipStageFollowpDbUtil {
 				String sewinper = myRes.getString(21);
 				String submittalcode = myRes.getString(22);
 				String isApproved = myRes.getString(23);
+				String lhStatus = myRes.getString(24);
 				SipStageFollowUp tempstageList = new SipStageFollowUp(id, se_code, se_name, qtnDt, qtnCode, qtnNo,
 						custName, projName, consultant, amount, priorityOrg, statusOrg, remarks, updatedBy, updatedOn,
 						reminderCount, consltWin, contractorWin, totalWin, expLOIDate, sewinper, submittalcode,
-						isApproved);
+						isApproved, lhStatus);
 				stageList.add(tempstageList);
 			}
 			return stageList;
@@ -292,8 +293,8 @@ public class SipStageFollowpDbUtil {
 			amountgreaterthan = checkFilterValue(amountgreaterthan);
 			StringBuilder sqlQuery = new StringBuilder(
 					"SELECT  CQHSYSID, SALES_EGR_CODE, SALES_ENG_NAME, QTN_DT, QTN_CODE, QTN_NO, CUST_NAME, PROJECT_NAME, CONSULTANT, QTN_AMOUNT,  QTN_PRI, QTN_STAT, QTN_REMARKS, QTN_MOD_BY,  QTN_MOD_DT,EXP_PO_DT,EXP_INV_DT, CONSULTANTWIN, CONTRACTORWIN, TOTALWIN, (SELECT COUNT(1) FROM  SIP_REMINDER WHERE H_SYS_ID = ST3.CQHSYSID) REMINDERCNT,  "
-							+ "	EXP_ORD_DT, SALESWIN FROM FJT_SM_STG3_TBL ST3  WHERE  SALES_EGR_CODE IN ( " + seCode
-							+ ")  ");
+							+ "	EXP_ORD_DT, SALESWIN,LH_STATUS FROM FJT_SM_STG3_TBL ST3  WHERE  SALES_EGR_CODE IN ( "
+							+ seCode + ")  ");
 			int counter = 1;
 			if (!priority.equalsIgnoreCase("-")) {
 				sqlQuery.append(" AND   QTN_PRI =   ? ");
@@ -395,9 +396,11 @@ public class SipStageFollowpDbUtil {
 					expODate = formatDate(myRes.getString(22));
 				}
 				String sewinper = myRes.getString(23);
+				String lhStatus = myRes.getString(24);
 				SipStageFollowUp tempstageList = new SipStageFollowUp(id, se_code, se_name, qtnDt, qtnCode, qtnNo,
 						custName, projName, consultant, amount, priorityOrg, statusOrg, remarks, updatedBy, updatedOn,
-						poDate, invoiceDate, reminderCount, consltWin, contractorWin, totalWin, expODate, sewinper);
+						poDate, invoiceDate, reminderCount, consltWin, contractorWin, totalWin, expODate, sewinper,
+						lhStatus);
 				stageList.add(tempstageList);
 			}
 			return stageList;

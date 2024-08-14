@@ -62,8 +62,24 @@
 .lostreasonheading{color:#ffffff;}.lostreasonbox{display:none; }
 .holdrequestWindow,.stage1requestWindow,.submittalstatusrequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
 .holdreasonheading,.stage1reasonheading,.submittalstatusreasonheading{color:#ffffff;}.holdreasonbox,.submittalstatusreasonbox{display:none; }
-.poUpdaterequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
-.poUpdatereasonheading{color:#ffffff;}.poUpdatereasonbox{display:none; }
+/* .poUpdaterequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
+ */
+  .poUpdaterequestWindow {
+    display: none; /* Default state is hidden */
+    padding: 1em;
+    border: 1px solid rgb(121, 85, 72);
+    border-radius: 3px;
+    font-size: 0.8em;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 20em;
+    height: auto;
+    background: rgb(121, 85, 72);
+    position: absolute; /* Use absolute positioning */
+    z-index: 1000; /* Ensure the modal is above other content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow */
+}
+ 
+ .poUpdatereasonheading{color:#ffffff;}.poUpdatereasonbox{display:none; }
 .expLOIDateUpdaterequestWindow,.sewinUpdaterequestWindow,.expOrderDateUpdaterequestWindow,.expBillingDateUpdaterequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
 .expLOIUpdatereasonheading,.sewinUpdatereasonheading,.expOrderDateUpdatereasonheading,.expBillingDateUpdatereasonheading{color:#ffffff;}.expLOIUpdatereasonbox,.sewinUpdatereasonbox,.expOrderDateUpdatereasonbox,.expBillingDateUpdatereasonbox{display:none; }
 .invUpdaterequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
@@ -115,8 +131,28 @@ div.dt-buttons{
  margin-left: 25px;
 }
 #cvDetails_tbl thead th, #cvDetails_tbl tbody td{border: 1px solid #03a9f4 !important;padding: 7px; text-align: left;}
-.stg3requestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
-.stg3reasonheading{color:#ffffff;}.stg3reasonbox{display:none; }
+/* .stg3requestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
+ */
+ .stg3requestWindow {
+    display: none; /* Default state is hidden */
+    padding: 1em;
+    border: 1px solid rgb(121, 85, 72);
+    border-radius: 3px;
+    font-size: 0.8em;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 20em;
+    height: auto;
+    background: rgb(121, 85, 72);
+    position: fixed; /* Fixed positioning to stay on screen */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    margin-top: -10em; /* Adjust this value to properly center vertically */
+    margin-left: -10em; /* Adjust this value to properly center horizontally */
+    z-index: 1000; /* Ensure the modal is above other content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow */
+}
+ 
+ .stg3reasonheading{color:#ffffff;}.stg3reasonbox{display:none; }
 .thin-column {
             width: 0.1px; /* Adjust this value as needed */
             border: none; /* Remove border for this column */
@@ -841,14 +877,14 @@ function getData(details){
 				}
 				 output +='<thead>'+       		
 		 			'<tr>	'+	        			 
-		 			'<th width="10%">Sales Eng.</th><th width="10%">SO Dt.</th><th width="10%">SO Code-No.</th><th width="10%">Customer</th><th width="10%">Project</th><th width="10%">Balance Value</th><th width="10%">Exp.Billing Date</th><th width="10%">Short Close</th><th width="10%">Reminders</th>'+	
-		 			'<th width="10%">Items</th>'+      
+		 			'<th width="7%">Sales Eng.</th><th width="5%">SO Dt.</th><th width="5%">SO Code-No.</th><th width="8%">Customer</th><th width="8%">Project</th><th width="5%">Balance Value</th><th width="5%">Exp.Billing Date</th><th width="3%">Short Close</th><th width="5%">Reminders</th>'+	
+		 			'<th width="3%">Items</th>'+      
 		 			'</tr></thead><tbody>'; 
 		 		 outputReport += '<table id="stage_detail_report" class="display nowrap" >'+
 					'<thead>'+       		
 		 			'<tr>	'+	        			 
-		 			'<th>Sales Eng.</th><th>SO Dt.</th><th>SO Code-No.</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Balance Value</th>'+	
-		 			'<th>Delivery Dt.</th><th>Item Code</th><th>Item Desc</th><th>SO UOM</th><th>Balance Quantity</th>'+   
+		 			'<th>Sales Eng.</th><th>SO Dt.</th><th>SO Code-No.</th><th>Customer</th><th>Project</th><th>Consultant</th><th th width="60px>Balance Value</th>'+	
+		 			'<th >Delivery Dt.</th><th>Item Code</th><th>Item Desc</th><th>SO UOM</th><th>Balance Quantity</th>'+   
 		 			'<th>Material Status</th><th>Payment Status</th><th>Readyness Staus</th><th>Updated On</th>'+  
 		 			'</tr></thead><tbody>'; 
 				 if(data){
@@ -865,9 +901,13 @@ function getData(details){
 					 '<td width="25%">'+$.trim(data[i].projectName)+'</td>'+ 
 					 '<td align ="right">'+$.trim(formatNumber(data[i].amount))+'</td>';
 					  output +=  '<td>'+$.trim(data[i].expLOIDate)+'<br/>';					 
-						 if(showUpdateBtn){   
-							 output += '<input type="radio" id="ExpBD'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpBD\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>';
-						 }
+						// if(showUpdateBtn){   
+						///	 output += '<input type="radio" id="ExpBD'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpBD\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>';
+						// }
+						 if(showUpdateBtn){ 
+					 		 	output += '<label style="color:blue;text-transform: uppercase;"><input type="radio" name="poupdate" id="ExpBD'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpBD\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>'	 		 
+					 		  			 '</label>';
+					 		   }
 					  output +=  ' </td>';	
 					  output +=  ' <td>';
 						 if(showUpdateBtn){   
@@ -913,7 +953,7 @@ function getData(details){
 				 output +='<thead>'+       		
 		 			'<tr>	'+	        			 
 		 			'<th>Sales Eng.</th><th>Qtn Dt.</th><th>Qtn No.-Code</th><th>Cons<br> Win %</th> <th>Cont <br> Win %</th><th>Total Win % <a href= "#" data-toggle="modal" data-target="#help-modaltotalwinning"> <i class="fa fa-info-circle pull-right" style="color: #2196f3;font-size: 15px;margin-top: 4px;"></i></a></th><th>SE WIN%</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Amount</th><th style="display: none;"></th><th>Follow-Up <br> Status</th><th>Follow-Up <br> Remark</th><th>Focus List</th>'+	
-		 			'<th>Exp.PODate</th><th>Exp. InvDate</th><th width="100px">Lost <br>Hold<br>  Status</th><th>Reminders</th>'+      
+		 			'<th>Exp.PODate</th><th>Exp. InvDate</th><th width="60px">Lost <br>Hold<br>  Status</th><th>Reminders</th>'+      
 		 			'</tr></thead><tbody>'; 
 				 if(data){
 					 stage23List = data; 
@@ -985,10 +1025,13 @@ function getData(details){
 			 		   }
 			 		  output +=  '</td> ';
 			 		 output += ' <td>';
-					 if(showUpdateBtn){ 
-					 output += ' <label style="color:red;text-transform: uppercase;"><input type="radio" name="lostorhold" id="L'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'LOIL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Lost'	 		 
+			 		 var isLostChecked = $.trim(data[i].lhStatus) === 'L' ? 'checked' : '';
+					 var isHoldChecked = $.trim(data[i].lhStatus) === 'H' ? 'checked' : '';
+					 
+					 if(showUpdateBtn){ 						 
+					 output += ' <label style="color:red;text-transform: uppercase;"><input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId) + '" id="L'+$.trim(data[i].cqhSysId)+'" ' + isLostChecked + ' onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'LOIL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Lost'	 		 
 			 		   '</label> ';
-				     output += '<label style="color:green;text-transform: uppercase;"> <input type="radio" name="lostorhold" id="nL'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'LOINL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> HOLD'	 		 
+				     output += '<label style="color:green;text-transform: uppercase;"> <input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId) + '" id="nL'+$.trim(data[i].cqhSysId)+'" ' + isHoldChecked +' onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'LOINL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> HOLD'	 		 
 			 		    '</label>';
 						 }
 					 output += '</td>';
@@ -1025,7 +1068,7 @@ function getData(details){
 				 output +='<thead>'+       		
 		 			'<tr>	'+	        			 
 		 			'<th>Sales Eng.</th><th>Qtn Dt.</th><th>Qtn<br/> Code-No</th><th>Cons<br/> Win %</th> <th>Cont<br/> Win %</th><th>Total<br/> Win % <a href= "#" data-toggle="modal" data-target="#help-modaltotalwinning"> <i class="fa fa-info-circle pull-right" style="color: #2196f3;font-size: 15px;margin-top: 4px;"></i></a></th><th>SE WIN%</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Product is Specified</th><th>Amount</th><th style="width: 0.1px; border: none; padding: 0; display: none;"></th><th>Follow-Up <br> Status</th><th>Follow-Up <br> Remarks</th><th>Focus List</th>'+	
-		 			'<th>Exp.LOI Date</th><th width="80px">Lost <br> Hold <br> Status</th><th>Submittal Status</th><th>Reminder</th>'+      
+		 			'<th>Exp.LOI Date</th><th width="60px">Lost <br> Hold <br> Status</th><th>Submittal Status</th><th>Reminder</th>'+      
 		 			'</tr></thead><tbody>'; 
 				 if(data){
 					 stage23List = data; 
@@ -1116,20 +1159,28 @@ function getData(details){
 					 totalAmount = totalAmount+Math.round(data[i].qtnAmount);
 					 
 					 output +=  '<td>'+$.trim(data[i].expLOIDate) +'<br/>';					 
-					 if(showUpdateBtn){   
-						 output += '<input type="radio" id="ExpLOI'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpLOI\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>';
-					 }
+					// if (showUpdateBtn) {
+					//	    output += '<input type="radio" name="poupdate" id="ExpLOI'  + $.trim(data[i].cqhSysId) + '" onClick="openLostHoldStg3Window(event,\'' + $.trim(data[i].cqhSysId) + '\',\'' + $.trim(data[i].qtnCode) + '\',\'' + $.trim(data[i].qtnNo) + '\',\'ExpLOI\',\'' + $.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/") + '\',\'' + $.trim(data[i].seCode) + '\')">';
+					//	}
+					 if(showUpdateBtn){ 
+				 		 	output += '<label style="color:blue;text-transform: uppercase;"><input type="radio" name="poupdate" id="ExpLOI'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpLOI\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Update'	 		 
+				 		  			 '</label>';
+				 		   }
 					 output +=  ' </td>';					 
 					
 					 output +=  ' <td>';
+					 
+					 var isLostChecked = $.trim(data[i].lhStatus) === 'L' ? 'checked' : '';
+					 var isHoldChecked = $.trim(data[i].lhStatus) === 'H' ? 'checked' : '';
+					 
 					 if(showUpdateBtn){   
-					 output += ' <label style="color:red;text-transform: uppercase;"><input type="radio" name="lostorhold" id="L'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'L\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Lost'	 		 
+					 output += ' <label style="color:red;text-transform: uppercase;"><input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId)+'" id="L'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'L\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Lost'	 		 
 					 		   '</label>';
-					 output += '<label style="color:green;text-transform: uppercase;"> <input type="radio" name="lostorhold" id="nL'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'NL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Hold'	 		 
+					 output += '<label style="color:green;text-transform: uppercase;"> <input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId)+'" id="nL'+$.trim(data[i].cqhSysId)+ '" ' + isApprovedYesChecked +' onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'NL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Hold'	 		 
 					 		   '</label>';
-					 output += '<label style="color:orange;text-transform: uppercase;"> <input type="radio" name="lostorhold" id="stg1'+$.trim(data[i].cqhSysId)+'" onClick=moveToStage1(event,\''+$.trim(data[i].cqhSysId)+'\')> Stage 1'	 		 
+					 output += '<label style="color:orange;text-transform: uppercase;"> <input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId)+'" id="stg1'+$.trim(data[i].cqhSysId)+'" onClick=moveToStage1(event,\''+$.trim(data[i].cqhSysId)+'\')> Stage 1'	 		 
 				 		  		'</label>';
-					 output += '<label style="color:blue;text-transform: uppercase;"> <input type="radio" name="lostorhold" id="stg'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'stg3\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Stage 3'	 		 
+					 output += '<label style="color:blue;text-transform: uppercase;"> <input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId)+'" id="stg'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'stg3\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Stage 3'	 		 
 					 		   '</label>';
 
 					 } 
@@ -2150,8 +2201,10 @@ function checkForNumberValidation(event){
 	}
 }
 function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSalesCode,projectname,qtncodeNo,seName,showbutton){
-	  qtnId = id,qtCode = qtnCode,qtNo = qtnNo;
-	
+	  qtnId = id,qtCode = qtnCode,qtNo = qtnNo;	  
+	  $("#datepicker-13").datepicker('destroy');
+	  $("#datepicker-13").datepicker({minDate: qtanDate, maxDate: '0', dateFormat: 'dd/mm/yy',  firstDay: 0});
+
 	  document.getElementById("segsalescode").value = segSalesCode;
 	  document.getElementById("segsalesname").value = seName;
 	  document.getElementById("showButton").value = showbutton;
@@ -2205,8 +2258,22 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 		    document.getElementById("qtnnDate").value =  qtanDate;			
 		    var heading = document.getElementById("stg3reasonheading");
 		    heading.innerHTML="Move Qtn. to Stage 3 - "+qtnCode+"-"+qtnNo;
-		    $("#stg3requestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'6%'});	
-		    $("#lostreasonbox").css( {display:'none'});	
+		 //  $("#stg3requestWindow").css( {  top: topDimn, background:'#795548', opacity: 1,  display:'block',   position: 'absolute',   left: '50%', marginLeft: '-10em',  right:'6%'});	
+		     // Calculate the popup position
+           var topOffset = window.scrollY + event.clientY - 60;
+           var leftOffset = window.scrollX + event.clientX - msgbox.offsetWidth / 2;
+  
+  // Set CSS properties
+            $("#stg3requestWindow").css({
+                  top: topOffset + 'px',
+                    left: leftOffset + 'px',
+                      background: '#795548',
+                        opacity: 1,
+                          display: 'block',
+                            position: 'absolute'
+                                });
+
+		   $("#lostreasonbox").css( {display:'none'});	
 		    $("#holdreasonbox").css( {display:'none'});	
 		    $("#stg3reasonbox").css( {display:'block'});	
 		    
@@ -2224,7 +2291,7 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 		    $("#loilostreasonbox").css( {display:'block'});	
 		    $("#loiholdreasonbox").css( {display:'none'});	
 		   
-     }else if(type === 'LOINL'){
+   }else if(type === 'LOINL'){
 			var qtnDate = qtanDate.split("/").reverse().join("-");
 			var todaydate = new Date();
 			var qtnDate1  = new Date(qtnDate);
@@ -2258,8 +2325,21 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 		    document.getElementById("datepicker-14").value="";
 		    var heading = document.getElementById("poUpdatereasonheading");
 		    heading.innerHTML="PO Update - "+qtnCode+"-"+qtnNo;
-		    $("#poUpdaterequestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'20%'});
-		    $("#poUpdatereasonbox").css( {display:'block'});	
+		 
+		//    $("#poUpdaterequestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'20%'});
+		    var topOffset = window.scrollY + event.clientY - 60;
+          var leftOffset = window.scrollX + event.clientX - msgbox.offsetWidth / 2;
+ 
+ // Set CSS properties
+           $("#poUpdaterequestWindow").css({
+                 top: topOffset + 'px',
+                   left: leftOffset + 'px',
+                     background: '#795548',
+                       opacity: 1,
+                         display: 'block',
+                           position: 'absolute'
+                               });
+		   $("#poUpdatereasonbox").css( {display:'block'});	
 		    
 		  //updateNotLostStatus(id, qtnCode, qtnNo, type);  
 	  }else if(type === 'ExpLOI'){		  
@@ -2270,8 +2350,21 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 		    document.getElementById("datepicker-17").value="";
 		    var heading = document.getElementById("expLOIUpdatereasonheading");
 		    heading.innerHTML="Exp LOI Update - "+qtnCode+"-"+qtnNo;
-		    $("#expLOIDateUpdaterequestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'20%'});
+		 //  $("#expLOIDateUpdaterequestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'20%'});
+		    var topOffset = window.scrollY + event.clientY - 60;
+          var leftOffset = window.scrollX + event.clientX - msgbox.offsetWidth / 2;
+ 
+ // Set CSS properties
+           $("#expLOIDateUpdaterequestWindow").css({
+                 top: topOffset + 'px',
+                   left: leftOffset + 'px',
+                     background: '#795548',
+                       opacity: 1,
+                         display: 'block',
+                           position: 'absolute'
+                               });
 		    $("#expLOIUpdatereasonbox").css( {display:'block'});	
+		    
 		    
 		  //updateNotLostStatus(id, qtnCode, qtnNo, type);  
 	  }else if(type === 'ExpOD'){		  
@@ -2360,6 +2453,7 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 	  }else{return;}
 	  
 	}
+
 function closeLostHoldStg3RequestWindow(requestWindow,reasonbox,type){
     var msgbox = document.getElementById(requestWindow);
     var reasonbox = document.getElementById(reasonbox);
@@ -2789,7 +2883,7 @@ function updateReminder(reminderDate,remDesc,projectname,qtncodeno){
 					});
 				  }
 $(function () {
-	 $("#datepicker-13").datepicker({minDate: new Date(<%=year%>, <%=mon%>, -1, <%=day%>), maxDate: '+1Y', dateFormat: 'dd/mm/yy',  firstDay: 0});
+	 $("#datepicker-13").datepicker({minDate: new Date(<%=year%>, <%=mon%>, -1, <%=day%>), maxDate: '0', dateFormat: 'dd/mm/yy',  firstDay: 0});
 	 $("#datepicker-14").datepicker({minDate: 0, maxDate: '+1Y', dateFormat: 'dd/mm/yy',  firstDay: 0});	
 	 $("#datepicker-16").datepicker({minDate: 1, maxDate: '+1Y', dateFormat: 'dd/mm/yy',  firstDay: 0});
 	 $("#datepicker-17").datepicker({minDate: new Date(<%=year%>, <%=mon%>, -1, <%=day%>), maxDate: '+1Y', dateFormat: 'dd/mm/yy',  firstDay: 0});
@@ -2814,8 +2908,9 @@ function updatePODetails(obj,loiAmount){
 	 // var qtnCode = document.getElementById("qtnCode").value;
 	 // var qtnNo = document.getElementById("qtnNo").value;
 	  if(!poDate){
-		  alert("Please select Expected PO date");
-		  return false;
+		 // alert("Please select Expected PO date");
+		  //return false;
+		  poDate='';
 	     }
 		   	$.ajax({
 		   		type: 'POST', 
@@ -2827,6 +2922,7 @@ function updatePODetails(obj,loiAmount){
 				 if(parseInt(data)=== 1){
 					 reasonBox.style.display ="none";
 					 document.getElementById("po"+qtnId+"").parentElement.parentElement.innerHTML = poDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='po"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"PO\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
+					 closeLostHoldStg3RequestWindow();
 					 return true;					 
 				 }else{		
 					 alert("Something went wrong. Please refresh the page and try again")
@@ -2857,8 +2953,14 @@ function updateExpLOIDetails(obj,loiAmount){
 		   		success: function(data) {
 				 if(parseInt(data)=== 1){
 					 reasonBox.style.display ="none";
-					 //document.getElementById("ExpLOI"+qtnId+"").parentElement.parentElement.innerHTML = poDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpLOI"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
-					  title.innerHTML="<strong>Updated! Please refresh the page</strong>";
+					 document.getElementById("ExpLOI"+qtnId+"").parentElement.parentElement.innerHTML = expLOIDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpLOI"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
+			      //	 title.innerHTML = "<strong>Updated! Please refresh the page</strong>";
+
+                    // var expLOIElement = document.getElementById("ExpLOI" + qtnId).parentElement.parentElement.innerHTML;
+                    //expLOIElement = expLOIDate + "<input type='radio' name='poupdate' id='ExpLOI" + qtnId + "' onclick='openLostHoldStg3Window(event,\"" + qtnId + "\",\"" + data.qtnCode + "\",\"" + data.qtnNo + "\",\"ExpLOI\",\"" + data.qtnDt.substring(0, 10).split("-").reverse().join("/") + "\",\"" + segsalescode + "\")'> Update";
+         
+					 //title.innerHTML="<strong>Updated! Please refresh the page</strong>";
+					 expLOIDateUpdaterequestWindow.style.display = "none";
 					 return true;					 
 				 }else{		
 					 alert("Something went wrong. Please refresh the page and try again")
@@ -2873,6 +2975,7 @@ function updateExpLOIDetails(obj,loiAmount){
 			});
 
 }
+
 function updateExpOrderDetails(obj,loiAmount){
 	  var expOrderDate= document.getElementById('datepicker-18').value;		
 	  var title = document.getElementById("expOrderDateUpdatereasonheading");	
@@ -2908,7 +3011,11 @@ function updateExpBillingDetails(obj,loiAmount){
 	  var title = document.getElementById("expBillingDateUpdatereasonheading");	
 	  var reasonBox = document.getElementById("expBillingDateUpdatereasonbox");	  
 	  var segsalescode = document.getElementById("segsalescode").value;
-	
+	  if(!expBillingDate){
+			 // alert("Please select Expected PO date");
+			  //return false;
+			  expBillingDate='';
+		     }
 		   	$.ajax({
 		   		type: 'POST', 
 		   		url: 'SipStageFollowUpController',
@@ -2918,7 +3025,9 @@ function updateExpBillingDetails(obj,loiAmount){
 				 if(parseInt(data)=== 1){
 					 reasonBox.style.display ="none";
 					 //document.getElementById("ExpLOI"+qtnId+"").parentElement.parentElement.innerHTML = poDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpLOI"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
-					  title.innerHTML="<strong>Updated! Please refresh the page</strong>";
+					  title.innerHTML="<strong>Updated</strong>";
+					 document.getElementById("ExpBD"+qtnId+"").parentElement.parentElement.innerHTML = expBillingDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpBD"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'> </label>";
+					 expBillingDateUpdaterequestWindow.style.display = "none";
 					 return true;					 
 				 }else{		
 					 alert("Something went wrong. Please refresh the page and try again")
@@ -2979,8 +3088,9 @@ function updateINVDetails(obj,loiAmount){
 	  var reasonBox = document.getElementById("invUpdaterequestWindow");	  
 	  var segsalescode = document.getElementById("segsalescode").value;
 	  if(!invDate){
-		  alert("Please select Expected Invoice date");
-		  return false;
+		/*   alert("Please select Expected Invoice date");
+		  return false; */
+		  invDate='';
 	     }
 		   	$.ajax({
 		   		type: 'POST', 

@@ -58,7 +58,10 @@ public class SSLMail {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(this.fromaddr, "FJGroup No_Reply"));
 			System.out.println(this.toaddr);
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("nufail.a@fjtco.com"));
+			// message.setRecipients(Message.RecipientType.TO,InternetAddress.parse("rafiuddin.m@fjtco.com"
+			// + "," + "rajakumari.ch@fjtco.com" + ","+ "arun@fjtco.com" + "," +
+			// "katrina.j@fjcare.com" + "," + "ashok.m@fjcare.com"));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("rajakumari.ch@fjtco.com"));
 			// message.setRecipients(Message.RecipientType.TO,
 			// InternetAddress.parse(this.toaddr));
 			// if (this.ccaddr != null) {
