@@ -48,6 +48,7 @@ public class SipStageFollowUp {
 	private String submittalcode = null;
 	private String submittalRemarks = null;
 
+	private String lhStatus = null;
 	private String isApproved = null;
 
 	public String getStyle() {
@@ -452,6 +453,14 @@ public class SipStageFollowUp {
 		this.type = type;
 	}
 
+	public String getLhStatus() {
+		return lhStatus;
+	}
+
+	public void setLhStatus(String lhStatus) {
+		this.lhStatus = lhStatus;
+	}
+
 	public SipStageFollowUp(String itemId, String materialStatus, String paymentStatus, String readynessStatus,
 			String deliveryDate) {
 		super();
@@ -465,7 +474,7 @@ public class SipStageFollowUp {
 	public SipStageFollowUp(String cqhSysId, String seCode, String seName, String qtnDt, String qtnCode, String qtnNo,
 			String custName, String projectName, String consultant, double amount, String priority, String status,
 			String remarks, String updatedBy, String updatedOn, String poDate, String invoiceDate, int reminderCount,
-			int consltWin, int contractorWin, int totalWin, String expLOIDate, String sewinper) {
+			int consltWin, int contractorWin, int totalWin, String expLOIDate, String sewinper, String lhStatus) {
 		super();
 		this.cqhSysId = cqhSysId;
 		this.seCode = seCode;
@@ -490,6 +499,7 @@ public class SipStageFollowUp {
 		this.totalWin = totalWin;
 		this.expLOIDate = expLOIDate;
 		this.sewinper = sewinper;
+		this.lhStatus = lhStatus;
 	}
 
 	public SipStageFollowUp(String cqhSysId, String seCode, String seName, String qtnDt, String qtnCode, String qtnNo,
@@ -524,7 +534,8 @@ public class SipStageFollowUp {
 	public SipStageFollowUp(String cqhSysId, String seCode, String seName, String qtnDt, String qtnCode, String qtnNo,
 			String custName, String projectName, String consultant, double amount, String priority, String status,
 			String remarks, String updatedBy, String updatedOn, int reminderCount, int consltWin, int contractorWin,
-			int totalWin, String expLOIDate, String sewinper, String submittalcode, String isApproved) {
+			int totalWin, String expLOIDate, String sewinper, String submittalcode, String isApproved,
+			String lhStatus) {
 		super();
 		this.cqhSysId = cqhSysId;
 		this.seCode = seCode;
@@ -549,5 +560,6 @@ public class SipStageFollowUp {
 		this.sewinper = sewinper;
 		this.submittalcode = submittalcode;
 		this.isApproved = isApproved;
+		this.lhStatus = lhStatus;
 	}
 }
