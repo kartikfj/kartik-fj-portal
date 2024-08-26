@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -23,8 +24,8 @@ public class EmailHrEvaluation {
 	private String host = null;
 	private int port = 0;
 	private int is_ssl = 0;
-	private String userName =null;
-	
+	private String userName = null;
+
 	public String getUserName() {
 		return userName;
 	}
@@ -130,10 +131,9 @@ public class EmailHrEvaluation {
 			System.out.println(this.toaddr);
 			message.setRecipients(Message.RecipientType.TO,
 					// InternetAddress.parse(this.toaddr));
-				InternetAddress.parse("nufail.a@fjtco.com"));
-			message.setRecipients(Message.RecipientType.CC,
-					 InternetAddress.parse("nufail.a@fjtco.com"));
-				   //InternetAddress.parse(this.ccaddr));
+					InternetAddress.parse("nufail.a@fjtco.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("nufail.a@fjtco.com"));
+			// InternetAddress.parse(this.ccaddr));
 			message.setSubject(this.messageSub);
 			this.messagebody += getMessageFooter();
 			message.setContent(this.messagebody, "text/html");
@@ -181,9 +181,12 @@ public class EmailHrEvaluation {
 
 		} finally {
 			try {
-				if (psmt != null)
-					;
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {

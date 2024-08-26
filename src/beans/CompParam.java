@@ -6,19 +6,15 @@
 package beans;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.sql.Date;
 import java.sql.Time;
-import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -91,8 +87,12 @@ public class CompParam {
 
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -113,8 +113,7 @@ public class CompParam {
 	}
 
 	/**
-	 * @param ref_date
-	 *            the ref_date to set
+	 * @param ref_date the ref_date to set
 	 */
 	public void setRef_date(String ref_date) {
 		this.ref_date = ref_date;
@@ -164,8 +163,12 @@ public class CompParam {
 
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -223,8 +226,12 @@ public class CompParam {
 
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -283,8 +290,12 @@ public class CompParam {
 
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -341,8 +352,12 @@ public class CompParam {
 
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -362,8 +377,7 @@ public class CompParam {
 	}
 
 	/**
-	 * @param month
-	 *            the month to set
+	 * @param month the month to set
 	 */
 	public void setMonth(int month) {
 		// System.out.print(month);
@@ -378,8 +392,7 @@ public class CompParam {
 	}
 
 	/**
-	 * @param year
-	 *            the year to set
+	 * @param year the year to set
 	 */
 	public void setYear(int year) {
 		// System.out.print(year);
@@ -394,8 +407,7 @@ public class CompParam {
 	}
 
 	/**
-	 * @param procMonth
-	 *            the procMonth to set
+	 * @param procMonth the procMonth to set
 	 */
 	public void setProcMonth(int procMonth) {
 		this.procMonth = procMonth;
@@ -409,8 +421,7 @@ public class CompParam {
 	}
 
 	/**
-	 * @param procYear
-	 *            the procYear to set
+	 * @param procYear the procYear to set
 	 */
 	public void setProcYear(int procYear) {
 		this.procYear = procYear;
@@ -477,8 +488,7 @@ public class CompParam {
 	}
 
 	/**
-	 * @param newschedule
-	 *            the newschedule to set
+	 * @param newschedule the newschedule to set
 	 */
 	public void setNewschedule(WorkSchedule1 newschedule) {
 		this.newschedule = newschedule;
@@ -492,8 +502,7 @@ public class CompParam {
 	}
 
 	/**
-	 * @param companyCode
-	 *            the companyCode to set
+	 * @param companyCode the companyCode to set
 	 */
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
@@ -507,8 +516,7 @@ public class CompParam {
 	}
 
 	/**
-	 * @param editor
-	 *            the editor to set
+	 * @param editor the editor to set
 	 */
 	public void setEditor(String editor) {
 		this.editor = editor;
