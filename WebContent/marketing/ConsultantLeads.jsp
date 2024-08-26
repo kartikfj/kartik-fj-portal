@@ -682,7 +682,7 @@ input.right {
 	                </div> 	                 
 				     <div class="form-group">
 	                  <label for="mktRmrk">Meeting Notes</label>
-	                  <textarea class="form-control" rows="2" id="meetingNotes" placeholder="Enter Meeting Notes" name="meetingNotes" required></textarea>
+	                  <textarea class="form-control" rows="2" id="meetingNotes" placeholder="Enter Meeting Notes" name="newConsRmrk" required></textarea>
 	                </div>
                  </div>
               </div>
