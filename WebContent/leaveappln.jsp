@@ -257,8 +257,8 @@
                         }
                         ++i;
                     }
-                    if (d1 && d2) {                    	
-                        diff = Math.floor((d2.getTime() - d1.getTime()) / 86400000); 
+                    if (d1 && d2) {                  	
+                        diff = Math.floor((d2.getTime() - d1.getTime()) / 86400000);
                         var totDays = diff+1;
                         if (diff == 0) {
                             var currentleavesel = document.getElementById("leavetype").value;
@@ -268,7 +268,6 @@
                                 $('#h_chkbox').attr('disabled', true);
                         }
                         diff = diff + 1;
-
                         var currentleavesel = document.getElementById("leavetype").value;
                         //console.log(hr22LvPolicy+" "+currentleavesel);
                         if(hr22LvPolicy && (currentleavesel == 'AN30' || currentleavesel == 'AN15' || currentleavesel == 'AN30FJC')){
