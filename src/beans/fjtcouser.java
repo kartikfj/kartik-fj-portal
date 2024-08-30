@@ -992,18 +992,15 @@ public class fjtcouser {
 			retval = -2;
 
 		} finally {
-			try {
-				if (psmt != null)
-					;
-				psmt.close();
-				con.closeConnection();
-
-			} catch (SQLException e) {
-
-				System.out.println("Exception in closing DB resources");
-				retval = -2;
-			}
-		}
+	        try {
+	            if (rs != null) rs.close(); // Ensure ResultSet is closed
+	            if (psmt != null) psmt.close(); // Close PreparedStatement
+	            if (mcon != null) mcon.close(); // Close database connection
+	        } catch (SQLException e) {
+	            System.out.println("Exception in closing DB resources");
+	            e.printStackTrace();
+	        }
+	    }
 		return retval;
 	}
 

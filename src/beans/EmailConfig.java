@@ -15,7 +15,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 /**
- * @author  
+ * @author
  */
 public class EmailConfig {
 
@@ -92,6 +92,7 @@ public class EmailConfig {
 	public void setIs_ssl(int is_ssl) {
 		this.is_ssl = is_ssl;
 	}
+
 	public String getUserName() {
 		return userName;
 	}
@@ -104,10 +105,10 @@ public class EmailConfig {
 	public int sendMail() {
 		readDefaultSenderMailProps();
 		Properties props = new Properties();
-		props.put("mail.smtp.host", this.host); 
+		props.put("mail.smtp.host", this.host);
 		props.put("mail.smtp.auth", "true");
-		props.setProperty("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.port", port); 
+		props.setProperty("mail.smtp.ssl.enable", "true");
+		props.put("mail.smtp.port", port);
 
 		int status = 0;
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
@@ -121,8 +122,9 @@ public class EmailConfig {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(this.fromaddr));
 			System.out.println(this.toaddr);
-			//message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(this.toaddr));
-			 message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("nufail.a@fjtco.com"));
+			// message.setRecipients(Message.RecipientType.TO,
+			// InternetAddress.parse(this.toaddr));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("nufail.a@fjtco.com"));
 			message.setSubject(this.messageSub);
 			this.messagebody += getMessageFooter();
 			message.setContent(this.messagebody, "text/html");

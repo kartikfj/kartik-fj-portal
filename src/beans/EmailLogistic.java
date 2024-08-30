@@ -119,7 +119,7 @@ public class EmailLogistic {
 
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.auth", "true");
-		props.setProperty("mail.smtp.starttls.enable", "true");
+		props.setProperty("mail.smtp.ssl.enable", "true");
 		props.put("mail.smtp.port", port);
 
 		int status = 0;

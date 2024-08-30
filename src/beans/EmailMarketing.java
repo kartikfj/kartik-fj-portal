@@ -1,4 +1,4 @@
- 
+
 package beans;
 
 import java.sql.Connection;
@@ -26,8 +26,8 @@ public class EmailMarketing {
 	private String host = null;
 	private int port = 0;
 	private int is_ssl = 0;
-	private String userName =null;
-	
+	private String userName = null;
+
 	public String getUserName() {
 		return userName;
 	}
@@ -35,6 +35,7 @@ public class EmailMarketing {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
 	public String getMessageSub() {
 		return messageSub;
 	}
@@ -115,7 +116,7 @@ public class EmailMarketing {
 
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.auth", "true");
-		props.setProperty("mail.smtp.starttls.enable", "true");
+		props.setProperty("mail.smtp.ssl.enable", "true");
 		props.put("mail.smtp.port", port);
 
 		int status = 0;
@@ -131,11 +132,10 @@ public class EmailMarketing {
 			message.setFrom(new InternetAddress(this.fromaddr, "FJ-SYNERGY"));
 			System.out.println(this.toaddr);
 			message.setRecipients(Message.RecipientType.TO,
-					//InternetAddress.parse(this.toaddr));
+					// InternetAddress.parse(this.toaddr));
 					InternetAddress.parse("nufail.a@fjtco.com"));
-			message.setRecipients(Message.RecipientType.CC,
-				InternetAddress.parse("nufail.a@fjtco.com"));
-				  // InternetAddress.parse(this.ccaddr));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("nufail.a@fjtco.com"));
+			// InternetAddress.parse(this.ccaddr));
 			message.setSubject(this.messageSub);
 			this.messagebody += getMessageFooter();
 			message.setContent(this.messagebody, "text/html");
@@ -206,7 +206,7 @@ public class EmailMarketing {
 				+ "<table style=\"width:100%;max-width:600px;margin-left:auto;margin-right:auto;padding-left:20px;padding-right:20px;padding-bottom:10px;color:#ffffff;line-height:1.4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Ubuntu','Open Sans','Helvetica Neue',sans-serif;background:#ffffff;background-color:#014888\"><tbody><tr><td><div style=\"text-align:center;margin-top:50px;\"><div style=\"font-size:20px;font-weight:700;margin-bottom:20px\">"
 				+ "Faisal Jassim Group.</div><div style=\"text-align:center\">" + "</div></div>"
 				+ "<div style=\"background: #014888;padding-top:15px;padding-right:0;padding-bottom:0;padding-left:0;margin-top:30px;color:#ffffff;font-size:12px;text-align:center;border-top:1px solid #8e8e8e\">Sent by  "
-				+ "<a href=\"http://www.faisaljassim.ae/\" style=\"color:#ffc107;text-decoration:underline\" target=\"_blank\" data-saferedirecturl=\"http://www.faisaljassim.ae/\" > FJ-Group</a> · P.O. Box 1871, Dubai Investment Park - 1 - Dubai<div>"
+				+ "<a href=\"http://www.faisaljassim.ae/\" style=\"color:#ffc107;text-decoration:underline\" target=\"_blank\" data-saferedirecturl=\"http://www.faisaljassim.ae/\" > FJ-Group</a> ï¿½ P.O. Box 1871, Dubai Investment Park - 1 - Dubai<div>"
 				+ "</div></div></td></tr></tbody></table></div>  " + "</td></tr></table>";
 		StringBuilder mbody = new StringBuilder("");
 		mbody.append(div);

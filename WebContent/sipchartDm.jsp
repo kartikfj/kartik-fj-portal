@@ -1529,66 +1529,80 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 			 </div>
 <!-- 	   	      <div id="stagedetailsgraph" style="width: 900px; height: 500px;"></div> -->
          </div>
-    <div id="bb1-meter" class="tab-pane fade  in active" >
-    <div class="row" > 	
-     <div class="box-header with-border" style="margin-top: -10px;"> 
-      <h3 class="box-title">Target Vs Actual  Achieved  %  for  ${syrtemp} -
-	     <c:choose>
-			 	<c:when test="${syrtemp lt CURR_YR}">
-			 		  (FY)
-			 	</c:when>
-			 	<c:otherwise>		
-			  		  (YTD)
-			 	</c:otherwise>
-	 		</c:choose>
-     </h3>
-      <style>
-  .bg-color-1 {
-    background-color: #ff9999; /* Change to your desired color */
+<div id="bb1-meter" class="tab-pane fade in active">
+    <div class="row">     
+        <div class="box-header with-border" style="margin-top: -10px;"> 
+            <h3 class="box-title">Target Vs Actual Achieved % for ${syrtemp} -
+                <c:choose>
+                    <c:when test="${syrtemp lt CURR_YR}">
+                        (FY)
+                    </c:when>
+                    <c:otherwise>        
+                        (YTD)
+                    </c:otherwise>
+                </c:choose>
+            </h3>
+            <style>
+                .bg-color-1 {
+                    background-color: #ff9999; /* Change to your desired color */
+                    padding: 2px; /* Adjust as needed */
+                    border-radius: 4px; /* Optional: for rounded corners */
+                }
 
- 
-  }
-  
-  .bg-color-3 {
-    background-color: #99ff99; /* Change to your desired color */
-   
- 
-  }
- .align-right {
-    display: inline-block;
-    text-align: right;
-    width: 60px; /* Adjust width as needed */
-}
- 
-</style>
- <h6>
-  &nbsp;  &nbsp; &nbsp;  &nbsp;   &nbsp;  &nbsp;<span class="bg-color-1"> Booking Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_bkng_ytd_target}"/></span></span>
-  &nbsp;  &nbsp; ||
-  &nbsp; &nbsp;
-  &nbsp;  <span class="bg-color-3"> Billing Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_blng_ytd_target}"/></span></span>
-</h6>
+                .bg-color-3 {
+                    background-color: #99ff99; /* Change to your desired color */
+                    padding: 2px; /* Adjust as needed */
+                    border-radius: 4px; /* Optional: for rounded corners */
+                }
 
-<h6>
-  &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; <span class="bg-color-1"> Booking Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actual}"/></span></span>
-  &nbsp;  &nbsp; ||
-  &nbsp;  &nbsp;
-  &nbsp;   <span class="bg-color-3"> Billing Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actualbl}"/></span></span>
-</h6>
- 
-      </div>		
-	   <div class="row">
-	   			 <div class="col-lg-1 col-xs-0" ></div>
-	   			 
-	   			<div class="col-lg-5 col-xs-6 sep">
-    <div id="guage_test_booking" style="background-color: #ff9999; padding: -10px 15px;"></div>
+                .align-right {
+                    display: inline-block;
+                    text-align: right;
+                    width: 60px; /* Adjust width as needed */
+                }
+
+                #guage_test_booking, #guage_test_billing {
+                    box-sizing: border-box;
+                    width: 100%; /* Full width of the container */
+                    height: 120px; /* Set height as needed */
+                }
+
+                @media (max-width: 768px) {
+                    #guage_test_booking, #guage_test_billing {
+                        height: 150px; /* Adjust height for smaller screens */
+                    }
+
+                    .align-right {
+                        width: auto; /* Adjust width for smaller screens */
+                    }
+                }
+            </style>
+            <h6>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <span class="bg-color-1"> Booking Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_bkng_ytd_target}"/></span></span>
+                &nbsp; &nbsp; || &nbsp; &nbsp;
+                <span class="bg-color-3"> Billing Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_blng_ytd_target}"/></span></span>
+            </h6>
+
+            <h6>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <span class="bg-color-1"> Booking Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actual}"/></span></span>
+                &nbsp; &nbsp; || &nbsp; &nbsp;
+                <span class="bg-color-3"> Billing Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actualbl}"/></span></span>
+            </h6>
+        </div>
+        <div class="row">
+            <div class="col-lg-1 col-xs-0"></div>
+            <div class="col-lg-5 col-xs-6 sep">
+                <div id="guage_test_booking" style="background-color: #ff9999; padding: 1px; box-sizing: border-box;  height: 180px;"></div>
+            </div>
+            <div class="col-lg-5 col-xs-6">
+                <div id="guage_test_billing" style="background-color: #99ff99; padding: 1px; box-sizing: border-box;  height: 180px;"></div>
+            </div>
+            <div class="col-lg-1 col-xs-0"></div>
+        </div>
+    </div>
 </div>
-	   			
-	   		
-       	          <div class="col-lg-5 col-xs-6"> <div id="guage_test_billing" style="background-color: #99ff99;"></div>
-		          </div><div class="col-lg-1 col-xs-0" ></div>
-		          </div>
-     </div>
-       </div>
           
      </div>
      
