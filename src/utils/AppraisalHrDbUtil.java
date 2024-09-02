@@ -79,7 +79,7 @@ public class AppraisalHrDbUtil {
 			}
 
 		} finally {
-			close(myStmt, null);
+			close(myStmt, myRes);
 			con.closeConnection();
 		}
 

@@ -28,8 +28,8 @@ public class EmailServiceRequest {
 	private String host = null;
 	private int port = 0;
 	private int is_ssl = 0;
-	private String userName =null;
-	
+	private String userName = null;
+
 	public String getUserName() {
 		return userName;
 	}
@@ -133,24 +133,23 @@ public class EmailServiceRequest {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(this.fromaddr, "FJ-SERVICE REQUEST"));
 			System.out.println(this.toaddr);
-			message.setRecipients(Message.RecipientType.TO,
-					// InternetAddress.parse(this.toaddr));
+			message.setRecipients(Message.RecipientType.TO, // InternetAddress.parse(this.toaddr));
 					InternetAddress.parse("nufail.a@fjtco.com"));
-			message.setRecipients(Message.RecipientType.CC,
-					InternetAddress.parse("nufail.a@fjtco.com"));
-				   //InternetAddress.parse(this.ccaddr));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("nufail.a@fjtco.com"));
+			// InternetAddress.parse(this.ccaddr));
 			message.setSubject(this.messageSub);
 			this.messagebody += getMessageFooter();
 			message.setContent(this.messagebody, "text/html");
 			Transport.send(message);
 			status = 1;
-			// System.out.println("Done");
+			System.out.println("Done in EmailServiceRequest");
 
 		} catch (MessagingException e) {
 			System.out.print(e);
 			// throw new RuntimeException(e);
 			status = -1;
 		} finally {
+			System.out.println("finally in EmailServiceRequest" + status);
 			return status;
 		}
 	}
@@ -186,9 +185,10 @@ public class EmailServiceRequest {
 
 		} finally {
 			try {
+				if (rs != null)
+					rs.close();
 				if (psmt != null)
-					;
-				psmt.close();
+					psmt.close();
 				con.closeConnection();
 
 			} catch (SQLException e) {

@@ -135,7 +135,8 @@ public class EmailLogistic {
 			message.setFrom(new InternetAddress(this.fromaddr, "FJ-Logistics"));
 			System.out.println(this.toaddr);
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("nufail.a@fjtco.com"));
-			// message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(this.toaddr));
+			// message.setRecipients(Message.RecipientType.TO,
+			// InternetAddress.parse(this.toaddr));
 			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("nufail.a@fjtco.com"));
 			// InternetAddress.parse(this.ccaddr));
 			message.setSubject(this.messageSub);
@@ -143,13 +144,14 @@ public class EmailLogistic {
 			message.setContent(this.messagebody, "text/html");
 			Transport.send(message);
 			status = 1;
-			// System.out.println("Done");
+			System.out.println("Done in EmailLogistic");
 
 		} catch (MessagingException e) {
 			System.out.print(e);
 			// throw new RuntimeException(e);
 			status = -1;
 		} finally {
+			System.out.println("finally in EmailLogistic" + status);
 			return status;
 		}
 	}
@@ -185,9 +187,10 @@ public class EmailLogistic {
 
 		} finally {
 			try {
+				if (rs != null)
+					rs.close();
 				if (psmt != null)
-					;
-				psmt.close();
+					psmt.close();
 				con.closeConnection();
 
 			} catch (SQLException e) {

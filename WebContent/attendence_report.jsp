@@ -107,7 +107,7 @@
                     
                 </sql:query>
         <c:choose>
-            <c:when test="${pageContext.request.method ne 'POST'}">
+            <c:when test="${pageContext.request.method != 'POST'}">
                 <sql:query var="rs3" dataSource="jdbc/orclfjtcolocal">
                     SELECT distinct EMP_DIVN_CODE from FJPORTAL.PM_EMP_KEY where EMP_COMP_CODE=?
                     <sql:param>${rs2.rows[0].COMP_CODE}</sql:param>
