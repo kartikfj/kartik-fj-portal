@@ -5,7 +5,17 @@
  <c:set var="syrtemp" value="${selected_Year}" scope="page" />
 <!DOCTYPE html>
 <html>
-<head>  
+<head>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var scodeSelect = document.getElementById('scode');
+    
+    // Check if a value is set and not "0" on page load
+    if (scodeSelect && scodeSelect.value && scodeSelect.value !== "0") {
+        sm_performance_booking(); // Call the function with the default value
+    }
+});
+</script>  
 <style>
 table.dataTable thead th,table.dataTable thead td {
     padding: 5px 5px;
@@ -288,9 +298,10 @@ table.dataTable thead th,table.dataTable thead td {
 <form class="form-inline" method="post" action="sip"> 
     <br/>
     <c:set var="sales_egr_code" value="${selected_salesman_code}" scope="page" /> 
+
     <select class="form-control form-control-sm select2" name="scode" id="scode" required onchange="sm_performance_booking()">
         <c:if test="${fjtuser.role ne 'mg' and fjtuser.salesDMYn eq 0}">  
-            <option ${fjtuser.emp_code  == selected_salesman_code ? 'selected':''} value="${fjtuser.emp_code}">${fjtuser.uname}</option>
+            <option value="${fjtuser.emp_code}" ${fjtuser.emp_code == selected_salesman_code ? 'selected':''}>${fjtuser.uname}</option>
         </c:if>
         <c:if test="${fjtuser.role eq 'mg' or fjtuser.salesDMYn ge 1}">  
             <option value="0">Select Sales Manager</option>
@@ -298,13 +309,13 @@ table.dataTable thead th,table.dataTable thead td {
         <c:forEach var="s_engList" items="${SEngLst}">
             <c:choose>
                 <c:when test="${fjtuser.role eq 'mg'}">
-                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code  == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
+                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
                 </c:when>
                 <c:when test="${fjtuser.salesDMYn ge 1 and fjtuser.role ne 'mg'}">
-                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code  == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
+                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
                 </c:when>
-                 <c:otherwise>
-                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_code  == selected_salesman_code ? 'selected':''} role="${s_engList.salesman_code}">${s_engList.salesman_name} -(${s_engList.salesman_code})</option>
+                <c:otherwise>
+                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_code == selected_salesman_code ? 'selected':''} role="${s_engList.salesman_code}">${s_engList.salesman_name} -(${s_engList.salesman_code})</option>
                 </c:otherwise> 
             </c:choose>
         </c:forEach>
@@ -316,7 +327,10 @@ table.dataTable thead th,table.dataTable thead td {
         <i class="fa fa-share" aria-hidden="true"></i> PERFORMANCE
     </button>
 </form>
+
+
 </div>
+
 
 
 
