@@ -436,8 +436,7 @@ public class BackDatedLeaveApplication {
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
-					;
-				psmt.close();
+					psmt.close();
 				con.closeConnection();
 			} catch (SQLException e) {
 
@@ -756,8 +755,7 @@ public class BackDatedLeaveApplication {
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
-					;
-				psmt.close();
+					psmt.close();
 				con.closeConnection();
 			} catch (SQLException e) {
 				System.out.println("Exception in closing DB resources");

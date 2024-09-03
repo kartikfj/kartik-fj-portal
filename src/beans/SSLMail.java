@@ -216,12 +216,17 @@ public class SSLMail {
 			retval = -2;
 		} finally {
 			try {
-				if (rs != null)
+
+
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
+				}
+				if (psmt != null) {
 					psmt.close();
-				if (mcon != null)
-					con.closeConnection();
+				}
+				con.closeConnection();
+
+
 			} catch (SQLException e) {
 				System.out.println("Exception in closing DB resources");
 				e.printStackTrace();
