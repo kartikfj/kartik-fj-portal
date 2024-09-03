@@ -992,6 +992,8 @@ public class fjtcouser {
 			retval = -2;
 
 		} finally {
+
+
 			try {
 				if (psmt != null)
 					psmt.close();
@@ -1005,6 +1007,7 @@ public class fjtcouser {
 				retval = -2;
 			}
 		}
+
 		return retval;
 	}
 

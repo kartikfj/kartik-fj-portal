@@ -107,7 +107,11 @@ public class EmailConfig {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", this.host);
 		props.put("mail.smtp.auth", "true");
+
+	
+
 		props.setProperty("mail.smtp.starttls.enable", "true");
+
 		props.put("mail.smtp.port", port);
 
 		int status = 0;
