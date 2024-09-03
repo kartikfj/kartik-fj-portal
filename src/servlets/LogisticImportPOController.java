@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import beans.Logistic;
-import beans.SSLConfiguration;
 import beans.fjtcouser;
 import utils.LogisticDashboardDbUtil;
 
@@ -24,10 +23,6 @@ import utils.LogisticDashboardDbUtil;
 public class LogisticImportPOController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private LogisticDashboardDbUtil logisticDashboardDbUtil;
-	static {
-		// Configure SSL/TLS settings
-		SSLConfiguration.configureSSL();
-	}
 
 	public LogisticImportPOController() throws ServletException {
 		super.init();

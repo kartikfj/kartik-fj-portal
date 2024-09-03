@@ -42,11 +42,6 @@ public class SSLMail {
 	// Security.addProvider(new BouncyCastleJsseProvider());
 	// }
 
-	static {
-		// Configure SSL/TLS settings
-		SSLConfiguration.configureSSL();
-	}
-
 	@SuppressWarnings("finally")
 	public int sendMail(String urlAddress) {
 		/*
@@ -217,7 +212,6 @@ public class SSLMail {
 		} finally {
 			try {
 
-
 				if (rs != null) {
 					rs.close();
 				}
@@ -225,7 +219,6 @@ public class SSLMail {
 					psmt.close();
 				}
 				con.closeConnection();
-
 
 			} catch (SQLException e) {
 				System.out.println("Exception in closing DB resources");
