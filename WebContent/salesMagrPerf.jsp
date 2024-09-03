@@ -78,26 +78,33 @@ table.dataTable thead th,table.dataTable thead td {
     align-items: center;
     margin-top: 1px;
     padding: 10px;
+     z-index: -1; 
 }
 
 .gauge-box {
-    background-color: #f9f9f9;
+   /*  background-color: #f9f9f9; */
     border: 1px solid #ddd;
     border-radius: 1px;
     padding: 0px;
-    width: 60px; /* Adjusted width for smaller size */
-    height: 70px; /* Adjusted height for smaller size */
+    width: 30px; /* Adjusted width for smaller size */
+    height: 60px; /* Adjusted height for smaller size */
     display: flex;
     justify-content: center;
     align-items: center;
+     z-index: -1; 
 }
 
 .gauge-booking {
-    background-color: #ff9999;
-}
+   /*  background-color: #ff9999; */
+     width: 40px; /* Match width of gauge box */
+    height: 180px;
+     z-index: -1; 
+ }
 
 .gauge-billing {
     background-color: #99ff99;
+     width: 60px; /* Match width of gauge box */
+     height:80px;
 }
 </style>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
@@ -365,15 +372,16 @@ table.dataTable thead th,table.dataTable thead td {
                     &nbsp;&nbsp; &nbsp;&nbsp;
                 </h6>
             </div>
-            <div class="gauge-container row" style="margin-top: 1px; padding: 0;">
-                <div class="col-md-3">
-                    <div id="guage_test_booking" class="gauge-box gauge-booking"></div>
-                </div>
-                                <div id="button-container"></div>
-                <div class="col-md-3">
-                    <div id="guage_test_billing" class="gauge-box gauge-billing"></div>
-                </div>
-            </div>
+           <div class="gauge-container row" style="margin-top: 0px; padding: 0; bottom:10px">
+   <div class="col-md-3">
+    <div id="guage_test_booking" style="background: linear-gradient(to bottom, transparent 20px, #ff9999 20px); padding: 1px; box-sizing: border-box; height: 228px;  margin-top:-20px" ></div>
+</div>
+   
+    <div id="button-container"></div>
+    <div class="col-md-3">
+        <div id="guage_test_billing" style="background:linear-gradient(to bottom, transparent 20px, #99ff99 20px); padding: 1px; box-sizing: border-box;  height: 228px;  margin-top:-20px"></div>
+    </div>
+</div>
         </div>
     </div>
 </div>

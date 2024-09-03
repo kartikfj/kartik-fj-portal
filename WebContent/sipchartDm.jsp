@@ -1594,10 +1594,11 @@ $('#mrInfJihLstGrpTbl').DataTable( {
         <div class="row">
             <div class="col-lg-1 col-xs-0"></div>
             <div class="col-lg-5 col-xs-6 sep">
-                <div id="guage_test_booking" style="background-color: #ff9999; padding: 1px; box-sizing: border-box;  height: 180px;"></div>
-            </div>
+    <div id="guage_test_booking" style="background: linear-gradient(to bottom, transparent 20px, #ff9999 20px); padding: 1px; box-sizing: border-box; height: 175px;  margin-top:-20px"></div>
+</div>
+            
             <div class="col-lg-5 col-xs-6">
-                <div id="guage_test_billing" style="background-color: #99ff99; padding: 1px; box-sizing: border-box;  height: 180px;"></div>
+                <div id="guage_test_billing" style="background: linear-gradient(to bottom, transparent 20px, #99ff99 20px); padding: 1px; box-sizing: border-box;  height: 175px;  margin-top:-20px"></div>
             </div>
             <div class="col-lg-1 col-xs-0"></div>
         </div>
