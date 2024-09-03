@@ -6,6 +6,17 @@
 <!DOCTYPE html>
 <html>
 <head>  
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var scodeSelect = document.getElementById('scode');
+    
+    // Check if a value is set and not "0" on page load
+    if (scodeSelect && scodeSelect.value && scodeSelect.value !== "0") {
+        sm_performance_booking(); // Call the function with the default value
+    }
+});
+</script>
+
 <style>
 table.dataTable thead th,table.dataTable thead td {
     padding: 5px 5px;
@@ -288,9 +299,10 @@ table.dataTable thead th,table.dataTable thead td {
 <form class="form-inline" method="post" action="sip"> 
     <br/>
     <c:set var="sales_egr_code" value="${selected_salesman_code}" scope="page" /> 
+
     <select class="form-control form-control-sm select2" name="scode" id="scode" required onchange="sm_performance_booking()">
         <c:if test="${fjtuser.role ne 'mg' and fjtuser.salesDMYn eq 0}">  
-            <option ${fjtuser.emp_code  == selected_salesman_code ? 'selected':''} value="${fjtuser.emp_code}">${fjtuser.uname}</option>
+            <option value="${fjtuser.emp_code}" ${fjtuser.emp_code == selected_salesman_code ? 'selected':''}>${fjtuser.uname}</option>
         </c:if>
         <c:if test="${fjtuser.role eq 'mg' or fjtuser.salesDMYn ge 1}">  
             <option value="0">Select Sales Manager</option>
@@ -298,13 +310,13 @@ table.dataTable thead th,table.dataTable thead td {
         <c:forEach var="s_engList" items="${SEngLst}">
             <c:choose>
                 <c:when test="${fjtuser.role eq 'mg'}">
-                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code  == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
+                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
                 </c:when>
                 <c:when test="${fjtuser.salesDMYn ge 1 and fjtuser.role ne 'mg'}">
-                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code  == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
+                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_emp_code == selected_salesman_code ? 'selected':''}>${s_engList.salesman_name}</option>
                 </c:when>
-                 <c:otherwise>
-                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_code  == selected_salesman_code ? 'selected':''} role="${s_engList.salesman_code}">${s_engList.salesman_name} -(${s_engList.salesman_code})</option>
+                <c:otherwise>
+                    <option value="${s_engList.salesman_emp_code}" ${s_engList.salesman_code == selected_salesman_code ? 'selected':''} role="${s_engList.salesman_code}">${s_engList.salesman_name} -(${s_engList.salesman_code})</option>
                 </c:otherwise> 
             </c:choose>
         </c:forEach>
@@ -316,6 +328,7 @@ table.dataTable thead th,table.dataTable thead td {
         <i class="fa fa-share" aria-hidden="true"></i> PERFORMANCE
     </button>
 </form>
+
 </div>
 
 
@@ -1203,7 +1216,7 @@ function sm_performance_booking(){
 			  stage2JIH = data[i].yrTot;
 		    break;
 		  case "4": // STAGE3 (LOI)
-			  stage3LOI = data[i].yrTot;
+			//  stage3LOI = data[i].yrTot;
 			  bookingActual = data[i].yrTot;			 
 		    break;
 		/*  case "4.1": // YTD Booking Perc
@@ -1333,7 +1346,7 @@ function sm_performance_booking(){
 				 //+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-4-(LPO) </td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td></tr>"
 				//+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-5-(BILLING) </td><td class='se-blr'></td><td style='text-align:right;'></td><td style='text-align:right;'>"+formatNumber(stage5LOI)+ "</td><td></td></tr>"
 				 //+  "<tr><td style='text-align:left;' class='se-brr'>Booking sdf</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerCodes(\""+smCode+"\")'>Show All</a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td></tr>"
-				  +  "<tr><td style='text-align:left;' class='se-brr'>Booking</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(stage3LOI)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBookingCodes(\""+$.trim(data[i].smCode)+"\", \"SC\")'>Show All</a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*5)/100+"</td></tr>"
+				  +  "<tr><td style='text-align:left;' class='se-brr'>Booking</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBookingCodes(\""+$.trim(data[i].smCode)+"\", \"SC\")'>Show All</a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*5)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Booking</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBooking))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(avgweeklyorders))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
@@ -1616,7 +1629,7 @@ function sm_performance_details(){
 				 //+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-4-(LPO) </td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td></tr>"
 				//+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-5-(BILLING) </td><td class='se-blr'></td><td style='text-align:right;'></td><td style='text-align:right;'>"+formatNumber(stage5LOI)+ "</td><td></td></tr>"
 				 //+  "<tr><td style='text-align:left;' class='se-brr'>Booking sdf</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerCodes(\""+smCode+"\")'>Show All</a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td></tr>"
-				  +  "<tr><td style='text-align:left;' class='se-brr'>Booking dfgdg</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(stage3LOI)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBookingCodes(\""+$.trim(data[i].smCode)+"\", \"SC\")'><i class='fa fa-file-excel-o' aria-hidden='true'></a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*5)/100+"</td></tr>"
+				  +  "<tr><td style='text-align:left;' class='se-brr'>Booking</td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "<a href ='#' data-backdrop='static' style='text-align: left' data-keyboard='false' data-toggle='modal' data-target='#modal-default1' onclick='printAllSalesEngineerBookingCodes(\""+$.trim(data[i].smCode)+"\", \"SC\")'><i class='fa fa-file-excel-o' aria-hidden='true'></a></td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*5)/100+"</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Booking</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBooking))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(avgweeklyorders))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"

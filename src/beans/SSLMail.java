@@ -77,7 +77,7 @@ public class SSLMail {
 			// throw new RuntimeException(e);
 			status = -1;
 		} finally {
-			System.out.println("Done in SSLMail");
+			System.out.println("finally in SSLMail");
 			return status;
 		}
 	}

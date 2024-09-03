@@ -3334,7 +3334,7 @@ function sm_performance_details(){
 			  stage2JIH = data[i].yrTot;
 		    break;
 		  case "4": // STAGE3 (LOI)
-			  stage3LOI = data[i].yrTot;
+			  //stage3LOI = data[i].yrTot;
 			  bookingActual = data[i].yrTot;
 		    break;
 		  case "4.1": // YTD Booking Perc

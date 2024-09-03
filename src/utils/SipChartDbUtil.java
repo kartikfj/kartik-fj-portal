@@ -2428,12 +2428,12 @@ public class SipChartDbUtil {
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			// SQL Query
 			// commented as Arun told to match summary and detailss
-//String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT,  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED  FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND WEEK LIKE '"
-			// + lastTwoDigits + "-%'";
-			String sql = " SELECT  WEEK, ZONE, SALES_EGR_CODE, PROJECT_NAME, CONSULTANT, "
-					+ "  QUOT_DT, QUOT_NO, LOI_RCD_DT, AMOUNT " + " FROM STG3_DETAIL "
-					+ " WHERE SALES_EGR_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?)  "
-					+ " ORDER BY LOI_RCD_DT desc ";
+			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT,  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED  FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND WEEK LIKE '"
+					+ lastTwoDigits + "-%'";
+//			String sql = " SELECT  WEEK, ZONE, SALES_EGR_CODE, PROJECT_NAME, CONSULTANT, "
+//					+ "  QUOT_DT, QUOT_NO, LOI_RCD_DT, AMOUNT " + " FROM STG3_DETAIL "
+//					+ " WHERE SALES_EGR_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?)  "
+//					+ " ORDER BY LOI_RCD_DT desc ";
 			System.out.println("query in stage3SummaryDetailsss " + sql);
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, sales_man_code);
@@ -2504,10 +2504,12 @@ public class SipChartDbUtil {
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			// SQL Query
 			// Commented as Arun told to match the summary with details
-//	String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT, "	+ "  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE = ? AND WEEK LIKE '" + lastTwoDigits + "-%'";
-			String sql = " SELECT  WEEK, ZONE, SALES_EGR_CODE, PROJECT_NAME, CONSULTANT, "
-					+ "  QUOT_DT, QUOT_NO, LOI_RCD_DT, AMOUNT " + " FROM STG3_DETAIL " + " WHERE SALES_EGR_CODE = ? "
-					+ " ORDER BY LOI_RCD_DT desc ";
+			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT, "
+					+ "  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE = ? AND WEEK LIKE '"
+					+ lastTwoDigits + "-%'";
+//			String sql = " SELECT  WEEK, ZONE, SALES_EGR_CODE, PROJECT_NAME, CONSULTANT, "
+//					+ "  QUOT_DT, QUOT_NO, LOI_RCD_DT, AMOUNT " + " FROM STG3_DETAIL " + " WHERE SALES_EGR_CODE = ? "
+//					+ " ORDER BY LOI_RCD_DT desc ";
 			System.out.println("query in stage3SummaryDetailsss " + sql);
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, salesManCode);
