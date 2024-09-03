@@ -306,10 +306,12 @@ public class ExperienceCertificate {
 			retval = -2;
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
+				}
+				if (psmt != null) {
 					psmt.close();
+				}
 				orcl.closeConnection();
 
 			} catch (SQLException e) {

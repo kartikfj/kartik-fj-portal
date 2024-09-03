@@ -699,11 +699,12 @@ public class Leave {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -837,11 +838,12 @@ public class Leave {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -907,11 +909,12 @@ public class Leave {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -956,11 +959,12 @@ public class Leave {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -1004,11 +1008,12 @@ public class Leave {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -1050,10 +1055,12 @@ public class Leave {
 			result = null; // DB error
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
+				}
+				if (psmt != null) {
 					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -1097,11 +1104,12 @@ public class Leave {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 			} catch (SQLException e) {
 

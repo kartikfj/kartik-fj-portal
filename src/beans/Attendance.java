@@ -390,8 +390,7 @@ public class Attendance {
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
-					;
-				psmt.close();
+					psmt.close();
 				con.closeConnection();
 			} catch (SQLException e) {
 
