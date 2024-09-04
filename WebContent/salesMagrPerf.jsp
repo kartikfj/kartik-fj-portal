@@ -565,7 +565,280 @@ table.dataTable thead th,table.dataTable thead td {
           </div>
 		  <div id="performance_container"></div>
 	  
+<style>
+.stage {
+    background-color: #065685;
+    color: white;
+    border: 1px solid #065685;
+}
 
+.navbar {
+    margin-bottom: 8px !important;
+}
+
+.table {
+    display: block !important;
+    overflow-x: auto !important;
+}
+
+#db-title-boxx {
+    background: white;
+    height: auto;
+    margin-top: -9px;
+    margin-left: -10px;
+    margin-right: -10px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
+}
+
+.fjtco-table {
+    background-color: #ffff;
+    padding: 0.01em 16px;
+    margin: 7px 7px 7px 15px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+    border-top: 3px solid #065685;
+}
+
+.small-box>.inner {
+    padding: 5px;
+    height: 80px;
+}
+
+.container {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+}
+
+.wrapper {
+    margin-top: -8px;
+}
+
+.counter-anim {
+    color: #f6fff6;
+}
+
+.collapse.in {
+    background: #3b80a9;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+    display: block;
+}
+
+.weight-500 {
+    color: #FFEB3B;
+    font-weight: normal;
+}
+
+.padding-0,
+.paddingr-0,
+.paddingl-0 {
+    padding-right: 0;
+    padding-left: 0;
+    width: 150px;
+    margin-bottom: -18px;
+}
+
+.fjtco-table .panel-body {
+    padding: 3px;
+}
+
+.box-tools {
+    cursor: pointer;
+}
+
+.row {
+    margin-left: 0px !important;
+}
+
+#stages-dt .col-lg-6 {
+    margin-top: -5px;
+}
+
+#stages-dt .small-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 120px; /* Set height to make all boxes equal */
+}
+
+#stages-dt .small-box .icon {
+    -webkit-transition: all .3s linear;
+    -o-transition: all .3s linear;
+    transition: all .3s linear;
+    position: absolute;
+    top: -5px;
+    right: 10px;
+    z-index: 0;
+    font-size: 70px;
+    color: rgba(0, 0, 0, 0.15);
+}
+
+.main-header {
+    z-index: 851 !important;
+}
+</style>
+
+<section style="margin-top: 8px;border-top: 3px solid #9e9e9e;width:460px;height:274px; border-radius: 3px;margin-bottom: 5px;">
+    <div class="nav-tabs-custom">
+        <div class="tab-content">
+        <div class="box-header with-border" style="margin-top: -18px;"> 
+												      <h3 class="box-title">STAGE DETAILS </h3>
+												        <div class="help-right" id="help-stages">
+															<i class="fa fa-info-circle pull-left"></i>
+														</div>
+														 <div class="help-right"  style="margin-right: 145px;" id="openModalBtn">
+															<i class="fa fa-bar-chart fa-1x"></i>
+														</div>
+														<!-- <div class="stage-details-graph" style="margin-left: 145px;" id="openModalBtn">
+															
+												   </div> -->
+												  </div>
+												  
+            <div id="stages-dt" class="tab-pane fade in active">
+                <div class="row">
+                    <!-- First Row -->
+                    <div class="col-lg-6 col-xs-12">
+                        <div class="small-box bg-red">
+                            <div class="inner">
+                                <h3>Stage 2</h3>
+                                 <p id="Stage2"><strong>0</strong></p>
+                            </div>
+                            <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-xs-12">
+                        <div class="small-box bg-yellow">
+                            <div class="inner">
+                                <h3>Stage 3</h3>
+                                 <p id="Stage3"><strong>0</strong></p>
+                            
+                            </div>
+                            <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:-17px;">
+                    <!-- Second Row -->
+                    <div class="col-lg-6 col-xs-12">
+                        <div class="small-box bg-blue">
+                            <div class="inner">
+                                <h3>Stage 4</h3>
+                                   <p id="Stage4"><strong>0</strong></p>
+                                <input type="hidden" id="s3sum_temp" value="0" />
+                            </div>
+                            <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-xs-12">
+                        <div class="small-box bg-green">
+                            <div class="inner">
+                                <h3>Stage 5</h3>
+                                   <p id="Stage5"><strong>0</strong></p>
+                                <input type="hidden" id="s4sum_temp" value="0" />
+                            </div>
+                            <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="myModal" class="modal">
+		  <div class="modal-content" style="width: 25%; height: 40%; margin-left: auto; margin-right: 25%;margin-top: 10%;">	
+		  	<div class="modal-header">		  
+         	 <button type="button" class="close" data-dismiss="modal">&times;</button>
+          		<h4 class="modal-title">Stage details of Sales Engineer - ${selected_salesman_code} </h4>
+        	</div>	   
+		    <div class="modal-body"> <div id="stagedetailsgraph"></div></div>
+		  </div>
+		</div>
+		
+ <div class="row">
+					<div class="modal fade" id="rcvbles_aging_modal-main" role="dialog" >
+					
+					        <div class="modal-dialog" style="width:97%;">
+					     		<!-- Modal content-->
+							      	<div class="modal-content">
+								        	<div class="modal-header">
+								         	 <button type="button" class="close" data-dismiss="modal">&times;</button>
+								          		<h4 class="modal-title"> </h4>
+								        	</div>
+								        	<div class="modal-body small"> <div id="table_div"></div></div>
+									        <div class="modal-footer"><div id="laoding-rcvbl" class="loader" ><img src="resources/images/wait.gif"></div>
+									          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									        </div>
+								     </div>
+								     
+								     
+						   	 </div>   	 		   	 
+		 			</div>
+	  
+	</div>		
+		<div class="modal fade" id="help-stages-modal">
+							<div class="modal-dialog" style="width: 80%;">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										<h4 class="modal-title">Stage Details Help</h4>
+									</div>
+									<div class="modal-body">
+										<ul>
+											<li>
+											<p class="font-weight-bold">Stage Details - Last two years data</p>
+											</li>
+											<li>
+											<h4 class="font-weight-bold text-primary">Stage-1</h4>
+												<p class="font-weight-bold">These are the quotations which are in tender stage processed against an enquiry.</p>
+											</li>
+											<li>
+											 <h4 class="font-weight-bold text-primary">Stage-2</h4>
+												<p class="font-weight-bold">These are the quotations which are job-in-hand but does not have LOI Date.</p>											
+											</li>
+											<li>
+											<h4 class="font-weight-bold text-primary">Stage-3</h4>
+											 <p class="font-weight-bold">These are the quotations against which LOI is received with date.</p>
+											</li>
+											<li>
+											<h4 class="font-weight-bold text-primary">Stage-4</h4>
+											 <p class="font-weight-bold">It is Order confirmation entry in ERP , ( Customer po )</p>
+											</li>											
+										</ul>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default pull-left"
+											data-dismiss="modal">Close</button>
+									</div>
+								</div>
+								<!-- /.modal-content -->
+							</div>
+							<!-- /.modal-dialog -->
+						</div>	  
+	 
+		 <script>
+        $(document).ready(function () {
+            $('#openModalBtn').click(function () {
+                $('#myModal').modal('show');
+            });
+            $('#help-stages').click(function () {
+                $('#help-stages-modal').modal('show');
+            });
+         
+        });
+    
+   
+       
+    </script>
   <!-- /.content-wrapper -->
 <!--   <footer class="main-footer">
     <div class="pull-right hidden-xs">
@@ -1012,6 +1285,12 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
 			     break;
 		}
 	} 
+		document.getElementById('Stage2').innerHTML = formatNumber(stage2JIH);
+        document.getElementById('Stage3').innerHTML = formatNumber(stage3LOI);
+      
+		 document.getElementById('Stage4').innerHTML = formatNumber(stage4LPO);
+         document.getElementById('Stage5').innerHTML = formatNumber(stage5LOI);
+		  document.getElementById('Stage2').innerHTML = formatNumber(stage2JIH);
 		 document.getElementById('bookingTargetValue').innerHTML = formatNumber(ytdTargetBkng);
          document.getElementById('bookingActualValue').innerHTML = formatNumber(bookingActual);
          document.getElementById('billingTargetValue').innerHTML = formatNumber(ytdTargetBlng);
@@ -1299,7 +1578,14 @@ function sm_performance_booking(){
 		  default:				 
 			     break;
 		}
+		 
 	} 
+		document.getElementById('Stage2').innerHTML = formatNumber(stage2JIH);
+        document.getElementById('Stage3').innerHTML = formatNumber(stage3LOI);
+      
+		document.getElementById('Stage4').innerHTML = formatNumber(stage4LPO);
+    document.getElementById('Stage5').innerHTML = formatNumber(stage5LOI);
+		
 		   document.getElementById('bookingTargetValue').innerHTML = formatNumber(ytdTargetBkng);
            document.getElementById('bookingActualValue').innerHTML = formatNumber(bookingActual);
            document.getElementById('billingTargetValue').innerHTML = formatNumber(ytdTargetBlng);
