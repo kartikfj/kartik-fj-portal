@@ -103,32 +103,13 @@ table.dataTable thead th,table.dataTable thead td {
  var slctdYear = parseInt('${syrtemp}');
  var durationFltr = (slctdYear < currYear)? 'FY' : 'YTD'; 
  var Million = 1000000; 
- var selectdSalesId = "${selected_salesman_code}";
+
  var totLosts = 0, targeteportsList = <%=new Gson().toJson(request.getAttribute("JIHLA"))%>; 
  var salesEngsList = <%=new Gson().toJson(request.getAttribute("SEngLst"))%>; 
  $(document).ready(function() {  $('.select2').select2();  });  
 
  const seList   =  <%=new Gson().toJson(request.getAttribute("s_engList"))%>;
   </script> 
-
-
-
- <c:set var="sales_egr_code" value="0" scope="page" /> 
- <c:set var="aging30" value="0" scope="page" /> 
- <c:set var="aging3060" value="0" scope="page" /> 
- <c:set var="aging6090" value="0" scope="page" /> 
- <c:set var="aging90120" value="0" scope="page" /> 
- <c:set var="aging120180" value="0" scope="page" /> 
- <c:set var="aging181" value="0" scope="page" /> 
- 
-  <c:forEach var="rcvbl_list"  items="${ORAR}" > 
-  <c:set var="aging30" value="${rcvbl_list.aging_1}" scope="page" /> 
-  <c:set var="aging3060" value="${rcvbl_list.aging_2}" scope="page" /> 
-  <c:set var="aging6090" value="${rcvbl_list.aging_3}" scope="page" /> 
-  <c:set var="aging90120" value="${rcvbl_list.aging_4}" scope="page" /> 
-  <c:set var="aging120180" value="${rcvbl_list.aging_5}" scope="page" /> 
-  <c:set var="aging181" value="${rcvbl_list.aging_6}" scope="page" /> 
-  </c:forEach> 
  
  <c:set var="year_target" value="0" scope="page" /> 
  <c:set var="actual" value="0" scope="page" /> 
@@ -890,12 +871,10 @@ data-dismiss="modal">Close</button>
 			        $('#myModal').modal('show');
 			        
 			       // Random data for the chart
-			        var s2Data = parseFloat(document.getElementById('StageGraph2').innerHTML) || 	1;
-                    var s3Data = parseFloat(document.getElementById('StageGraph3').innerHTML) || 1;
-                    var s4Data = parseFloat(document.getElementById('StageGraph4').innerHTML) || 1;
-                    var s5Data = parseFloat(document.getElementById('StageGraph5').innerHTML) || 1;
-
- 
+			        var s2Data = parseFloat(document.getElementById('StageGraph2').innerHTML);
+                    var s3Data = parseFloat(document.getElementById('StageGraph3').innerHTML);
+                    var s4Data = parseFloat(document.getElementById('StageGraph4').innerHTML);
+                    var s5Data = parseFloat(document.getElementById('StageGraph5').innerHTML);
 			      /*   var s2Data = document.getElementById('StageGrahp2').innerHTML;
 			        var s3Data = document.getElementById('StageGraph3').innerHTML;
 			        var s4Data = document.getElementById('StageGraph4').innerHTML;
@@ -915,10 +894,10 @@ data-dismiss="modal">Close</button>
 			    function drawChart(s2Data, s3Data, s4Data, s5Data) {
 			        var data = google.visualization.arrayToDataTable([
 			            ['Sales Engineer', 'Stages', { role: 'style' }, { role: 'annotation' }],
-			            ['S2', s2Data, '#dd4b39', new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 2 }).format(s2Data / 1000000)],
-			            ['S3', s3Data, '#f39c12', new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 2 }).format(s3Data / 1000000)],
-			            ['S4', s4Data, '#0073b7', new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 2 }).format(s4Data / 1000000)],
-			            ['S5', s5Data, '#00a65a', new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 2 }).format(s5Data / 1000000)]
+			            ['S2', s2Data, '#dd4b39', new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 2 }).format(s2Data)],
+			            ['S3', s3Data, '#f39c12', new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 2 }).format(s3Data)],
+			            ['S4', s4Data, '#0073b7', new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 2 }).format(s4Data)],
+			            ['S5', s5Data, '#00a65a', new Intl.NumberFormat('en-US', { style: 'decimal', maximumFractionDigits: 2 }).format(s5Data)]
 			        ]);
 
 			        var options = {
@@ -1084,7 +1063,17 @@ function showSalesEngineerPerf(salesCode,smName,smPage) {
 			     break;
 		}
 	} 
+		document.getElementById('StageGraph2').innerHTML = extractValue(stage2JIH);
+        document.getElementById('StageGraph3').innerHTML = extractValue(stage3LOI);      
+		document.getElementById('StageGraph4').innerHTML = extractValue(stage4LPO);
+        document.getElementById('StageGraph5').innerHTML = extractValue(stage5LOI);
+
 		
+		document.getElementById('Stage2').innerHTML = extractValue(stage2JIH);
+        document.getElementById('Stage3').innerHTML = extractValue(stage3LOI);
+	    document.getElementById('Stage4').innerHTML = extractValue(stage4LPO);
+        document.getElementById('Stage5').innerHTML = extractValue(stage5LOI);
+        
 		prcntgeBooking = percentageCal(bookingActual, bookingTarget);
 		//ytdPrcntgeBkng = percentageCal(bookingActual, ytdTargetBkng);
 		prcntgeBilling = percentageCal(billingActual, billingTarget);
@@ -1348,10 +1337,9 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
 	} 
 
 		document.getElementById('StageGraph2').innerHTML = extractValue(stage2JIH);
-        document.getElementById('StageGraph3').innerHTML = extractValue(stage3LOI);
-      
+        document.getElementById('StageGraph3').innerHTML = extractValue(stage3LOI);      
 		document.getElementById('StageGraph4').innerHTML = extractValue(stage4LPO);
-        document.getElementById('StageGraph2').innerHTML = extractValue(stage5LOI);
+        document.getElementById('StageGraph5').innerHTML = extractValue(stage5LOI);
 
 		
    		 document.getElementById('Stage2').innerHTML = extractValue(stage2JIH);
@@ -1652,10 +1640,9 @@ function sm_performance_booking(){
 		}
 	} 
 		document.getElementById('StageGraph2').innerHTML = extractValue(stage2JIH);
-        document.getElementById('StageGraph3').innerHTML = extractValue(stage3LOI);
-      
+        document.getElementById('StageGraph3').innerHTML = extractValue(stage3LOI);      
 		document.getElementById('StageGraph4').innerHTML = extractValue(stage4LPO);
-        document.getElementById('StageGraph2').innerHTML = extractValue(stage5LOI);
+        document.getElementById('StageGraph5').innerHTML = extractValue(stage5LOI);
 
 		
 		document.getElementById('Stage2').innerHTML = extractValue(stage2JIH);
@@ -1953,7 +1940,17 @@ function sm_performance_details(){
 			     break;
 		}
 	} 
+		document.getElementById('StageGraph2').innerHTML = extractValue(stage2JIH);
+        document.getElementById('StageGraph3').innerHTML = extractValue(stage3LOI);      
+		document.getElementById('StageGraph4').innerHTML = extractValue(stage4LPO);
+        document.getElementById('StageGraph5').innerHTML = extractValue(stage5LOI);
+
 		
+		document.getElementById('Stage2').innerHTML = extractValue(stage2JIH);
+        document.getElementById('Stage3').innerHTML = extractValue(stage3LOI);
+	    document.getElementById('Stage4').innerHTML = extractValue(stage4LPO);
+        document.getElementById('Stage5').innerHTML = extractValue(stage5LOI);
+        
 		prcntgeBooking = percentageCal(bookingActual, bookingTarget);
 		ytdPrcntgeBkng = percentageCal(bookingActual, ytdTargetBkng);
 		prcntgeBilling = percentageCal(billingActual, billingTarget);
@@ -2193,11 +2190,14 @@ function printAllSalesEngineerBookingCodes(smCode) {
 }
 
 //stage 2 detail normal se page
-function s2Details() { 
+function s2Details() {
 	$('#laoding').show();
-	var smCode = $("#scode option:selected").val(); 
-var excelTtl='Stage 2 Details of Sales Engineer : ${selected_salesman_code}';
-var ttl="<b>Stage 2 Details of Sales Engineer : ${selected_salesman_code} </b> ";
+var smCode =  selectElement.options[selectElement.selectedIndex].role; 
+if(smCode == null){
+	smCode =  $("#scode option:selected").val();
+}
+var excelTtl='Stage 2 Details of Sales Engineer : '+smCode;
+var ttl="<b>Stage 2 Details of Sales Engineer : </b> "+smCode;
 $("#jihv-modal-graph .modal-title").html(ttl);
 $.ajax({ 
 	type: 'POST',
@@ -2233,9 +2233,12 @@ $('#jihvexport').DataTable( {
 },error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
 } 
 function s3Details(val){ $('#laoding').show();
-var smCode = $("#scode option:selected").val(); 
-var ttl="<b>Stage 3 Details of <strong style='color:blue;'><i>${selected_salesman_code} </i></strong></b>"; 
-var excelTtl="Stage 3 Details of ${selected_salesman_code}";
+var smCode =  selectElement.options[selectElement.selectedIndex].role; 
+if(smCode == null){
+	smCode =  $("#scode option:selected").val();
+}
+var ttl="<b>Stage 3 Details of <strong style='color:blue;'><i>"+smCode+" </i></strong></b>"; 
+var excelTtl="Stage 3 Details of "+smCode;
 $("#s3-modal-graph .modal-title").html(ttl);
 $.ajax({ type: 'POST', url: 'salesManagerPerf', data: {fjtco: "s3_dt", c1:smCode}, dataType: "json", success: function(data) { $('#laoding').hide();
 var output="<table id='s3-excl' class='table table-bordered small'><thead><tr>"+"<th>#</th><th>Week</th><th>Zone</th><th>Product Category</th><th>Product Sub Category</th>"+
@@ -2269,9 +2272,12 @@ $('#s3-excl').DataTable( {
 
 },error:function(data,status,er) { $('#laoding').hide(); alert("please click again"); }});}
 function s4Details(){ $('#laoding').show(); 
-var smCode = $("#scode option:selected").val(); 
-var ttl="<b>Stage 4 Details of <strong style='color:blue;'><i>${selected_salesman_code} </i></strong></b>";
-var excelTtl="Stage 4 Details of ${selected_salesman_code}"
+var smCode =  selectElement.options[selectElement.selectedIndex].role; 
+if(smCode == null){
+	smCode =  $("#scode option:selected").val();
+}
+var ttl="<b>Stage 4 Details of <strong style='color:blue;'><i>"+smCode+" </i></strong></b>";
+var excelTtl="Stage 4 Details of "+smCode
 $("#s4-modal-graph .modal-title").html(ttl);$.ajax({ type: 'POST',url: 'salesManagerPerf', data: {fjtco: "s4_dt", c1:smCode}, dataType: "json",success: function(data) {
 $('#laoding').hide();var output="<table id='s4-excl' class='table table-bordered small'><thead><tr>"+"<th>#</th><th>So Date</th><th>So Txn Code</th><th>Order No.</th>"+
 "<th>Sales Eng.</th><th>Zone</th><th>Product Category</th><th>Product Sub Category</th><th>Project Name</th>"+ " <th>Consultant</th><th>Payment Term</th><th>Customer</th>  <th>Profit %</th><th>Balance Value</th>"+ "<th>Projected Invoice Date</th><th>Soh Location Code</th></tr></thead><tbody>";
@@ -2302,9 +2308,12 @@ $('#s4-excl').DataTable( {
 
 },error:function(data,status,er) { $('#laoding').hide(); alert("please click again");} });} 
 function s5Details(val){ $('#laoding').show(); 
-var smCode = $("#scode option:selected").val(); 
-var ttl="<b>Stage 5 Details of <strong style='color:blue;'><i>${selected_salesman_code} </i></strong></b>";
-var excelTtl="Stage 5 Details of ${selected_salesman_code}"
+var smCode =  selectElement.options[selectElement.selectedIndex].role; 
+if(smCode == null){
+	smCode =  $("#scode option:selected").val();
+}
+var ttl="<b>Stage 5 Details of <strong style='color:blue;'><i>"+smCode+" </i></strong></b>";
+var excelTtl="Stage 5 Details of "+smCode
 $("#s5-modal-graph .modal-title").html(ttl);$.ajax({ type: 'POST',url: 'salesManagerPerf', data: {fjtco: "s5_dt", c1:smCode}, dataType: "json",success: function(data) {
 $('#laoding').hide();var output="<table id='s5-excl' class='table table-bordered small'><thead><tr><th>#</th><th>Comp Code</th><th>Week</th><th>Doc ID</th><th>Doc Date</th><th>Sm Code</th>"+
 "<th>Sm Name</th><th>Party Name</th><th>Contact</th><th>Contact No</th><th>Project Name</th>"+ " <th>Zone</th><th>Currency</th><th>Amount</th> </tr></thead><tbody>";
