@@ -1553,53 +1553,59 @@ $('#s1dexport').DataTable( {
      <%--  <h6>YTD Booking Target : <fmt:formatNumber type="number"   value="${guage_bkng_ytd_target}"/>   || YTD Billing Target : <fmt:formatNumber type="number"   value="${guage_blng_ytd_target}"/>   </h6>
       <h6>YTD Booking Actual : <fmt:formatNumber type="number"   value="${actual}"/>    || YTD Billing Actual : <fmt:formatNumber type="number"   value="${actualbl}"/>   </h6>  --%>
          <style>
-  .bg-color-1 {
-    background-color: #ff9999; /* Change to your desired color */
 
- 
-  }
-  
-  .bg-color-3 {
-    background-color: #99ff99; /* Change to your desired color */
-   
- 
-  }
- .align-right {
-    display: inline-block;
-    text-align: right;
-    width: 60px; /* Adjust width as needed */
-}
- 
-</style>
- <h6>
-  &nbsp;  &nbsp; &nbsp;  &nbsp;   &nbsp;  &nbsp;<span class="bg-color-1"> Booking Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_bkng_ytd_target}"/></span></span>
-  &nbsp;  &nbsp; ||
-  &nbsp; &nbsp;
-  &nbsp;  <span class="bg-color-3"> Billing Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_blng_ytd_target}"/></span></span>
-</h6>
+                .bg-color-1 {
+                    background-color: #ff9999; /* Change to your desired color */
+                    padding: 2px; /* Adjust as needed */
+                    border-radius: 4px; /* Optional: for rounded corners */
+                }
 
-<h6>
-  &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; <span class="bg-color-1"> Booking Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actual}"/></span></span>
-  &nbsp;  &nbsp; ||
-  &nbsp;  &nbsp;
-  &nbsp;   <span class="bg-color-3"> Billing Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actualbl}"/></span></span>
-</h6>
-    
-    
-    
-     <%-- <h6>
-    YTD Booking Target : <fmt:formatNumber type="number" value="${guage_bkng_ytd_target}"/>   
-      &nbsp; &nbsp; &nbsp; ||&nbsp; &nbsp; &nbsp;
-    YTD Billing Target : <fmt:formatNumber type="number" value="${guage_blng_ytd_target}"/>
-</h6>
-<h6>
-    YTD Booking Actual : <fmt:formatNumber type="number" value="${actual}"/>    
-    &nbsp; &nbsp; ||&nbsp; &nbsp; &nbsp;
-    YTD Billing Actual : <fmt:formatNumber type="number" value="${actualbl}"/>
-</h6> --%>
+                .bg-color-3 {
+                    background-color: #99ff99; /* Change to your desired color */
+                    padding: 2px; /* Adjust as needed */
+                    border-radius: 4px; /* Optional: for rounded corners */
+                }
+
+                .align-right {
+                    display: inline-block;
+                    text-align: right;
+                    width: 60px; /* Adjust width as needed */
+                }
+
+                #guage_test_booking, #guage_test_billing {
+                    box-sizing: border-box;
+                    width: 100%; /* Full width of the container */
+                    height: 120px; /* Set height as needed */
+                }
+
+                @media (max-width: 768px) {
+                    #guage_test_booking, #guage_test_billing {
+                        height: 150px; /* Adjust height for smaller screens */
+                    }
+
+                    .align-right {
+                        width: auto; /* Adjust width for smaller screens */
+                    }
+                }
+            </style>
+            <h6>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <span class="bg-color-1"> Booking Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_bkng_ytd_target}"/></span></span>
+                &nbsp; &nbsp; || &nbsp; &nbsp;
+                <span class="bg-color-3"> Billing Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_blng_ytd_target}"/></span></span>
+            </h6>
+
+            <h6>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <span class="bg-color-1"> Booking Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actual}"/></span></span>
+                &nbsp; &nbsp; || &nbsp; &nbsp;
+                <span class="bg-color-3"> Billing Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actualbl}"/></span></span>
+            </h6>
+        
      
       </div>		
-	     <div class="row">
+	    <div class="row">
+
             <div class="col-lg-1 col-xs-0"></div>
             <div class="col-lg-5 col-xs-6 sep">
     <div id="guage_test_booking" style="background: linear-gradient(to bottom, transparent 20px, #ff9999 20px); padding: 1px; box-sizing: border-box; height: 175px;  margin-top:-20px"></div>
@@ -1610,6 +1616,7 @@ $('#s1dexport').DataTable( {
             </div>
             <div class="col-lg-1 col-xs-0"></div>
         </div>
+
      </div>
        </div>
      </div>
@@ -3429,7 +3436,7 @@ function sm_performance_details(){
 			  stage2JIH = data[i].yrTot;
 		    break;
 		  case "4": // STAGE3 (LOI)
-			  stage3LOI = data[i].yrTot;
+			  //stage3LOI = data[i].yrTot;
 			  bookingActual = data[i].yrTot;
 		    break;
 		  case "4.1": // YTD Booking Perc
@@ -3530,9 +3537,11 @@ function sm_performance_details(){
  		   +"<th class='se-brr'>Performance Title</th><th>YearlyTarget</th><th>YTD Target</th><th>Actual</th><th>Yearly%</th><th>YTD%</th><th>% Achieved </th><th>Weightage</th><th>Total %</th></tr></thead><tbody>";
  	    output+= "<tr><td style='text-align:left;'class='se-brr'>TENDER</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage1TENDER))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>JIH</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage2JIH))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
-				// +	"<tr><td style='text-align:left;'class='se-brr'>LOI</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage3LOI))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"				 
-				//+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-5-(BILLING) </td><td class='se-blr'></td><td style='text-align:right;'></td><td style='text-align:right;'>"+formatNumber(stage5LOI)+ "</td><td></td></tr>"
-				 +  "<tr><td style='text-align:left;' class='se-brr'>Booking </td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "</td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td></tr>"
+
+				 //+	"<tr><td style='text-align:left;'class='se-brr'>LOI</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage3LOI))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"				 
+					//+	"<tr><td style='text-align:left;' class='se-brr'>STAGE-5-(BILLING) </td><td class='se-blr'></td><td style='text-align:right;'></td><td style='text-align:right;'>"+formatNumber(stage5LOI)+ "</td><td></td></tr>"
+					 +  "<tr><td style='text-align:left;' class='se-brr'>Booking </td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "</td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td></tr>"
+
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Booking</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBooking))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
 				 +	"<tr><td style='text-align:left;' class='se-brr'>Avg Weekly Orders</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(avgweeklyorders))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"

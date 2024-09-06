@@ -134,13 +134,14 @@ public class EmailConfig {
 			message.setContent(this.messagebody, "text/html");
 			Transport.send(message);
 			status = 1;
-			// System.out.println("Done");
+			System.out.println("Done in EmailConfig");
 
 		} catch (MessagingException e) {
 			System.out.print(e);
 			// throw new RuntimeException(e);
 			status = -1;
 		} finally {
+			System.out.println("finally in EmailConfig" + status);
 			return status;
 		}
 	}
@@ -176,12 +177,12 @@ public class EmailConfig {
 
 		} finally {
 			try {
-				if (rs != null) {
+
+				if (rs != null)
 					rs.close();
-				}
-				if (psmt != null) {
+				if (psmt != null)
 					psmt.close();
-				}
+
 				con.closeConnection();
 
 			} catch (SQLException e) {

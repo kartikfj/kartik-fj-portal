@@ -17,9 +17,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 
 import beans.SalesmanPerformance;
+import beans.SipJihvDetails;
 import beans.SipJihvSummary;
 import beans.SipOutRecvbleReprt;
 import beans.Stage3Details;
+
+import beans.Stage4Details;
+
 import beans.Stage5Details;
 import beans.fjtcouser;
 import utils.SipChartDbUtil;
@@ -126,6 +130,36 @@ public class salesManagerPerfController extends HttpServlet {
 					e.printStackTrace();
 				}
 				break;
+
+			case "s2_dt":
+				try {// handling jihv aging wise details
+					getStage2Details(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case "s3_dt":
+				try {// handling stage 3 details
+					getStage3_Details(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case "s4_dt":
+				try {// handling stage 4 details
+					getStage4_Details(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case "s5_dt":
+				try {// handling stage 4 details
+					getStage5_Details(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+
 			default:// defaultly redirecting to jsp page
 				try {
 					goToSip(request, response);
@@ -160,6 +194,135 @@ public class salesManagerPerfController extends HttpServlet {
 //			new Gson().toJson(theSalesEngList, response.getWriter());
 //		}
 		// request.setAttribute("SM_MAP", smMap);
+
+	}
+
+	private void getStage5_Details(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException {
+		try {
+			fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
+			String smCode = request.getParameter("c1");
+			String dataType = request.getParameter("c2");
+			String smEmpCode = null;
+			if (dataType != null && dataType.equals("SC")) {
+				smEmpCode = sipChartDbUtil.getEmployeeCodeBySalesCode(smCode);
+			} else {
+				smEmpCode = smCode;
+			}
+
+			List<Stage5Details> theStage5DtList = null;
+			String result = sipChartDbUtil.checkSalesMgrPerfTabisAllowed(smEmpCode);
+			if (fjtuser.getSalesDMYn() < 1 && !result.equals("Yes")) {
+				theStage5DtList = sipChartDbUtil.stage5SummaryBillingDetailsForSE(smCode);
+			} else {
+				theStage5DtList = sipChartDbUtil.stage5SummaryBillingDetailsForPerf(smEmpCode);
+			}
+
+			response.setContentType("application/json");
+			(new Gson()).toJson(theStage5DtList, response.getWriter());
+		} catch (Exception var9) {
+			response.setStatus(500);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			(new Gson()).toJson(Collections.singletonMap("error", "An error occurred"), response.getWriter());
+			var9.printStackTrace();
+		}
+
+	}
+
+	private void getStage3_Details(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException {
+		try {
+
+			fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
+			String smCode = request.getParameter("c1");
+			String dataType = request.getParameter("c2");
+			String smEmpCode = null;
+			if (dataType != null && dataType.equals("SC")) {
+				smEmpCode = sipChartDbUtil.getEmployeeCodeBySalesCode(smCode);
+			} else {
+				smEmpCode = smCode;
+			}
+
+			List<Stage3Details> theStage3DtList = null;
+			String result = sipChartDbUtil.checkSalesMgrPerfTabisAllowed(smEmpCode);
+			// Fetch data from the database
+
+			if (fjtuser.getSalesDMYn() >= 1 || result.equals("Yes")) {
+				theStage3DtList = sipChartDbUtil.stage3BookingDetailsForPerf(smEmpCode);
+			} else {
+				theStage3DtList = sipChartDbUtil.stage3SummaryDetails(smCode);
+			}
+			// Set response content type and write JSON
+			response.setContentType("application/json");
+			new Gson().toJson(theStage3DtList, response.getWriter());
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			new Gson().toJson(Collections.singletonMap("error", "An error occurred"), response.getWriter());
+			e.printStackTrace();
+
+		}
+
+	}
+
+	private void getStage2Details(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, JsonIOException, IOException {
+		// Stage 2 details for sales engineer
+		fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
+		String smCode = request.getParameter("c1");
+		String dataType = request.getParameter("c2");
+		String smEmpCode = null;
+		if (dataType != null && dataType.equals("SC")) {
+			smEmpCode = sipChartDbUtil.getEmployeeCodeBySalesCode(smCode);
+		} else {
+			smEmpCode = smCode;
+		}
+
+		List<SipJihvDetails> theStage2DtList = null;
+		String result = sipChartDbUtil.checkSalesMgrPerfTabisAllowed(smEmpCode);
+		// Fetch data from the database
+
+		if (fjtuser.getSalesDMYn() >= 1 || result.equals("Yes")) {
+			theStage2DtList = sipChartDbUtil.getStage2DetailsForSalesManager(smEmpCode);
+		} else {
+			theStage2DtList = sipChartDbUtil.getStage2DetailsForSalesEngineer(smCode);
+		}
+		response.setContentType("application/json");
+		new Gson().toJson(theStage2DtList, response.getWriter());
+	}
+
+	private void getStage4_Details(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException {
+		try {
+			fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
+			String smCode = request.getParameter("c1");
+			String dataType = request.getParameter("c2");
+			String smEmpCode = null;
+			if (dataType != null && dataType.equals("SC")) {
+				smEmpCode = sipChartDbUtil.getEmployeeCodeBySalesCode(smCode);
+			} else {
+				smEmpCode = smCode;
+			}
+
+			List<Stage4Details> theStage4DtList = null;
+			String result = sipChartDbUtil.checkSalesMgrPerfTabisAllowed(smEmpCode);
+			if (fjtuser.getSalesDMYn() < 1 && !result.equals("Yes")) {
+				theStage4DtList = sipChartDbUtil.stage4SummaryDetails(smCode);
+			} else {
+				theStage4DtList = sipChartDbUtil.stage4SummaryBillingDetailsForPerf(smEmpCode);
+			}
+
+			response.setContentType("application/json");
+			(new Gson()).toJson(theStage4DtList, response.getWriter());
+		} catch (Exception var9) {
+			response.setStatus(500);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			(new Gson()).toJson(Collections.singletonMap("error", "An error occurred"), response.getWriter());
+			var9.printStackTrace();
+		}
 
 	}
 

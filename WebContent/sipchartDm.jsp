@@ -3478,7 +3478,7 @@ function sm_performance_details(){
 			  stage2JIH = data[i].yrTot;
 		    break;
 		  case "4": // STAGE3 (LOI)
-			  stage3LOI = data[i].yrTot;
+			 // stage3LOI = data[i].yrTot;
 			  bookingActual = data[i].yrTot;
 		    break;
 		  case "4.1": // YTD Booking Perc
@@ -3697,7 +3697,37 @@ $('#s1dexport').DataTable( {
 
 },error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
 }      
+function s5Details(val){ $('#laoding').show(); 
+var ttl="<b>Stage 5 Details of <strong style='color:blue;'><i>${selected_salesman_code} </i></strong></b>";
+var excelTtl="Stage 5 Details of ${selected_salesman_code}"
+$("#s5-modal-graph .modal-title").html(ttl);$.ajax({ type: 'POST',url: 'sip', data: {fjtco: "s5_dt", sd1:"${selected_salesman_code}"}, dataType: "json",success: function(data) {
+$('#laoding').hide();var output="<table id='s5-excl' class='table table-bordered small'><thead><tr>"+"<th>#</th><th>Comp Code</th><th>Week</th><th>Doc ID</th><th>Doc Date</th><th>Sm Code</th>"+
+"<th>Sm Name</th><th>Party Name</th><th>Contact</th><th>Contact No</th><th>Project Name</th>"+ " <th>Zone</th><th>Currency</th><th>Amount</th> </tr></thead><tbody>";
+var j=0;for (var i in data) { j=j+1; output+="<tr><td>"+j+"</td><td><span>" + $.trim(data[i].d1)+ "</span></td>"+
+"<td>" + $.trim(data[i].d2)+ "</td><td>" + $.trim(data[i].d3) + "</td>"+ "<td>" +$.trim(data[i].d4.substring(0, 10)).split("-").reverse().join("/")+ "</td><td>"  + $.trim(data[i].d5 )+ "</td>"+
+"<td>" + $.trim(data[i].d6 )+ "</td><td>" +$.trim( data[i].d7 )+ "</td>"+ "<td>" + $.trim(data[i].d8 )+ "</td><td>" + $.trim(data[i].d9 )+ "</td>"+ "<td>" + $.trim(data[i].d10 )+ "</td><td>" + $.trim(data[i].d12 )+ "</td>"+
+"<td>" + $.trim(data[i].d13 )+ "</td><td>" + $.trim(data[i].d14 )+ "</td></tr>"; } 
+//output+="<tr><td colspan='16'><b>Total</b></td><td><b>"+val+"</b></td></tr>"; 
+output+="</tbody></table>";  $("#s5-modal-graph .modal-body").html(output);$("#s5-modal-graph").modal("show");
+$('#s5-excl').DataTable( {
+    dom: 'Bfrtip',  
+    "columnDefs" : [{"targets":[1, 10], "type":"date-eu"}],
+    buttons: [
+        {
+            extend: 'excelHtml5',
+            text:      '<i class="fa fa-file-excel-o" style="color: green; font-size: 2em;"></i>',
+            filename: excelTtl,
+            title: excelTtl,
+            messageTop: 'File Processed on : ${currCal} ,The information in this file is copyright to Faisal Jassim Group.'
+            
+            
+        }
+      
+       
+    ]
+} );
 
+},error:function(data,status,er) { $('#laoding').hide(); alert("please click again");} });} 
 function sm_view_details() {
 	try {
 		selectElement = document.querySelector('#scode');		

@@ -176,12 +176,12 @@ public class SoBudgetReplyMailer {
 
 		} finally {
 			try {
-				if (rs != null) {
+
+				if (rs != null)
 					rs.close();
-				}
-				if (psmt != null) {
+				if (psmt != null)
 					psmt.close();
-				}
+
 				con.closeConnection();
 
 			} catch (SQLException e) {

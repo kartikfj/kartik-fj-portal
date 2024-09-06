@@ -131,8 +131,9 @@ public class EmailMarketing {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(this.fromaddr, "FJ-SYNERGY"));
 			System.out.println(this.toaddr);
-			message.setRecipients(Message.RecipientType.TO,
-					// InternetAddress.parse(this.toaddr));
+
+			message.setRecipients(Message.RecipientType.TO, // InternetAddress.parse(this.toaddr));
+
 					InternetAddress.parse("nufail.a@fjtco.com"));
 			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("nufail.a@fjtco.com"));
 			// InternetAddress.parse(this.ccaddr));
@@ -141,13 +142,14 @@ public class EmailMarketing {
 			message.setContent(this.messagebody, "text/html");
 			Transport.send(message);
 			status = 1;
-			// System.out.println("Done");
+			System.out.println("Done in EmailMarketing");
 
 		} catch (MessagingException e) {
 			System.out.print(e);
 			// throw new RuntimeException(e);
 			status = -1;
 		} finally {
+			System.out.println("finally in EmailMarketing" + status);
 			return status;
 		}
 	}
@@ -183,12 +185,12 @@ public class EmailMarketing {
 
 		} finally {
 			try {
-				if (rs != null) {
+
+				if (rs != null)
 					rs.close();
-				}
-				if (psmt != null) {
+				if (psmt != null)
 					psmt.close();
-				}
+
 				con.closeConnection();
 
 			} catch (SQLException e) {

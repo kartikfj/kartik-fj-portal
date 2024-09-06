@@ -2319,7 +2319,9 @@ public class SipChartDbUtil {
 		}
 	}
 
-	public List<Stage5Details> stage5SummaryBillingDetailsForPerf(String smCode) throws SQLException {
+
+	public List<Stage5Details> stage5SummaryBillingDetailsForSE(String smCode) throws SQLException {
+
 		List<Stage5Details> s5DetailsList = new ArrayList<>();
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
@@ -2328,11 +2330,12 @@ public class SipChartDbUtil {
 
 		try {
 			int currentYear = LocalDate.now().getYear();
-			// Extract the last two digits
+
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			myCon = orcl.getOrclConn();
 			// Build SQL query with IN clause for multiple salesperson codes
-			String sql = "SELECT * FROM ORION.SIP_SM_BLNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN  WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND TO_CHAR(DOC_DATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') AND WEEK LIKE '"
+			String sql = "SELECT * FROM SIP_SM_BLNG_TBL WHERE SM_CODE = ? AND TO_CHAR(DOC_DATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') AND WEEK LIKE '"
+
 					+ lastTwoDigits + "-%' ORDER BY DOC_DATE";
 
 			myStmt = myCon.prepareStatement(sql);
@@ -2367,7 +2370,9 @@ public class SipChartDbUtil {
 		}
 	}
 
-	public List<Stage5Details> stage5SummaryBillingDetailsForSE(String smCode) throws SQLException {
+
+	public List<Stage5Details> stage5SummaryBillingDetailsForPerf(String smCode) throws SQLException {
+
 		List<Stage5Details> s5DetailsList = new ArrayList<>();
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
@@ -2376,10 +2381,13 @@ public class SipChartDbUtil {
 
 		try {
 			int currentYear = LocalDate.now().getYear();
+
+			// Extract the last two digits
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			myCon = orcl.getOrclConn();
 			// Build SQL query with IN clause for multiple salesperson codes
-			String sql = "SELECT * FROM SIP_SM_BLNG_TBL WHERE SM_CODE = ? AND TO_CHAR(DOC_DATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') AND WEEK LIKE '"
+			String sql = "SELECT * FROM ORION.SIP_SM_BLNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN  WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND TO_CHAR(DOC_DATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') AND WEEK LIKE '"
+
 					+ lastTwoDigits + "-%' ORDER BY DOC_DATE";
 
 			myStmt = myCon.prepareStatement(sql);
@@ -2430,10 +2438,14 @@ public class SipChartDbUtil {
 			// Extract the last two digits
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			// SQL Query
-			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT, "
-					+ "  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED "
-					+ "  FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND WEEK LIKE '"
+
+			// commented as Arun told to match summary and detailss
+			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT,  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED  FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND WEEK LIKE '"
 					+ lastTwoDigits + "-%'";
+//			String sql = " SELECT  WEEK, ZONE, SALES_EGR_CODE, PROJECT_NAME, CONSULTANT, "
+//					+ "  QUOT_DT, QUOT_NO, LOI_RCD_DT, AMOUNT " + " FROM STG3_DETAIL "
+//					+ " WHERE SALES_EGR_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?)  "
+//					+ " ORDER BY LOI_RCD_DT desc ";
 
 			System.out.println("query in stage3SummaryDetailsss " + sql);
 			myStmt = myCon.prepareStatement(sql);
@@ -2504,9 +2516,14 @@ public class SipChartDbUtil {
 			// Extract the last two digits
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			// SQL Query
+
+			// Commented as Arun told to match the summary with details
 			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT, "
-					+ "  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED "
-					+ "  FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE = ? AND WEEK LIKE '" + lastTwoDigits + "-%'";
+					+ "  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE = ? AND WEEK LIKE '"
+					+ lastTwoDigits + "-%'";
+//			String sql = " SELECT  WEEK, ZONE, SALES_EGR_CODE, PROJECT_NAME, CONSULTANT, "
+//					+ "  QUOT_DT, QUOT_NO, LOI_RCD_DT, AMOUNT " + " FROM STG3_DETAIL " + " WHERE SALES_EGR_CODE = ? "
+//					+ " ORDER BY LOI_RCD_DT desc ";
 
 			System.out.println("query in stage3SummaryDetailsss " + sql);
 			myStmt = myCon.prepareStatement(sql);
@@ -2563,4 +2580,150 @@ public class SipChartDbUtil {
 
 	}
 
+	public List<SipJihvDetails> getStage2DetailsForSalesManager(String sales_man_code) throws SQLException {
+		List<SipJihvDetails> agingDetailsList = new ArrayList<>();// aging details
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		try {
+			myCon = orcl.getOrclConn();
+			String sql = "SELECT COMP_CODE, WEEK, QTN_DT, QTN_CODE, QTN_NO, CUST_CODE, CUST_NAME, PROJECT_NAME, CONSULTANT, INVOICING_YEAR, PROD_TYPE, "
+					+ " PROD_CLASSFCN, ZONE,PROFIT_PERC, QTN_AMOUNT FROM FJT_SM_JIH_AGING_DETAIL_TBL "
+					+ "WHERE SALES_EGR_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?)    order by QTN_DT";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, sales_man_code);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+
+				String cmp_code = myRes.getString(1);
+				String week = myRes.getString(2);
+				String quatation_dt = myRes.getString(3);
+				String quatation_code = myRes.getString(4);
+				String quatation_num = myRes.getString(5);
+				String customer_code = myRes.getString(6);
+				String customer_name = myRes.getString(7);
+				String project_name = myRes.getString(8);
+				String consultant = myRes.getString(9);
+				String invoicing_yr = myRes.getString(10);
+				String prdct_type = myRes.getString(11);
+				String product_classf = myRes.getString(12);
+				String zone = myRes.getString(13);
+				String profit_perc = myRes.getString(14);
+				int qtn_amount = myRes.getInt(15);
+
+				SipJihvDetails tempagingDetailsList = new SipJihvDetails(cmp_code, week, quatation_dt, quatation_code,
+						quatation_num, customer_code, customer_name, project_name, consultant, invoicing_yr, prdct_type,
+						product_classf, zone, profit_perc, qtn_amount);
+				agingDetailsList.add(tempagingDetailsList);
+			}
+			return agingDetailsList;
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
+
+	public List<Stage4Details> stage4SummaryBillingDetailsForPerf(String sales_man_code) throws SQLException {
+
+		List<Stage4Details> s4DetailsList = new ArrayList<>();// aging details
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		try {
+			myCon = orcl.getOrclConn();
+			// ----listing of Stage4 transactions for a given Sales Egr, as on Current
+			// running date
+			String sql = "SELECT SO_DT,SO_TXN_CODE,SO_NO,SOH_SM_CODE,SALES_ENG,SH_LC_NO,LC_EXP_DT,ZONE,PROD_CATG,  "
+					+ "PROD_SUB_CATG,PROJECT,CONSULTANT,PMT_TERM,CUSTOMER,PROF_PERC,BALANCE_VALUE,  "
+					+ "PROJECTED_INV_DT,SO_LOCN_CODE  " + "FROM FJT_STG4_DET_SM_TBL WHERE  "
+					+ "SOH_SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?)  "
+					+ "ORDER BY SO_DT DESC ";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, sales_man_code);
+
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+
+				String so_date = myRes.getString(1);
+				String so_trxn_code = myRes.getString(2);
+				String so_number = myRes.getString(3);
+				String sm_code = myRes.getString(4);
+				String sm_name = myRes.getString(5);
+				String sh_lc_nu = myRes.getString(6);
+				String lc_exp_dt = myRes.getString(7);
+				String zone = myRes.getString(8);
+				String pdct_cat = myRes.getString(9);
+				String pdct_sub_cat = myRes.getString(10);
+				String prjct = myRes.getString(11);
+				String consultant = myRes.getString(12);
+				String pmt_term = myRes.getString(13);
+				String customer = myRes.getString(14);
+				String prof_perc = myRes.getString(15);
+				int balance_value = myRes.getInt(16);
+				String projected_inv_dt = myRes.getString(17);
+				String so_lcn_code = myRes.getString(18);
+
+				Stage4Details temps4DetailsList = new Stage4Details(so_date, so_trxn_code, so_number, sm_code, sm_name,
+						sh_lc_nu, lc_exp_dt, zone, pdct_cat, pdct_sub_cat, prjct, consultant, pmt_term, customer,
+						prof_perc, balance_value, projected_inv_dt, so_lcn_code);
+				s4DetailsList.add(temps4DetailsList);
+			}
+			return s4DetailsList;
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
+
+	public List<Stage3Details> stage3BookingDetailsForPerf(String sales_man_code) throws SQLException {
+		List<Stage3Details> s3DetailsList = new ArrayList<>();// aging details
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		try {
+			myCon = orcl.getOrclConn();
+			// --LISTING OF STAGE3 TRANSACTIONS FOR A GIVEN SALES EGR AS ON RUNNING DATE.
+
+			String sql = " SELECT  WEEK, ZONE, SALES_EGR_CODE, PROD_CATG, PROD_SUB_CATG, PROJECT_NAME, CONSULTANT, "
+					+ " CUSTOMER, QUOT_DT, QUOT_CODE, QUOT_NO, AMOUNT, AVG_GP, LOI_RCD_DT, EXP_PO_DT, INVOICING_YEAR "
+					+ " FROM STG3_DETAIL "
+					+ " WHERE SALES_EGR_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) ORDER BY LOI_RCD_DT desc ";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, sales_man_code);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				String week = myRes.getString(1);
+				String zone = myRes.getString(2);
+				String sales_eg_code = myRes.getString(3);
+				String prod_cat = myRes.getString(4);
+				String prod_sub_catg = myRes.getString(5);
+				String prjct_name = myRes.getString(6);
+				String consultnt = myRes.getString(7);
+				String custmr = myRes.getString(8);
+				String qt_dt = myRes.getString(9);
+				String qtn_code = myRes.getString(10);
+				String qtn_num = myRes.getString(11);
+				int amount = myRes.getInt(12);
+				String avg_gp = myRes.getString(13);
+				String loi_rcd_dt = myRes.getString(14);
+				String exp_po_dt = myRes.getString(15);
+				String invoicing_year = myRes.getString(16);
+				Stage3Details temps3DetailsList = new Stage3Details(week, zone, sales_eg_code, prod_cat, prod_sub_catg,
+						prjct_name, consultnt, custmr, qt_dt, qtn_code, qtn_num, amount, avg_gp, loi_rcd_dt, exp_po_dt,
+						invoicing_year);
+				s3DetailsList.add(temps3DetailsList);
+			}
+			return s3DetailsList;
+		} finally { // close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
 }
+
+

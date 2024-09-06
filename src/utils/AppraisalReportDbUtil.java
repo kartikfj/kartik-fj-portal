@@ -105,7 +105,7 @@ public class AppraisalReportDbUtil {
 			}
 			return hrAppraisaReportlList;
 		} finally {
-			close(myStmt, null);
+			close(myStmt, myRes);
 			con.closeConnection();
 
 		}
@@ -273,7 +273,7 @@ public class AppraisalReportDbUtil {
 
 		} finally {
 			// close jdbc objects
-			close(myStmt, null);
+			close(myStmt, myRes);
 			con.closeConnection();
 		}
 	}
@@ -382,7 +382,7 @@ public class AppraisalReportDbUtil {
 
 		} finally {
 			// close jdbc objects
-			close(myStmt, null);
+			close(myStmt, myRes);
 			con.closeConnection();
 		}
 	}

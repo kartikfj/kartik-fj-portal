@@ -81,23 +81,23 @@ public class SSLMail {
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("rajakumari.ch@fjtco.com"));
 			// message.setRecipients(Message.RecipientType.TO,
 			// InternetAddress.parse(this.toaddr));
-			// if (this.ccaddr != null) {
-			// message.setRecipients(Message.RecipientType.CC,
-			// InternetAddress.parse(this.ccaddr));
-			// }
+//			if (this.ccaddr != null) {
+//				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(this.ccaddr));
+//			}
 
 			message.setSubject(this.messageSub);
 			this.messagebody += getMessageFooter(urlAddress);
 			message.setContent(this.messagebody, "text/html");
 			Transport.send(message);
 			status = 1;
-			// System.out.println("Done");
+			System.out.println("Done in SSLMail");
 
 		} catch (MessagingException e) {
 			System.out.print(e);
 			// throw new RuntimeException(e);
 			status = -1;
 		} finally {
+			System.out.println("finally in SSLMail");
 			return status;
 		}
 	}
@@ -212,12 +212,11 @@ public class SSLMail {
 		} finally {
 			try {
 
-				if (rs != null) {
+				if (rs != null)
 					rs.close();
-				}
-				if (psmt != null) {
+				if (psmt != null)
 					psmt.close();
-				}
+
 				con.closeConnection();
 
 			} catch (SQLException e) {

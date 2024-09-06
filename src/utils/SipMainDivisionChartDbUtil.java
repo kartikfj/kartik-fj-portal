@@ -923,8 +923,8 @@ public class SipMainDivisionChartDbUtil {
 			String sql = " SELECT DIVN,  " + "  DMCODE,  " + "  JAN_A \"JAN\",  " + "  FEB_A \"FEB\",  "
 					+ "  MAR_A \"MAR\",  " + "  APR_A \"APR\",  " + "  MAY_A \"MAY\",  " + "  JUN_A \"JUN\",  "
 					+ "  JUL_A \"JUL\",  " + "  AUG_A \"AUG\",  " + "  SEP_A \"SEP\",  " + "  OCT_A \"OCT\",  "
-					+ "  NOV_A \"NOV\",  " + "  DEC_A \"DEC\",  " + "  YR_TOT_A \"TOTAL\" FROM DM_BLNG_TRGT_TBL  "
-					+ "  WHERE DMCODE = ? ";
+					+ "  NOV_A \"NOV\",  " + "  DEC_A \"DEC\",  "
+					+ "  YR_TOT_A \"TOTAL\", YR_TOT_GP \"GP\" FROM DM_BLNG_TRGT_TBL  " + "  WHERE DMCODE = ? ";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, theDmCode);// dm employee code
 			// Execute a SQL query
@@ -945,9 +945,10 @@ public class SipMainDivisionChartDbUtil {
 				String nov_tmp = myRes.getString(13);
 				String dec_tmp = myRes.getString(14);
 				String total_tmp = myRes.getString(15);
+				String gptotal_tmp = myRes.getString(16);
 				SipMainDivisionBillingSummaryYtm tempdivisionBillingList = new SipMainDivisionBillingSummaryYtm(
 						divn_tmp, dm_tmp, jan_tmp, feb_tmp, mar_tmp, apr_tmp, may_tmp, jun_tmp, jul_tmp, aug_tmp,
-						sep_tmp, oct_tmp, nov_tmp, dec_tmp, total_tmp);
+						sep_tmp, oct_tmp, nov_tmp, dec_tmp, total_tmp, gptotal_tmp);
 				divisionBillingList.add(tempdivisionBillingList);
 			}
 			return divisionBillingList;

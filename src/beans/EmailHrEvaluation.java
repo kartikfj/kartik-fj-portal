@@ -129,8 +129,9 @@ public class EmailHrEvaluation {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(this.fromaddr, "FJ-Employee-Performance-Evaluation"));
 			System.out.println(this.toaddr);
-			message.setRecipients(Message.RecipientType.TO,
-					// InternetAddress.parse(this.toaddr));
+
+			message.setRecipients(Message.RecipientType.TO, // InternetAddress.parse(this.toaddr));
+
 					InternetAddress.parse("nufail.a@fjtco.com"));
 			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("nufail.a@fjtco.com"));
 			// InternetAddress.parse(this.ccaddr));
@@ -139,13 +140,14 @@ public class EmailHrEvaluation {
 			message.setContent(this.messagebody, "text/html");
 			Transport.send(message);
 			status = 1;
-			// System.out.println("Done");
+			System.out.println("Done in EmailHrEvaluation");
 
 		} catch (MessagingException e) {
 			System.out.print(e);
 			// throw new RuntimeException(e);
 			status = -1;
 		} finally {
+			System.out.println("finally in EmailHrEvaluation" + status);
 			return status;
 		}
 	}
@@ -181,12 +183,12 @@ public class EmailHrEvaluation {
 
 		} finally {
 			try {
-				if (rs != null) {
+
+				if (rs != null)
 					rs.close();
-				}
-				if (psmt != null) {
+				if (psmt != null)
 					psmt.close();
-				}
+
 				con.closeConnection();
 
 			} catch (SQLException e) {

@@ -16,6 +16,7 @@ public class SipMainDivisionBillingSummaryYtm {
 	private String nov = null;
 	private String dec = null;
 	private String ytm_total = null;
+	private String gpytm_total = null;
 
 	public String getDivision() {
 		return division;
@@ -137,6 +138,14 @@ public class SipMainDivisionBillingSummaryYtm {
 		this.ytm_total = ytm_total;
 	}
 
+	public String getGpytm_total() {
+		return gpytm_total;
+	}
+
+	public void setGpytm_total(String gpytm_total) {
+		this.gpytm_total = gpytm_total;
+	}
+
 	public SipMainDivisionBillingSummaryYtm(String division, String dm_emp_code, String jan, String feb, String mar,
 			String apr, String may, String jun, String jul, String aug, String sep, String oct, String nov, String dec,
 			String ytm_total) {
@@ -156,6 +165,28 @@ public class SipMainDivisionBillingSummaryYtm {
 		this.nov = nov;
 		this.dec = dec;
 		this.ytm_total = ytm_total;
+	}
+
+	public SipMainDivisionBillingSummaryYtm(String division, String dm_emp_code, String jan, String feb, String mar,
+			String apr, String may, String jun, String jul, String aug, String sep, String oct, String nov, String dec,
+			String ytm_total, String gpytm_total) {
+		super();
+		this.division = division;
+		this.dm_emp_code = dm_emp_code;
+		this.jan = jan;
+		this.feb = feb;
+		this.mar = mar;
+		this.apr = apr;
+		this.may = may;
+		this.jun = jun;
+		this.jul = jul;
+		this.aug = aug;
+		this.sep = sep;
+		this.oct = oct;
+		this.nov = nov;
+		this.dec = dec;
+		this.ytm_total = ytm_total;
+		this.gpytm_total = gpytm_total;
 	}
 
 }

@@ -995,10 +995,11 @@ public class fjtcouser {
 
 
 			try {
-				if (psmt != null)
-					psmt.close();
 				if (rs != null)
 					rs.close();
+				if (psmt != null)
+					psmt.close();
+
 				con.closeConnection();
 
 			} catch (SQLException e) {

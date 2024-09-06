@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import beans.OrclDBConnectionPool;
 import beans.SalesOrder_Budget;
 import beans.SoBudgetReplyMailer;
-import beans.OrclDBConnectionPool;
 
 public class BudgetApprovalMailDbutil {
 
@@ -48,8 +48,8 @@ public class BudgetApprovalMailDbutil {
 
 			}
 			return retVal;
-		}catch(SQLException e) {
-			System.out.println("Exception  for SOID  BudgetApprovalMailDbUtil.soStatus "+so_id);
+		} catch (SQLException e) {
+			System.out.println("Exception  for SOID  BudgetApprovalMailDbUtil.soStatus " + so_id);
 			e.printStackTrace();
 		} finally {
 			// close jdbc objects
@@ -504,14 +504,12 @@ public class BudgetApprovalMailDbutil {
 
 			}
 
-			
-
-		}catch(SQLException e) {
-			System.out.println("Exception in BudgetApprovalDbUtil.getSoBdgExpencDtls "+sob_id);
+		} catch (SQLException e) {
+			System.out.println("Exception in BudgetApprovalDbUtil.getSoBdgExpencDtls " + sob_id);
 			e.printStackTrace();
 		} finally {
 			// close jdbc objects
-			close(myStmt, null);
+			close(myStmt, myRes);
 			orcl.closeConnection();
 		}
 		return budgetExpencDtls;
@@ -564,7 +562,7 @@ public class BudgetApprovalMailDbutil {
 
 		} finally {
 			// close jdbc objects
-			close(myStmt, null);
+			close(myStmt, myRes);
 			orcl.closeConnection();
 		}
 	}
