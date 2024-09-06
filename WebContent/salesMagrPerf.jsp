@@ -344,7 +344,7 @@ table.dataTable thead th,table.dataTable thead td {
     <div class="row">
         <!-- Second Section (Now First) -->
         <div class="col-lg-5 col-md-12">
-            <section style="margin-top: 8px;border-top: 3px solid #9e9e9e;width:100%;height:274px; border-radius: 3px;margin-bottom: 5px;">
+            <section style="margin-top: 2px;border-top: 3px solid #9e9e9e;width:100%;height:274px; border-radius: 3px;margin-bottom: 5px;">
                 <div class="nav-tabs-custom">
                     <div class="tab-content">
                         <div id="bb1-meter" class="tab-pane fade in active">
@@ -420,7 +420,7 @@ table.dataTable thead th,table.dataTable thead td {
                                     <div class="col-lg-1 col-xs-0"></div>
                                 </div>
                             </div>
-                                  <div id="performance_container" style="margin-left: 70px;"></div>
+                                  <div id="performance_container" style="margin-left: 40px;"></div>
 
                         </div>
                     </div>
@@ -449,80 +449,118 @@ table.dataTable thead th,table.dataTable thead td {
 }
 
 </style>
+<style>
+#performance_container .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#performance_container .col-sm-6 {
+    padding-left: 25px;
+    padding-right: 5px;
+    margin-left: -10px;
+}
+#performance_container .btn {
+    letter-spacing: 1px; /* Adjust the spacing between letters */
+}
+
+
+/* Additional styles for responsiveness */
+@media (max-width: 576px) {
+    #performance_container .col-sm-6 {
+        margin-left: 0;
+        margin-bottom: 10px; /* Ensure spacing is adequate on small screens */
+    }
+    /* Ensure proper spacing and prevent overlap */
+ /* Flexbox layout for header and icons */
+
+</style>
         <!-- First Section (Now Second) -->
-        <div class="col-lg-5 col-md-12">
-            <section style="margin-top: 8px;border-top: 3px solid #9e9e9e;width:90%;height:274px; border-radius: 3px;margin-bottom: 5px;">
-                <div class="stage-details-graph" id="openModalBtn">
-						<i class="fa fa-bar-chart fa-1x"></i>
-			 </div>
-                <div class="nav-tabs-custom">
-              
-                
-                    <div class="tab-content">
-                        <div class="box-header with-border" style="margin-top: -18px;"> 
-                            <h3 class="box-title">STAGE DETAILS</h3>
-                            <div class="help-right" id="help-stages">
-                                <i class="fa fa-info-circle pull-left"></i>
-                            </div>
-                           
- 
-
-
-                           
+       <!-- First Section (Now Second) -->
+<div class="col-lg-5 col-md-12">
+    <section class="stage-details-section">
+        <div class="nav-tabs-custom">
+            <div class="tab-content">
+                <div class="box-header with-border d-flex justify-content-between align-items-center" style="margin-top: -10px;">
+                    <h3 class="box-title">STAGE DETAILS</h3>
+                    <div class="d-flex align-items-center">
+                        <div class="stage-details-graph" id="openModalBtn">
+                            <i class="fa fa-bar-chart fa-1x"></i>
                         </div>
-                        <div id="stages-dt" class="tab-pane fade in active">
-                            <div class="row">
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="small-box bg-red">
-                                        <div class="inner">
-                                            <h3>Stage 2</h3>
-                                            <p id="Stage2"><strong>0</strong></p>
-                                        </div>
-                                        <div class="icon"><i class="fa fa-pie-chart"></i></div>
-                                        <a href="#" onclick="s2Details();"  class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
+                        <div class="help-right ml-2" id="help-stages">
+                            <i class="fa fa-info-circle"></i>
+                        </div>
+                    </div>
+                </div>
+                <div id="stages-dt" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="small-box bg-red">
+                                <div class="inner">
+                                    <h3>Stage 2</h3>
+                                    <p id="Stage2"><strong>0</strong></p>
                                 </div>
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="small-box bg-yellow">
-                                        <div class="inner">
-                                            <h3>Stage 3</h3>
-                                            <p id="Stage3"><strong>0</strong></p>
-                                        </div>
-                                        <div class="icon"><i class="fa fa-pie-chart"></i></div>
-                                       <a href="#" onclick="s3Details();"  class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                   
-                                </div>
+                                <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                                <a href="#" onclick="s2Details();" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
-                            <div class="row" style="margin-top:-17px;">
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="small-box bg-blue">
-                                        <div class="inner">
-                                            <h3>Stage 4</h3>
-                                            <p id="Stage4"><strong>0</strong></p>
-                                            <input type="hidden" id="s3sum_temp" value="0" />
-                                        </div>
-                                        <div class="icon"><i class="fa fa-pie-chart"></i></div>
-                                        <a href="#" onclick="s4Details();"  class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3>Stage 3</h3>
+                                    <p id="Stage3"><strong>0</strong></p>
                                 </div>
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="small-box bg-green">
-                                        <div class="inner">
-                                            <h3>Stage 5</h3>
-                                            <p id="Stage5"><strong>0</strong></p>
-                                            <input type="hidden" id="s4sum_temp" value="0" />
-                                        </div>
-                                        <div class="icon"><i class="fa fa-pie-chart"></i></div>
-                                        <a href="#" onclick="s5Details();"  class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
+                                <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                                <a href="#" onclick="s3Details();" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="small-box bg-blue">
+                                <div class="inner">
+                                    <h3>Stage 4</h3>
+                                    <p id="Stage4"><strong>0</strong></p>
+                                    <input type="hidden" id="s3sum_temp" value="0" />
                                 </div>
+                                <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                                <a href="#" onclick="s4Details();" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>Stage 5</h3>
+                                    <p id="Stage5"><strong>0</strong></p>
+                                    <input type="hidden" id="s4sum_temp" value="0" />
+                                </div>
+                                <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                                <a href="#" onclick="s5Details();" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
+    </section>
+</div>
+
+<style>
+    .stage-details-section {
+        border-top: 3px solid #9e9e9e;
+        width: 90%;
+        height: 274px;
+        border-radius: 3px;
+        margin-bottom: 5px;
+    }
+
+    @media (max-width: 576px) { /* Adjust based on your mobile breakpoint */
+        .stage-details-section {
+            margin-top: 70px; /* Apply margin-top on mobile screens only */
+        }
+    }
+</style>
+       
     </div>
 </div>
  
@@ -1399,11 +1437,11 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
  
     			output+="</tbody></table>"; 
 
-    			   var buttonHtmlBooking = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
+    			   var buttonHtmlBooking = "<div class='col-sm-6'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
 
     	    		// Define the button HTML for billing details
     	    		//var buttonHtmlBilling = "<div class='col-sm-3'><button type='button' class='btn btn-primary btn-block' onclick='printAllSalesEngineerBillingCodes(\"" + $.trim(data[i].smCode)+"\", \"SC\")'>Billing Details</button></div>";
-    	    	    var buttonHtmlBilling = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBillingCodes(\"" +$.trim(smCode) + "\", \"SC\")'>Billing Details</button></div>";
+    	    	    var buttonHtmlBilling = "<div class='col-sm-6'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBillingCodes(\"" +$.trim(smCode) + "\", \"SC\")'>Billing Details</button></div>";
 
 
     	    		// Combine both button HTMLs within a Bootstrap row
@@ -1713,11 +1751,11 @@ function sm_performance_booking(){
 				      handle: ".modal-header"
 				  });
     	 */
-    	    var buttonHtmlBooking = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
+    	    var buttonHtmlBooking = "<div class='col-sm-6'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
 
     		// Define the button HTML for billing details
     		//var buttonHtmlBilling = "<div class='col-sm-3'><button type='button' class='btn btn-primary btn-block' onclick='printAllSalesEngineerBillingCodes(\"" + $.trim(data[i].smCode)+"\", \"SC\")'>Billing Details</button></div>";
-    	    var buttonHtmlBilling = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBillingCodes(\"" + smCode + "\")'>Billing Details</button></div>";
+    	    var buttonHtmlBilling = "<div class='col-sm-6'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBillingCodes(\"" + smCode + "\")'>Billing Details</button></div>";
 
     		// Combine both button HTMLs within a Bootstrap row
     		var combinedButtonsHtml = "<div class='row'>" + buttonHtmlBooking + buttonHtmlBilling + "</div>";
