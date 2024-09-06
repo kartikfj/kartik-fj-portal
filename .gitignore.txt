@@ -1,4 +1,0 @@
-/.settings/
-/.metadata/
-/.Server/
-/build/
