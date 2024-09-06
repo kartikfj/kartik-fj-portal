@@ -753,7 +753,7 @@ table.dataTable thead th,table.dataTable thead td {
 <div class="modal-content" style="width: 25%; height: 40%; margin-left: auto; margin-right: 25%;margin-top: 10%;"> 
 <div class="modal-header"> 
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4 class="modal-title">Stage details of Sales Engineer - ${selected_salesman_code} </h4>
+<h4 class="modal-title">Stage Details Graph</h4>
 </div> 
 <div class="modal-body"> <div id="stagedetailsgraph"></div></div>
 </div>
