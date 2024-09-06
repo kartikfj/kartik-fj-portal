@@ -107,6 +107,9 @@ public class SipStageFollowUpController extends HttpServlet {
 					e.printStackTrace();
 				}
 				break;
+			case "updateStageRemarks":
+				updateStageRemarks(request, response, sales_eng_Emp_code);
+				break;
 			case "lost":
 				updateQtnToLost(request, response, sales_eng_Emp_code, fjtuser);
 				break;
@@ -257,6 +260,26 @@ public class SipStageFollowUpController extends HttpServlet {
 		new Gson().toJson(updateStatus, response.getWriter());
 	}
 
+	private void updateStageRemarks(HttpServletRequest request, HttpServletResponse response, String sales_eng_Emp_code)
+			throws JsonIOException, IOException {
+		String seCode = request.getParameter("seCode");
+		String remarks = request.getParameter("remarks");
+		String id = request.getParameter("id");
+		String stage = request.getParameter("stage");
+
+		System.out.print("hi this is data" + remarks + "this is my" + stage);
+		int updateStatus = 0;
+
+		try {
+			updateStatus = sipStageFollowpDbUtil.updateStageRemarks(seCode, remarks, id, sales_eng_Emp_code, stage);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		response.setContentType("application/json");
+		new Gson().toJson(updateStatus, response.getWriter());
+	}
+
 	private void getStageData(HttpServletRequest request, HttpServletResponse response)
 			throws JsonIOException, IOException {
 		int stage = 0;
@@ -378,6 +401,7 @@ public class SipStageFollowUpController extends HttpServlet {
 		String remarkType = request.getParameter("rtyp");
 		String statuschange = request.getParameter("tstuas");
 		String segSalesCode = request.getParameter("segsalescode");
+		System.out.println("kartik" + sysId);
 		int status = sipStageFollowpDbUtil.updateLOIQtnToLost(sysId, reason, sales_Egr_Code, remarkType, statuschange,
 				fjtuser, segSalesCode);
 

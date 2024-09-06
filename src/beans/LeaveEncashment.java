@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author 
+ * @author
  */
 public class LeaveEncashment {
 
@@ -114,9 +114,9 @@ public class LeaveEncashment {
 				if (rs != null) {
 					rs.close();
 				}
-				if (psmt != null)
-					;
-				psmt.close();
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 			} catch (SQLException e) {
 
@@ -370,8 +370,7 @@ public class LeaveEncashment {
 				+ "font-family: Arial, Helvetica, sans-serif;\n" + "font-size: 15px;\n" + "border-radius: 3px;\n"
 				+ "-webkit-border-radius: 3px;\n" + "-moz-border-radius: 3px;\n" + "border: 1px solid #a31d16;\n"
 				+ "cursor: pointer;\">");
-		mbody.append(
-				"<a style='text-decoration: none;' href='"+fusr.getUrlAddress()+"LeaveProcess?ocjtfdinu=");
+		mbody.append("<a style='text-decoration: none;' href='" + fusr.getUrlAddress() + "LeaveProcess?ocjtfdinu=");
 		// mbody.append("<a style='text-decoration: none;'
 		// href=\'http://127.0.01:8090/fjhr/LeaveProcess?ocjtfdinu=");
 		mbody.append(unqid + "&edocmpe=" + this.emp_code + "&revorppa=" + this.approver_id
@@ -381,7 +380,7 @@ public class LeaveEncashment {
 				+ "-webkit-border-radius: 3px;\n" + "-moz-border-radius: 3px;\n" + "border: 1px solid #a31d16;\n"
 				+ "cursor: pointer;\">");
 		mbody.append(
-				"&nbsp;<a style='text-decoration: none;' href='"+fusr.getUrlAddress()+"LeaveProcess?ocjtfdinu=");
+				"&nbsp;<a style='text-decoration: none;' href='" + fusr.getUrlAddress() + "LeaveProcess?ocjtfdinu=");
 		// mbody.append("<a style='text-decoration: none;'
 		// href=\'http://127.0.01:8090/fjtco/LeaveProcess?ocjtfdinu=");
 		mbody.append(unqid + "&edocmpe=" + this.emp_code + "&revorppa=" + this.approver_id
@@ -403,8 +402,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param effectivedate
-	 *            the effectivedate to set
+	 * @param effectivedate the effectivedate to set
 	 */
 	public void setEffectivedate(Date effectivedate) {
 		this.effectivedate = effectivedate;
@@ -418,8 +416,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param leavetype
-	 *            the leavetype to set
+	 * @param leavetype the leavetype to set
 	 */
 	public void setLeavetype(String leavetype) {
 		this.leavetype = leavetype;
@@ -433,8 +430,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param encashdays
-	 *            the encashdays to set
+	 * @param encashdays the encashdays to set
 	 */
 	public void setEncashdays(float encashdays) {
 		this.encashdays = encashdays;
@@ -448,8 +444,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param reason
-	 *            the reason to set
+	 * @param reason the reason to set
 	 */
 	public void setReason(String reason) {
 		this.reason = reason;
@@ -463,8 +458,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param emp_code
-	 *            the emp_code to set
+	 * @param emp_code the emp_code to set
 	 */
 	public void setEmp_code(String emp_code) {
 		this.emp_code = emp_code;
@@ -478,8 +472,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param comp_code
-	 *            the comp_code to set
+	 * @param comp_code the comp_code to set
 	 */
 	public void setComp_code(String comp_code) {
 		this.comp_code = comp_code;
@@ -493,8 +486,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param status
-	 *            the status to set
+	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
 		this.status = status;
@@ -508,8 +500,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param emp_name
-	 *            the emp_name to set
+	 * @param emp_name the emp_name to set
 	 */
 	public void setEmp_name(String emp_name) {
 		this.emp_name = emp_name;
@@ -523,8 +514,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param approver_id
-	 *            the approver_id to set
+	 * @param approver_id the approver_id to set
 	 */
 	public void setApprover_id(String approver_id) {
 		this.approver_id = approver_id;
@@ -538,8 +528,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param approverEId
-	 *            the approverEId to set
+	 * @param approverEId the approverEId to set
 	 */
 	public void setApproverEId(String approverEId) {
 		this.approverEId = approverEId;
@@ -553,8 +542,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param approverName
-	 *            the approverName to set
+	 * @param approverName the approverName to set
 	 */
 	public void setApproverName(String approverName) {
 		this.approverName = approverName;
@@ -568,8 +556,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param applied_date
-	 *            the applied_date to set
+	 * @param applied_date the applied_date to set
 	 */
 	public void setApplied_date(Timestamp applied_date) {
 		this.applied_date = applied_date;
@@ -583,8 +570,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param reqid
-	 *            the reqid to set
+	 * @param reqid the reqid to set
 	 */
 	public void setReqid(int reqid) {
 		this.reqid = reqid;
@@ -598,8 +584,7 @@ public class LeaveEncashment {
 	}
 
 	/**
-	 * @param lv_desc
-	 *            the lv_desc to set
+	 * @param lv_desc the lv_desc to set
 	 */
 	public void setLv_desc(String lv_desc) {
 		this.lv_desc = lv_desc;

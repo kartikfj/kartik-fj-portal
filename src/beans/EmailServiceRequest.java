@@ -118,7 +118,7 @@ public class EmailServiceRequest {
 
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.auth", "true");
-		props.setProperty("mail.smtp.starttls.enable", "true");
+		props.setProperty("mail.smtp.ssl.enable", "true");
 		props.put("mail.smtp.port", port);
 
 		int status = 0;
@@ -133,7 +133,9 @@ public class EmailServiceRequest {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(this.fromaddr, "FJ-SERVICE REQUEST"));
 			System.out.println(this.toaddr);
+
 			message.setRecipients(Message.RecipientType.TO, // InternetAddress.parse(this.toaddr));
+
 					InternetAddress.parse("nufail.a@fjtco.com"));
 			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("nufail.a@fjtco.com"));
 			// InternetAddress.parse(this.ccaddr));
@@ -185,10 +187,12 @@ public class EmailServiceRequest {
 
 		} finally {
 			try {
+
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
 					psmt.close();
+
 				con.closeConnection();
 
 			} catch (SQLException e) {

@@ -429,11 +429,12 @@ public class LeaveApplication {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 			} catch (SQLException e) {
 
@@ -822,11 +823,12 @@ public class LeaveApplication {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 			} catch (SQLException e) {
 
@@ -1454,11 +1456,12 @@ public class LeaveApplication {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 			} catch (SQLException e) {
 				System.out.println("Exception in closing DB resources");
@@ -1489,8 +1492,12 @@ public class LeaveApplication {
 			e.printStackTrace();
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				orcl.closeConnection();
 
 			} catch (SQLException e) {

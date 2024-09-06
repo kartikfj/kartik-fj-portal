@@ -26,6 +26,7 @@ public class LogisticImportPOController extends HttpServlet {
 
 	public LogisticImportPOController() throws ServletException {
 		super.init();
+
 		logisticDashboardDbUtil = new LogisticDashboardDbUtil();
 	}
 

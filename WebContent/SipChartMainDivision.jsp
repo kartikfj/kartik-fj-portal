@@ -1517,7 +1517,9 @@ function s2Details() { var dmCode= '${DFLTDMCODE}';$('#laoding').show();
                 <span class="bg-color-3"> Billing Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actualbl}"/></span></span>
             </h6>
         </div>
+
          <div class="row">
+
             <div class="col-lg-1 col-xs-0"></div>
             <div class="col-lg-5 col-xs-6 sep">
                 <div id="guage_test_booking" style="background: linear-gradient(to bottom, transparent 20px, #ff9999 20px); padding: 1px; box-sizing: border-box;  height: 166px; margin-top:-20px"></div>
@@ -1527,7 +1529,9 @@ function s2Details() { var dmCode= '${DFLTDMCODE}';$('#laoding').show();
             </div>
             <div class="col-lg-1 col-xs-0"></div>
         </div>
+
         
+
     </div>
 </div>
        </div>

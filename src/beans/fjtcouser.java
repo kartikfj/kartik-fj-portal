@@ -992,11 +992,14 @@ public class fjtcouser {
 			retval = -2;
 
 		} finally {
+
+
 			try {
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
 					psmt.close();
+
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -1005,6 +1008,7 @@ public class fjtcouser {
 				retval = -2;
 			}
 		}
+
 		return retval;
 	}
 

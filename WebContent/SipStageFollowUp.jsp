@@ -55,13 +55,31 @@
  svg:first-child > g > text[text-anchor~=middle]{ font-size: 18px;font-weight: bold; fill: #337ab7;}
 .requestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72) 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
 .requestWindowPriority{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72) 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
+.requestWindowRemarks{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72) 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
 .lostWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72) 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
 .reasonheading{color:#ffffff;}.reasonbox{display:none; }
+.reasonboxRemarks{display:none; }
 .lostreasonheading{color:#ffffff;}.lostreasonbox{display:none; }
 .holdrequestWindow,.stage1requestWindow,.submittalstatusrequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
 .holdreasonheading,.stage1reasonheading,.submittalstatusreasonheading{color:#ffffff;}.holdreasonbox,.submittalstatusreasonbox{display:none; }
-.poUpdaterequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
-.poUpdatereasonheading{color:#ffffff;}.poUpdatereasonbox{display:none; }
+/* .poUpdaterequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
+ */
+  .poUpdaterequestWindow {
+    display: none; /* Default state is hidden */
+    padding: 1em;
+    border: 1px solid rgb(121, 85, 72);
+    border-radius: 3px;
+    font-size: 0.8em;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 20em;
+    height: auto;
+    background: rgb(121, 85, 72);
+    position: absolute; /* Use absolute positioning */
+    z-index: 1000; /* Ensure the modal is above other content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow */
+}
+ 
+ .poUpdatereasonheading{color:#ffffff;}.poUpdatereasonbox{display:none; }
 .expLOIDateUpdaterequestWindow,.sewinUpdaterequestWindow,.expOrderDateUpdaterequestWindow,.expBillingDateUpdaterequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
 .expLOIUpdatereasonheading,.sewinUpdatereasonheading,.expOrderDateUpdatereasonheading,.expBillingDateUpdatereasonheading{color:#ffffff;}.expLOIUpdatereasonbox,.sewinUpdatereasonbox,.expOrderDateUpdatereasonbox,.expBillingDateUpdatereasonbox{display:none; }
 .invUpdaterequestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
@@ -113,9 +131,33 @@ div.dt-buttons{
  margin-left: 25px;
 }
 #cvDetails_tbl thead th, #cvDetails_tbl tbody td{border: 1px solid #03a9f4 !important;padding: 7px; text-align: left;}
-.stg3requestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
-.stg3reasonheading{color:#ffffff;}.stg3reasonbox{display:none; }
-
+/* .stg3requestWindow{display:none;padding:5px;border-radius:5px;border: rgb(121, 85, 72); 1px solid; border-radius:3px;font-size:0.8em; font-family:Arial, Helvetica, sans-serif; padding: 1em;width:20em;height:auto;background: rgb(121, 85, 72);}
+ */
+ .stg3requestWindow {
+    display: none; /* Default state is hidden */
+    padding: 1em;
+    border: 1px solid rgb(121, 85, 72);
+    border-radius: 3px;
+    font-size: 0.8em;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 20em;
+    height: auto;
+    background: rgb(121, 85, 72);
+    position: fixed; /* Fixed positioning to stay on screen */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    margin-top: -10em; /* Adjust this value to properly center vertically */
+    margin-left: -10em; /* Adjust this value to properly center horizontally */
+    z-index: 1000; /* Ensure the modal is above other content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow */
+}
+ 
+ .stg3reasonheading{color:#ffffff;}.stg3reasonbox{display:none; }
+.thin-column {
+            width: 0.1px; /* Adjust this value as needed */
+            border: none; /* Remove border for this column */
+            padding: 0; /* Remove padding to make it as thin as possible */
+        }
 </style>
 <c:set var="sales_egr_code" value="0" scope="page" /> 
 </head>
@@ -247,7 +289,7 @@ div.dt-buttons{
 		         </div>
 		       </div>
 		         <%--Reason Div Start --%>
-			        <div id="requestWindow" class="requestWindow"  >
+			        <div id="requestWindow" class="requestWindow"  style="display: none;">
 			      		<img src="resources/images/Closebutton.png" style="float: right" onclick="closeRequestWindow();"/><br/>
 			        	<div id="reasonheading" class="reasonheading"></div> 
 			        	<div id="reasonbox" class="reasonbox">
@@ -259,9 +301,19 @@ div.dt-buttons{
 							     <label class="label-text">Priority:</label>
 							     <select  class="form-control form-control-sm" id="priorityUpdt"></select>
 							 </div> -->
+			        	<!-- 	<label class="label-text">Remarks:</label> <textarea name="remarks" rows="4" cols="50" id="remarks" maxlength="200" style="width:18em;height: 6em"></textarea>                   
+			              	<br/><br/> -->
+			           	  	<input type="button" class="sbt_btn3"  onclick="Apply(event);" name="actn" value="Apply"/>
+			        	</div>                     
+			       </div>			
+			       <div id="requestWindowRemarks" class="requestWindowRemarks"  >
+			      		<img src="resources/images/Closebutton.png" style="float: right" onclick="closeRequestWindow1();"/><br/>
+			        	<div id="reasonheading" class="reasonheading"></div> 
+			        	<div id="reasonboxRemarks" class="reasonboxRemarks">
+			        	 
 			        		<label class="label-text">Remarks:</label> <textarea name="remarks" rows="4" cols="50" id="remarks" maxlength="200" style="width:18em;height: 6em"></textarea>                   
 			              	<br/><br/>
-			           	  	<input type="button" class="sbt_btn3"  onclick="Apply(event);" name="actn" value="Apply"/>
+			           	  	<input type="button" class="sbt_btn3"  onclick="Remarks(event);" name="actn" value="Apply"/>
 			        	</div>                     
 			       </div>			      
 			       <%-- Reason Div End --%> 
@@ -825,14 +877,14 @@ function getData(details){
 				}
 				 output +='<thead>'+       		
 		 			'<tr>	'+	        			 
-		 			'<th width="10%">Sales Eng.</th><th width="10%">SO Dt.</th><th width="10%">SO Code-No.</th><th width="10%">Customer</th><th width="10%">Project</th><th width="10%">Balance Value</th><th width="10%">Exp.Billing Date</th><th width="10%">Short Close</th><th width="10%">Reminders</th>'+	
-		 			'<th width="10%">Items</th>'+      
+		 			'<th width="7%">Sales Eng.</th><th width="5%">SO Dt.</th><th width="5%">SO Code-No.</th><th width="8%">Customer</th><th width="8%">Project</th><th width="5%">Balance Value</th><th width="5%">Exp.Billing Date</th><th width="3%">Short Close</th><th width="5%">Reminders</th>'+	
+		 			'<th width="3%">Items</th>'+      
 		 			'</tr></thead><tbody>'; 
 		 		 outputReport += '<table id="stage_detail_report" class="display nowrap" >'+
 					'<thead>'+       		
 		 			'<tr>	'+	        			 
-		 			'<th>Sales Eng.</th><th>SO Dt.</th><th>SO Code-No.</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Balance Value</th>'+	
-		 			'<th>Delivery Dt.</th><th>Item Code</th><th>Item Desc</th><th>SO UOM</th><th>Balance Quantity</th>'+   
+		 			'<th>Sales Eng.</th><th>SO Dt.</th><th>SO Code-No.</th><th>Customer</th><th>Project</th><th>Consultant</th><th th width="60px>Balance Value</th>'+	
+		 			'<th >Delivery Dt.</th><th>Item Code</th><th>Item Desc</th><th>SO UOM</th><th>Balance Quantity</th>'+   
 		 			'<th>Material Status</th><th>Payment Status</th><th>Readyness Staus</th><th>Updated On</th>'+  
 		 			'</tr></thead><tbody>'; 
 				 if(data){
@@ -849,9 +901,13 @@ function getData(details){
 					 '<td width="25%">'+$.trim(data[i].projectName)+'</td>'+ 
 					 '<td align ="right">'+$.trim(formatNumber(data[i].amount))+'</td>';
 					  output +=  '<td>'+$.trim(data[i].expLOIDate)+'<br/>';					 
-						 if(showUpdateBtn){   
-							 output += '<input type="radio" id="ExpBD'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpBD\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>';
-						 }
+						// if(showUpdateBtn){   
+						///	 output += '<input type="radio" id="ExpBD'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpBD\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>';
+						// }
+						 if(showUpdateBtn){ 
+					 		 	output += '<label style="color:blue;text-transform: uppercase;"><input type="radio" name="poupdate" id="ExpBD'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpBD\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>'	 		 
+					 		  			 '</label>';
+					 		   }
 					  output +=  ' </td>';	
 					  output +=  ' <td>';
 						 if(showUpdateBtn){   
@@ -896,8 +952,8 @@ function getData(details){
 				}
 				 output +='<thead>'+       		
 		 			'<tr>	'+	        			 
-		 			'<th>Sales Eng.</th><th>Qtn Dt.</th><th>Qtn No.-Code</th><th>Cons<br> Win %</th> <th>Cont <br> Win %</th><th>Total Win % <a href= "#" data-toggle="modal" data-target="#help-modaltotalwinning"> <i class="fa fa-info-circle pull-right" style="color: #2196f3;font-size: 15px;margin-top: 4px;"></i></a></th><th>SE WIN%</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Amount</th><th>Follow-Up <br> Status</th><th>Follow-Up <br> Remark</th><th>Focus List</th>'+	
-		 			'<th>Exp.PODate</th><th>Exp. InvDate</th><th width="100px">Lost <br>Hold<br>  Status</th> <th>Follow-Up & Remarks</th><th>Reminders</th>'+      
+		 			'<th>Sales Eng.</th><th>Qtn Dt.</th><th>Qtn No.-Code</th><th>Cons<br> Win %</th> <th>Cont <br> Win %</th><th>Total Win % <a href= "#" data-toggle="modal" data-target="#help-modaltotalwinning"> <i class="fa fa-info-circle pull-right" style="color: #2196f3;font-size: 15px;margin-top: 4px;"></i></a></th><th>SE WIN%</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Amount</th><th style="display: none;"></th><th>Follow-Up <br> Status</th><th>Follow-Up <br> Remark</th><th>Focus List</th>'+	
+		 			'<th>Exp.PODate</th><th>Exp. InvDate</th><th width="60px">Lost <br>Hold<br>  Status</th><th>Reminders</th>'+      
 		 			'</tr></thead><tbody>'; 
 				 if(data){
 					 stage23List = data; 
@@ -922,18 +978,24 @@ function getData(details){
 					 '<td>'+$.trim(data[i].custName)+'</td>'+
 					 '<td>'+$.trim(data[i].projectName)+'</td>'+
 					 '<td>'+$.trim(data[i].consultant)+'</td>'+
-					 '<td  align ="right">'+$.trim(formatNumber(Math.round(data[i].qtnAmount)))+'</td>'+
-					 '<td id="status'+$.trim(data[i].cqhSysId)+'">'+$.trim(data[i].status)+'</td>'+					 
-						/*  output +=  '<td>';	
-						    var isInFocusListChecked = $.trim(data[i].priority) === 'Focus List' ? 'checked' : '';					   
-						 if(showUpdateBtn){   
-							 output += ' <label style="color:green;text-transform: uppercase;"><input type="radio" name="focuslist'+$.trim(data[i].cqhSysId) + '" value="YES"  id="focuslist'+$.trim(data[i].cqhSysId) + '" ' + isInFocusListChecked + ' onClick=updateIsInFocusList(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].seCode)+'\')> Yes'	 		 
-					 		   '</label>';				 		
-					 		  output += '<input type="hidden" id="focuslist'+$.trim(data[i].cqhSysId) + '" value="'+$.trim(data[i].priority) + '"/>';
+					 '<td  align =""right>'+$.trim(formatNumber(Math.round(data[i].qtnAmount)))+'</td>';
+					 output += '<td style="display: none;"></td>';
+					 output += '<td id="status' + $.trim(data[i].cqhSysId) + '">' + $.trim(data[i].status);
+					 if ($.trim(data[i].status) !== '') {
+					    // output += '% <br/>';
+					 }
+					 if (showUpdateBtn) {
+					     output += ' <input type="checkbox" id="' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:' + $.trim(data[i].cqhSysId) + ',event})"> ';
+					 }
+					 output += '</td>';
+				
+					 	 output += '<td id="remarks' + $.trim(data[i].cqhSysId) + '">' + $.trim(data[i].remarks);
+						 if (showUpdateBtn) {
+						     output += ' <input type="checkbox" id="remarksCheckbox' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow2({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:\'' + $.trim(data[i].cqhSysId) + '\' ,stage:\'FJT_SM_STG3_TBL\',event: event})">';
 						 }
-						 output +=  ' </td>'+ */
-						 
-					 '<td id="remarks'+$.trim(data[i].cqhSysId)+'">'+$.trim(data[i].remarks)+'</td>';
+						output += '</td>';
+ 
+					 //'<td id="remarks'+$.trim(data[i].cqhSysId)+'">'+$.trim(data[i].remarks)+'</td>';
 					 output += '<td>';
 					 var isInFocusListChecked = $.trim(data[i].priority) === 'Focus List' ? 'checked' : '';
 					 if (showUpdateBtn) {
@@ -963,19 +1025,23 @@ function getData(details){
 			 		   }
 			 		  output +=  '</td> ';
 			 		 output += ' <td>';
-					 if(showUpdateBtn){ 
-					 output += ' <label style="color:red;text-transform: uppercase;"><input type="radio" name="lostorhold" id="L'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'LOIL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Lost'	 		 
+			 		 var isLostChecked = $.trim(data[i].lhStatus) === 'L' ? 'checked' : '';
+					 var isHoldChecked = $.trim(data[i].lhStatus) === 'H' ? 'checked' : '';
+					 
+					 if(showUpdateBtn){ 						 
+					 output += ' <label style="color:red;text-transform: uppercase;"><input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId) + '" id="L'+$.trim(data[i].cqhSysId)+'" ' + isLostChecked + ' onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'LOIL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Lost'	 		 
 			 		   '</label> ';
-				     output += '<label style="color:green;text-transform: uppercase;"> <input type="radio" name="lostorhold" id="nL'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'LOINL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> HOLD'	 		 
+				     output += '<label style="color:green;text-transform: uppercase;"> <input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId) + '" id="nL'+$.trim(data[i].cqhSysId)+'" ' + isHoldChecked +' onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'LOINL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> HOLD'	 		 
 			 		    '</label>';
 						 }
 					 output += '</td>';
-			 		 if(showUpdateBtn){   
-						 output += '<td><button class="btn btn-xs btn-danger" id="'+$.trim(data[i].cqhSysId)+'" onclick=openRequestWindow({seCode:\''+$.trim(data[i].seCode)+'\',row:'+i+',id:'+$.trim(data[i].cqhSysId)+',event})>Update</button></td>';
+					 
+			 		/*  if(showUpdateBtn){   
+						 output += '<td> <input type="checkbox" id="' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:' + $.trim(data[i].cqhSysId) + ',event})"> </td>';
 					 }else{
 						 const updatedOn = ($.trim(data[i].updatedOn)) ? $.trim(data[i].updatedOn.substring(0, 10)).split("-").reverse().join("/") : '-';
 						 output += '<td>'+updatedOn+'</td>'
-						 }
+						 } */
 			 		 output +=  ' <td>';
 					// if(showUpdateBtn){   
 						 output += ' <button class="btn btn-xs btn-success"  name="reminders" id="R'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'R\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\',\''+encodeURIComponent($.trim(data[i].projectName))+'\',\''+$.trim(data[i].qtnCode)+-+$.trim(data[i].qtnNo)+'\',\''+encodeURIComponent($.trim(data[i].seName))+'\',\''+showUpdateBtn+'\')> Reminders </button>' 
@@ -1001,8 +1067,8 @@ function getData(details){
 				 
 				 output +='<thead>'+       		
 		 			'<tr>	'+	        			 
-		 			'<th>Sales Eng.</th><th>Qtn Dt.</th><th>Qtn<br/> Code-No</th><th>Cons<br/> Win %</th> <th>Cont<br/> Win %</th><th>Total<br/> Win % <a href= "#" data-toggle="modal" data-target="#help-modaltotalwinning"> <i class="fa fa-info-circle pull-right" style="color: #2196f3;font-size: 15px;margin-top: 4px;"></i></a></th><th>SE WIN%</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Product is Specified</th><th>Amount</th><th>Follow-Up <br> Status</th><th>Follow-Up <br> Remarks</th><th>Focus List</th>'+	
-		 			'<th>Exp.LOI Date</th><th>Follow-Up & Remarks</th><th width="80px">Lost <br> Hold <br> Status</th><th>Submittal Status</th><th>Reminder</th>'+      
+		 			'<th>Sales Eng.</th><th>Qtn Dt.</th><th>Qtn<br/> Code-No</th><th>Cons<br/> Win %</th> <th>Cont<br/> Win %</th><th>Total<br/> Win % <a href= "#" data-toggle="modal" data-target="#help-modaltotalwinning"> <i class="fa fa-info-circle pull-right" style="color: #2196f3;font-size: 15px;margin-top: 4px;"></i></a></th><th>SE WIN%</th><th>Customer</th><th>Project</th><th>Consultant</th><th>Product is Specified</th><th>Amount</th><th style="width: 0.1px; border: none; padding: 0; display: none;"></th><th>Follow-Up <br> Status</th><th>Follow-Up <br> Remarks</th><th>Focus List</th>'+	
+		 			'<th>Exp.LOI Date</th><th width="60px">Lost <br> Hold <br> Status</th><th>Submittal Status</th><th>Reminder</th>'+      
 		 			'</tr></thead><tbody>'; 
 				 if(data){
 					 stage23List = data; 
@@ -1039,19 +1105,48 @@ function getData(details){
 				 		   '</label>';
 				 		  output += '<input type="hidden" id="isapprovedval'+$.trim(data[i].cqhSysId) + '" value="'+$.trim(data[i].isApproved) + '"/>';
 					 }
-					 output +=  ' </td>'+
-					 '<td  align ="right">'+formatNumber(Math.round(data[i].qtnAmount))+'</td>'+					 
-					 '<td id="status'+$.trim(data[i].cqhSysId)+'">'+$.trim(data[i].status)+'</td>'+
-				/* 	 output +=  '<td>';	
-					    var isInFocusListChecked = $.trim(data[i].priority) === 'Focus List' ? 'checked' : '';					   
-					 if(showUpdateBtn){   
-						 output += ' <label style="color:green;text-transform: uppercase;"><input type="radio" name="focuslist'+$.trim(data[i].cqhSysId) + '" value="YES"  id="focuslist'+$.trim(data[i].cqhSysId) + '" ' + isInFocusListChecked + ' onClick=updateIsInFocusList(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].seCode)+'\')> Yes'	 		 
-				 		   '</label>';				 		
-				 		  output += '<input type="hidden" id="focuslist'+$.trim(data[i].cqhSysId) + '" value="'+$.trim(data[i].priority) + '"/>';
-					 }
-					 output +=  ' </td>'+ */
 					 
-					 '<td id="remarks'+$.trim(data[i].cqhSysId)+'">'+$.trim(data[i].remarks)+'</td>';
+					 output +=  ' </td>'+
+					 '<td  align ="right">'+formatNumber(Math.round(data[i].qtnAmount))+'</td>';
+					 output += '<td style="display: none;"></td>';
+					 output += '<td id="status' + $.trim(data[i].cqhSysId) + '">' + $.trim(data[i].status);
+					 if ($.trim(data[i].status) !== '') {
+					     output += '% <br/>';
+					 }
+					 if (showUpdateBtn) {
+					     output += ' <input type="checkbox" id="' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:' + $.trim(data[i].cqhSysId) + ',event})"> ';
+					 }
+					 output += '</td>';
+
+					// output += '<td id="remarks' + $.trim(data[i].cqhSysId) + '">' + $.trim(data[i].remarks);
+					 output += '<td id="remarks' + $.trim(data[i].cqhSysId) + '">' + $.trim(data[i].remarks);
+					 if (showUpdateBtn) {
+					     output += ' <input type="checkbox" id="remarksCheckbox' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow2({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:\'' + $.trim(data[i].cqhSysId) + '\',stage:\'FJT_SM_STG2_TBL\',event: event})">';
+					 }
+					// output += '</td>';
+
+					 output += '</td>';
+					 //'<td id="status'+$.trim(data[i].cqhSysId)+'">'+$.trim(data[i].status)+'</td>';
+					 // output += '<td id="status' + $.trim(data[i].cqhSysId) + '">';
+					 //output += '</td>';
+			           /*  if ($.trim(data[i].status) !== '') {
+			                output += $.trim(data[i].status);
+			            }
+			            if (showUpdateBtn) {
+			               // output += '<input type="checkbox" id="statusCheckbox' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:' + $.trim(data[i].cqhSysId) + ',event: event})"> ';
+			            	  //output += ' <input type="checkbox" id="' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:' + $.trim(data[i].cqhSysId) + ',event})"> ';
+			            	   output += ' <input type="checkbox" id="' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:' + $.trim(data[i].cqhSysId) + ',event})"> ';
+			            }
+			           
+			 */
+				 /* 	 output += '<td id="remarks' + $.trim(data[i].cqhSysId) + '">' + $.trim(data[i].remarks);
+					 if (showUpdateBtn) {
+					     output += ' <input type="checkbox" id="remarksCheckbox' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow2({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:\'' + $.trim(data[i].cqhSysId) + '\',event: event})">';
+					 }
+					// output += '</td>';
+
+					 output += '</td>'; 
+				 */
 
 					 output += '<td>';
 										 var isInFocusListChecked = $.trim(data[i].priority) === 'Focus List' ? 'checked' : '';
@@ -1064,25 +1159,28 @@ function getData(details){
 					 totalAmount = totalAmount+Math.round(data[i].qtnAmount);
 					 
 					 output +=  '<td>'+$.trim(data[i].expLOIDate) +'<br/>';					 
-					 if(showUpdateBtn){   
-						 output += '<input type="radio" id="ExpLOI'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpLOI\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')>';
-					 }
+					// if (showUpdateBtn) {
+					//	    output += '<input type="radio" name="poupdate" id="ExpLOI'  + $.trim(data[i].cqhSysId) + '" onClick="openLostHoldStg3Window(event,\'' + $.trim(data[i].cqhSysId) + '\',\'' + $.trim(data[i].qtnCode) + '\',\'' + $.trim(data[i].qtnNo) + '\',\'ExpLOI\',\'' + $.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/") + '\',\'' + $.trim(data[i].seCode) + '\')">';
+					//	}
+					 if(showUpdateBtn){ 
+				 		 	output += '<label style="color:blue;text-transform: uppercase;"><input type="radio" name="poupdate" id="ExpLOI'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'ExpLOI\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Update'	 		 
+				 		  			 '</label>';
+				 		   }
 					 output +=  ' </td>';					 
-					 if(showUpdateBtn){   
-						 output += '<td><button class="btn btn-xs btn-danger" id="'+$.trim(data[i].cqhSysId)+'" onclick=openRequestWindow({seCode:\''+$.trim(data[i].seCode)+'\',row:'+i+',id:'+$.trim(data[i].cqhSysId)+',event})>Update</button></td>';
-					 }else{
-						 const updatedOn = ($.trim(data[i].updatedOn)) ? $.trim(data[i].updatedOn.substring(0, 10)).split("-").reverse().join("/") : '-';
-						 output += '<td>'+updatedOn+'</td>'
-						 } 
+					
 					 output +=  ' <td>';
+					 
+					 var isLostChecked = $.trim(data[i].lhStatus) === 'L' ? 'checked' : '';
+					 var isHoldChecked = $.trim(data[i].lhStatus) === 'H' ? 'checked' : '';
+					 
 					 if(showUpdateBtn){   
-					 output += ' <label style="color:red;text-transform: uppercase;"><input type="radio" name="lostorhold" id="L'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'L\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Lost'	 		 
+					 output += ' <label style="color:red;text-transform: uppercase;"><input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId)+'" id="L'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'L\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Lost'	 		 
 					 		   '</label>';
-					 output += '<label style="color:green;text-transform: uppercase;"> <input type="radio" name="lostorhold" id="nL'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'NL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Hold'	 		 
+					 output += '<label style="color:green;text-transform: uppercase;"> <input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId)+'" id="nL'+$.trim(data[i].cqhSysId)+ '" ' + isApprovedYesChecked +' onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'NL\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Hold'	 		 
 					 		   '</label>';
-					 output += '<label style="color:orange;text-transform: uppercase;"> <input type="radio" name="lostorhold" id="stg1'+$.trim(data[i].cqhSysId)+'" onClick=moveToStage1(event,\''+$.trim(data[i].cqhSysId)+'\')> Stage 1'	 		 
+					 output += '<label style="color:orange;text-transform: uppercase;"> <input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId)+'" id="stg1'+$.trim(data[i].cqhSysId)+'" onClick=moveToStage1(event,\''+$.trim(data[i].cqhSysId)+'\')> Stage 1'	 		 
 				 		  		'</label>';
-					 output += '<label style="color:blue;text-transform: uppercase;"> <input type="radio" name="lostorhold" id="stg'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'stg3\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Stage 3'	 		 
+					 output += '<label style="color:blue;text-transform: uppercase;"> <input type="radio" name="lostorhold'+$.trim(data[i].cqhSysId)+'" id="stg'+$.trim(data[i].cqhSysId)+'" onClick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'stg3\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\')> Stage 3'	 		 
 					 		   '</label>';
 
 					 } 
@@ -1124,7 +1222,7 @@ function getData(details){
 				 output += '<thead>'+       		
 		 			'<tr>	'+	        			 
 		 			'<th>Sales Eng.</th><th>Qtn Dt.</th><th>Qtn Code-No</th><th>Customer</th><th width="20%">Project</th><th>Consultant</th><th>Amount</th><th>Follow-Up <br> Status</th><th>Follow-Up <br> Remarks</th><th>Focus List</th>'+	
-		 			'<th>Follow-Up & Remarks</th><th width="120px">Update Stage</th><th>Reminder</th>'+      
+		 			'<th width="120px">Update Stage</th><th>Reminder</th>'+      
 		 			'</tr></thead><tbody>'; 
 				 if(data){
 					 stage23List = data; 
@@ -1134,38 +1232,28 @@ function getData(details){
 					  output += '<tr  id="'+$.trim(data[i].cqhSysId)+'"><td>'+$.trim(data[i].seCode)+'-'+$.trim(data[i].seName)+'</td>'+	 
 					 '<td>'+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'</td>'+	
 					 '<td>'+$.trim(data[i].qtnCode)+'-'+$.trim(data[i].qtnNo)+'</td>'+
-					// '<td>'+$.trim(data[i].consultWin)+'%</td>'+
-					 //'<td>'+$.trim(data[i].contractorWin)+'%</td>'+
-					 //'<td>'+$.trim(data[i].totalWin)+'%</td>';
-					// output +=  '<td>'+$.trim(data[i].sewinper);	
-// 					 if($.trim(data[i].sewinper) !== '')
-// 						 output += '% <br/>';
-// 						 if(showUpdateBtn){   
-// 							 output += '<input type="radio" id="SEWIN'+$.trim(data[i].cqhSysId)+'"onclick=openLostHoldStg3Window(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].qtnCode)+'\',\''+$.trim(data[i].qtnNo)+'\',\'SEWIN\',\''+$.trim(data[i].qtnDt.substring(0, 10)).split("-").reverse().join("/")+'\',\''+$.trim(data[i].seCode)+'\',\'2\')>';
-// 						 }
-// 					 output +=  ' </td>'+
+					
 					 '<td>'+$.trim(data[i].custName)+'</td>'+
 					 '<td>'+$.trim(data[i].projectName)+'</td>'+
 					 '<td>'+$.trim(data[i].consultant)+'</td>'+
-					 '<td  align ="right">'+formatNumber(Math.round(data[i].qtnAmount))+'</td>'+					 
-					 '<td id="status'+$.trim(data[i].cqhSysId)+'">'+$.trim(data[i].status)+'</td>'+
-					/*   output +=  '<td>';	
-					    var isInFocusListChecked = $.trim(data[i].priority) === 'Focus List' ? 'checked' : '';					   
-					 if(showUpdateBtn){   
-						 output += ' <label style="color:green;text-transform: uppercase;"><input type="radio" name="focuslist'+$.trim(data[i].cqhSysId) + '" value="YES"  id="focuslist'+$.trim(data[i].cqhSysId) + '" ' + isInFocusListChecked + ' onClick=updateIsInFocusList(event,\''+$.trim(data[i].cqhSysId)+'\',\''+$.trim(data[i].seCode)+'\')> Yes'	 		 
-				 		   '</label>';				 		
-				 		  output += '<input type="hidden" id="focuslist'+$.trim(data[i].cqhSysId) + '" value="'+$.trim(data[i].priority) + '"/>';
+					 '<td  align ="right">'+formatNumber(Math.round(data[i].qtnAmount))+'</td>';					 
+					 output += '<td id="status' + $.trim(data[i].cqhSysId) + '">' + $.trim(data[i].status);
+					 if ($.trim(data[i].status) !== '') {
+					     output += '% <br/>';
 					 }
-					 output +=  ' </td>'+ */
-				/* 	 output += '<td>';
-					 var isInFocusListChecked = $.trim(data[i].priority) === 'Focus List' ? 'checked' : '';
 					 if (showUpdateBtn) {
-					     output += '<label style="color:green;text-transform: uppercase;"><input type="checkbox" name="focuslist' + $.trim(data[i].cqhSysId) + '" value="Focus List" id="focuslist' + $.trim(data[i].cqhSysId) + '" ' + isInFocusListChecked + ' onClick="updateIsInFocusList(event, \'' + $.trim(data[i].cqhSysId) + '\', \'' + $.trim(data[i].seCode) + '\', \'FJT_SM_STG1_TBL\')"> Yes</label>';
-					     output += '<input type="hidden" id="focuslist' + $.trim(data[i].cqhSysId) + '" value="' + $.trim(data[i].priority) + '"/>';
+					     output += ' <input type="checkbox" id="' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:' + $.trim(data[i].cqhSysId) + ',event})"> ';
 					 }
-					 output += '</td>'+ */
+					 output += '</td>';
 
-					 '<td id="remarks'+$.trim(data[i].cqhSysId)+'">'+$.trim(data[i].remarks)+'</td>';
+					// output += '<td id="remarks' + $.trim(data[i].cqhSysId) + '">' + $.trim(data[i].remarks);
+					 output += '<td id="remarks' + $.trim(data[i].cqhSysId) + '">' + $.trim(data[i].remarks);
+					 if (showUpdateBtn) {
+					     output += ' <input type="checkbox" id="remarksCheckbox' + $.trim(data[i].cqhSysId) + '" onclick="openRequestWindow2({seCode:\'' + $.trim(data[i].seCode) + '\',row:' + i + ',id:\'' + $.trim(data[i].cqhSysId) + '\',stage:\'FJT_SM_STG1_TBL\',event: event})">';
+					 }
+					// output += '</td>';
+
+					 output += '</td>';
 					 output += '<td>';
 					 var isInFocusListChecked = $.trim(data[i].priority) === 'Focus List' ? 'checked' : '';
 					 if (showUpdateBtn) {
@@ -1175,12 +1263,7 @@ function getData(details){
 					 output += '</td>';
 					 totalAmount = totalAmount+Math.round(data[i].qtnAmount);
 					
-					 if(showUpdateBtn){   
-						 output += '<td><button class="btn btn-xs btn-danger" id="'+$.trim(data[i].cqhSysId)+'" onclick=openRequestWindow({seCode:\''+$.trim(data[i].seCode)+'\',row:'+i+',id:'+$.trim(data[i].cqhSysId)+',event})>Update</button></td>';
-					 }else{
-						 const updatedOn = ($.trim(data[i].updatedOn)) ? $.trim(data[i].updatedOn.substring(0, 10)).split("-").reverse().join("/") : '-';
-						 output += '<td>'+updatedOn+'</td>'
-						 } 
+				
 					 output +=  ' <td>';
 					 if(showUpdateBtn){  
 					 output += '<label style="color:orange;text-transform: uppercase;"> <input type="radio" name="lostorhold" id="stg1'+$.trim(data[i].cqhSysId)+'" onClick=moveToStage2(event,\''+$.trim(data[i].cqhSysId)+'\')>Move to Stage-2'	 		 
@@ -1209,57 +1292,61 @@ function getData(details){
 			   // $("#stage_detail").html(outputReport+""+output); 
 			    $("#stage_detail").html(output);
 			    
-			    table =	  $('#stage1_detail_tbl').DataTable({
-			         dom: 'Bfrtip',
-			        'paging'      : true,
-			        //'lengthChange': false,
-			        'searching'   : true,
-			        'ordering'    : true,
-			        'info'        : true,			    
-			        //"dom": '<"top"if>rt<"bottom"lp><"clear">',
-			        "dom": '<"top"iBf>rt<"bottom"lp><"clear">',
-			        'autoWidth'   : false,
-			        "pageLength"  : 15, 
-			        "order": [[ 1, "desc" ]],
-			       
-			        "createdRow": function (row, data, dataIndex) {
+			   
 
-			        },
-			        "buttons": [
-			        	 {
-			                 extend: 'excelHtml5',
-			                 text: '<i class="fa fa-file-excel-o" style="color: #1d4e6b; font-size: 1em;">Export</i>',
-			                 filename: 'STAGE-' + details.stage + ' Followup Details  ',
-			                 title: 'STAGE-' + details.stage + ' Followup Details   ',
-			                 messageTop: 'The information in this file is copyright to FJ Group.',
-			                 exportOptions: {
-			                     format: {
-			                         body: function (data, row, column, node) {
-			                             //return $(node).attr('data-export');
-			                        	 if (column === 11 || column === 12 || column === 13){
-					  		            		if(data.startsWith("<"))
-			                        		 		return;
-			                        		 	else
-					  		            		return data.substr(0,10);
-					  		            	}
-			                        	       if (column === 9) { // Adjust the column index for "Focus List"
-				                                var checkbox = $(data).find('input[type="checkbox"]');
-				                                if (checkbox.length) {
-				                                    return checkbox.is(':checked') ? 'Yes' : 'No';
-				                                }
-				                                return '';
-				                            } 
-					  		            	else{
-					  		                  return data;
-					  		            	}
-			                         }
-			                     },			                    
-			                     columns: ':not(:last-child):not(:nth-last-child(2)):not(:nth-last-child(3))'
-			                 }
-			             }
-			         ]
-			     });
-			    
+			    var table = $('#stage1_detail_tbl').DataTable({
+			        dom: 'Bfrtip',
+			        paging: true,
+			        searching: true,
+			        ordering: true,
+			        info: true,
+			        "dom": '<"top"iBf>rt<"bottom"lp><"clear">',
+			        autoWidth: false,
+			        pageLength: 15,
+			        order: [[1, "desc"]],
+			        buttons: [
+			            {
+			                extend: 'excelHtml5',
+			                text: '<i class="fa fa-file-excel-o" style="color: #1d4e6b; font-size: 1em;">Export</i>',
+			                filename: 'STAGE-' + details.stage + ' Followup Details',
+			                title: 'STAGE-' + details.stage + ' Followup Details',
+			                messageTop: 'The information in this file is copyright to FJ Group.',
+			                exportOptions: {
+			                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], // Include columns 1 to 9 by their indices
+			                    format: {
+			                        body: function (data, row, column, node) {
+			                            var temp = document.createElement('div');
+			                            temp.innerHTML = data.trim();
+			                            
+			                            // Handle columns 7, 8, and 9 specifically for text content or checkboxes
+			                            if (column === 7 || column === 8) {
+			                                // Return the text content of the element
+			                                return temp.textContent.trim();
+			                            } 
+			                            
+			                            else if (column === 9) { // Handle "Focus List" column
+			                                var checkbox = $(temp).find('input[type="checkbox"]');
+			                                if (checkbox.length) {
+			                                    return checkbox.is(':checked') ? 'Yes' : 'No';
+			                                }
+			                                return '';
+			                            }
+			                            else if (column === 11 || column === 12) { // Example: Limiting text length for specific columns
+			                                if (data.startsWith("<")) {
+			                                    return '';
+			                                } else {
+			                                    return data.substr(0, 10);
+			                                }
+			                            }
+			                            
+			                            return data;
+			                        }
+			                    }
+			                }
+			            }
+			        ]
+			    });
+
 			    $('#stage_detail_tbl').DataTable({
 			        dom: 'Bfrtip',
 			        paging: true,
@@ -1306,8 +1393,22 @@ function getData(details){
 			                            if (column === 6) { // Handle SE WIN%
 			                                return data.startsWith("<") ? '' : data.substr(0, 3);
 			                            } 
-			                            
-			                            if (column === 14) { // Adjust the column index for "Focus List"
+			                            var temp = document.createElement('div');
+			                            temp.innerHTML = data.trim();
+			                            if (column === 11) {
+			                                // Return the text content of the element
+			                                return temp.textContent.trim();
+			                            } 
+			                            // Handle columns 7, 8, and 9 specifically for text content or checkboxes
+			                            if (column === 12) {
+			                                // Return the text content of the element
+			                                return temp.textContent.trim();
+			                            } 
+			                            if (column === 13) {
+			                                // Return the text content of the element
+			                                return temp.textContent.trim();
+			                            } 
+			                            if (column === 15) { // Adjust the column index for "Focus List"
 			                                var checkbox = $(data).find('input[type="checkbox"]');
 			                                if (checkbox.length) {
 			                                    return checkbox.is(':checked') ? 'Yes' : 'No';
@@ -1318,7 +1419,7 @@ function getData(details){
 			                            else if (column === 10) { // Handle hidden input column
 			                                var hiddenInputValue = $(node).find('input[type="hidden"]').val();
 			                                return hiddenInputValue || '';
-			                            } else if (column === 14 || column === 15 || column === 16) { // Handle date columns
+			                            } else if (column === 13 || column === 14 || column === 15 || column === 16) { // Handle date columns
 			                                return data.startsWith("<") ? '' : data.substr(0, 10);
 			                            } else {
 			                                return $(node).attr('data-export') || data;
@@ -1331,7 +1432,7 @@ function getData(details){
 			        ]
 			    });
 
-			    table = $('#stage_detail_tbl3').DataTable({
+			    var table = $('#stage_detail_tbl3').DataTable({
 			        dom: 'Bfrtip',
 			        paging: true,
 			        searching: true,
@@ -1366,19 +1467,25 @@ function getData(details){
 			                exportOptions: {
 			                    format: {
 			                        body: function (data, row, column, node) {
-			                            // Handling the "Focus List" checkbox column
-			                            if (column === 13) { // Adjust the column index for "Focus List"
+			                            if (column === 14) { // Focus List checkbox column
 			                                var checkbox = $(data).find('input[type="checkbox"]');
 			                                if (checkbox.length) {
 			                                    return checkbox.is(':checked') ? 'Yes' : 'No';
 			                                }
 			                                return '';
-			                            } 
+			                            }
 			                            
-			                            // Handle other columns
+			                            var temp = document.createElement('div');
+			                            temp.innerHTML = data.trim();
+			                            
+			                            // Specific handling for columns with HTML elements
+			                            if (column === 12 ||column === 13 || column === 14) {
+			                                return temp.textContent.trim();
+			                            }
+			                            
 			                            if (column === 6) { // SE WIN%
 			                                return data.startsWith("<") ? '' : data.substr(0, 3);
-			                            } else if (column === 14 || column === 15 || column === 16) { // Date columns
+			                            } else if ([13, 14, 15, 16, 17].includes(column)) { // Date columns
 			                                return data.startsWith("<") ? '' : data.substr(0, 10);
 			                            } else {
 			                                return $(node).attr('data-export') || data;
@@ -1448,6 +1555,22 @@ function getData(details){
 	    selectedSeCode = "";
 	    
 	}
+  function closeRequestWindow1() {
+	    const msgbox = document.getElementById("requestWindowRemarks");
+	    const reasonboxRemarks = document.getElementById("reasonboxRemarks");
+	    
+	    if (msgbox) {
+	        msgbox.style.display = 'none';
+	    }
+	    if (reasonboxRemarks) {
+	        reasonboxRemarks.style.display = "none";
+	    }
+	    
+	    selectedId = "";
+	    selectedRow = -1;
+	    selectedSeCode = "";
+	}
+
   
 function updateStage(details){  
 	if ((confirm('Are You sure, You Want to update this details!'))) {
@@ -1459,20 +1582,24 @@ function updateStage(details){
 		   		dataType: "json",
 		   		success: function(data) {	
 		   			$('#laoding').hide();
-				 const remarks =  document.getElementById("remarks"); 
+			//	 const remarks =  document.getElementById("remarks"); 
 				 const title = document.getElementById("reasonheading");
 				 const reasonBox = document.getElementById("reasonbox");  
-				 remarks.value = "";
+				// remarks.value = "";
 				 reasonBox.style.display ="none";
 				// title.innerHTML="<strong>Proceesing, Please wait..</strong>";				 
 				 if(parseInt(data)=== 1){ 
 					 document.getElementById(details.id).disabled = true; 
 					 //title.innerHTML="<strong>Completed!</strong>";					
 					 document.getElementById("status" + details.id).innerHTML = details.status;	
-					 if(details.priority)
-						 document.getElementById("priority"+details.id).innerHTML = details.priority;
-					 if(details.remarks)
-						 document.getElementById("remarks"+details.id+"").innerHTML = details.remarks;
+				//	 if(details.priority)
+					//	 document.getElementById("priority"+details.id).innerHTML = details.priority;
+				//	 if(details.remarks)
+					//	 document.getElementById("remarks"+details.id+"").innerHTML = details.remarks;
+			//	 const checkboxHTML = ' <input type="checkbox" id="' + details.id + '" onclick="openRequestWindow({seCode:\'' + details.seCode + '\',row:' + details.row + ',id:\'' + details.id + '\',event: event})">';
+              //      document.getElementById("status" + details.id).innerHTML += checkboxHTML;
+
+                    
 					 return true;					 
 				 }else{					 
 					 title.innerHTML="<strong>Something went wrong, Please try later</strong>";
@@ -1713,6 +1840,66 @@ function openRequestWindow(data){
 			//	document.getElementById("remarks").value =''+table.cell({row:data.row, column:9}).data()+'' ; 
 	}   
 }
+/* function openRequestWindow1(data){	 
+	if(data.event.target.id == data.id){ 
+		        selectedSeCode = data.seCode;
+		        selectedRow = data.row;
+				selectedId = data.event.target.id; 
+				const singleFilteredRowItem = stage23List.filter(item=> selectedId === item.cqhSysId)[0]
+				const status = checkValue(singleFilteredRowItem.status);
+				const priority = checkValue(singleFilteredRowItem.priority);
+			 	const remarks = checkValue(singleFilteredRowItem.remarks);
+				var topDimn = ''+data.event.clientY-60+'px';
+				var msgbox = document.getElementById("requestWindowRemarks");
+				var reasonbox = document.getElementById("reasonboxRemarks");
+				if(msgbox ==null) return;
+				document.getElementById("remarks").value = remarks;
+				var heading = document.getElementById("reasonheading");
+			    heading.innerHTML="Stage-"+selectedStage+" followup";
+				$("#requestWindowRemarks").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'6%'});	
+			    $("#reasonboxRemarks").css( {display:'block'});	
+			    setFilterSelectorSub(selectedStage, "statusUpdt", status, 'Follow-up Status');
+			    setFilterSelectorSub(selectedStage,"priorityUpdt", priority, 'Focus List');
+				
+			//	document.getElementById("remarks").value =''+table.cell({row:data.row, column:9}).data()+'' ; 
+	}   
+} */
+
+function openRequestWindow1(data) {
+    console.log("openRequestWindow1 called with data:", data);
+
+    const expectedId = 'remarksCheckbox' + data.id;
+    console.log("Event Target ID:", data.event.target.id);
+    console.log("Expected ID:", expectedId);
+
+    if (data.event.target.id === expectedId) {
+        selectedSeCode = data.seCode;
+        selectedRow = data.row;
+        selectedId = data.id;
+
+        const singleFilteredRowItem = stage23List.find(item => selectedId == item.cqhSysId);
+        
+        if (!singleFilteredRowItem) {
+            console.error("Item with cqhSysId", selectedId, "not found in stage23List");
+            return;
+        }
+
+        const remarks = checkValue(singleFilteredRowItem.remarks);
+
+        const topDimn = (data.event.clientY - 60) + 'px';
+        const msgbox = document.getElementById("requestWindowRemarks");
+        const reasonbox = document.getElementById("reasonboxRemarks");
+        if (!msgbox || !reasonbox) return;
+
+        document.getElementById("remarks").value = remarks;
+        const heading = document.getElementById("reasonheading");
+        heading.innerHTML = "Stage-" + selectedStage + " followup";
+        $("#requestWindowRemarks").css({ background: '#795548', opacity: 1, display: 'block', position: 'absolute', top: topDimn, right: '6%' });
+        $("#reasonboxRemarks").css({ display: 'block' });
+    } else {
+        console.log("ID mismatch: Checkbox ID did not match the expected ID.");
+    }
+}
 
 function checkValue(value){
 	if(typeof value === 'undefined' || value == 'undefined' || value === null || value === '' || value == ''){
@@ -1726,6 +1913,115 @@ function Apply(action){
 		  alert("Please select a status");
 	} 
 }
+/* function Remarks(action){
+	 action.preventDefault(); 
+	 const data = { row:selectedRow, id: selectedId , "stage":$.trim(selectedStage),"status":$.trim($('#statusUpdt').val()), remarks: $.trim($('#remarks').val()), seCode: selectedSeCode }
+	if(data.remarks){ updateStage(data);
+        closeRequestWindow1();
+	} else{
+		  alert("Please fill the remaks");
+	} 
+} */
+function openRequestWindow2(data) {
+    console.log("openRequestWindow2 called with data:", data);
+
+    const expectedId = 'remarksCheckbox' + data.id;
+    console.log("Event Target ID:", data.event.target.id);
+    console.log("Expected ID:", expectedId);
+    console.log("Stage ID",data.stage);
+    if (data.event.target.id === expectedId) {
+        selectedSeCode = data.seCode;
+        selectedRow = data.row;
+        selectedId = data.id;
+        stage=data.stage;
+        const singleFilteredRowItem = stage23List.find(item => selectedId == item.cqhSysId);
+
+        if (!singleFilteredRowItem) {
+            console.error("Item with cqhSysId", selectedId, "not found in stage23List");
+            return;
+        }
+
+        const remarks = checkValue(singleFilteredRowItem.remarks);
+
+        const topDimn = (data.event.clientY - 60) + 'px';
+        const msgbox = document.getElementById("requestWindowRemarks");
+        const reasonbox = document.getElementById("reasonboxRemarks");
+        if (!msgbox || !reasonbox) return;
+
+        document.getElementById("remarks").value = remarks;
+        const heading = document.getElementById("reasonheading");
+        heading.innerHTML = "Stage-" + selectedStage + " followup";
+        $("#requestWindowRemarks").css({ background: '#795548', opacity: 1, display: 'block', position: 'absolute', top: topDimn, right: '6%' });
+        $("#reasonboxRemarks").css({ display: 'block' });
+    } else {
+        console.log("ID mismatch: Checkbox ID did not match the expected ID.");
+    }
+}
+function Remarks(event) {
+    event.preventDefault();
+    const data = {
+        row: selectedRow,
+        id: selectedId,
+        stage:stage,
+        remarks: $.trim($('#remarks').val()),
+        seCode: selectedSeCode
+    };
+    if (data.remarks) {
+        updateStageRemarks(data);
+        closeRequestWindow1();
+    } else {
+        alert("Please fill the remarks");
+    }
+}
+function updateStageRemarks(details) {
+    if (confirm('Are You sure, You Want to update these details!')) {
+    	//alert(details.stage);
+        $('#laoding').show();
+        $.ajax({
+            type: _method,
+            url: _url,
+            data: {
+                action: "updateStageRemarks",
+                id: details.id,
+                seCode: details.seCode,
+                remarks: details.remarks,
+                stage:details.stage,
+            },
+            dataType: "json",
+            success: function(data) {
+                $('#laoding').hide();
+                const remarks = document.getElementById("remarks");
+                const title = document.getElementById("reasonheading");
+                const reasonBox = document.getElementById("reasonboxRemarks");
+                remarks.value = "";
+                reasonBox.style.display = "none";
+
+                if (parseInt(data) === 1) {
+                    document.getElementById(details.id).disabled = true;
+                    document.getElementById("remarks" + details.id).innerHTML = details.remarks;
+
+                    // Ensure checkbox is added back
+                    if (1) {
+                        const checkboxHTML = ' <input type="checkbox" id="remarksCheckbox' + details.id + '" onclick="openRequestWindow2({seCode:\'' + details.seCode + '\',row:' + details.row + ',id:\'' + details.id + '\',event: event})">';
+                        document.getElementById("remarks" + details.id).innerHTML += checkboxHTML;
+                    }
+                    return true;
+                } else {
+                    title.innerHTML = "<strong>Something went wrong, Please try later</strong>";
+                }
+            },
+            error: function(data, status, er) {
+                $('#laoding').hide();
+                alert("please click again");
+                return false;
+            }
+        });
+    } else {
+        $('#laoding').hide();
+        return false;
+    }
+}
+
 function updatePriority(action) {
 
 action.preventDefault();
@@ -1905,8 +2201,10 @@ function checkForNumberValidation(event){
 	}
 }
 function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSalesCode,projectname,qtncodeNo,seName,showbutton){
-	  qtnId = id,qtCode = qtnCode,qtNo = qtnNo;
-	
+	  qtnId = id,qtCode = qtnCode,qtNo = qtnNo;	  
+	  $("#datepicker-13").datepicker('destroy');
+	  $("#datepicker-13").datepicker({minDate: qtanDate, maxDate: '0', dateFormat: 'dd/mm/yy',  firstDay: 0});
+
 	  document.getElementById("segsalescode").value = segSalesCode;
 	  document.getElementById("segsalesname").value = seName;
 	  document.getElementById("showButton").value = showbutton;
@@ -1960,8 +2258,22 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 		    document.getElementById("qtnnDate").value =  qtanDate;			
 		    var heading = document.getElementById("stg3reasonheading");
 		    heading.innerHTML="Move Qtn. to Stage 3 - "+qtnCode+"-"+qtnNo;
-		    $("#stg3requestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'6%'});	
-		    $("#lostreasonbox").css( {display:'none'});	
+		 //  $("#stg3requestWindow").css( {  top: topDimn, background:'#795548', opacity: 1,  display:'block',   position: 'absolute',   left: '50%', marginLeft: '-10em',  right:'6%'});	
+		     // Calculate the popup position
+           var topOffset = window.scrollY + event.clientY - 60;
+           var leftOffset = window.scrollX + event.clientX - msgbox.offsetWidth / 2;
+  
+  // Set CSS properties
+            $("#stg3requestWindow").css({
+                  top: topOffset + 'px',
+                    left: leftOffset + 'px',
+                      background: '#795548',
+                        opacity: 1,
+                          display: 'block',
+                            position: 'absolute'
+                                });
+
+		   $("#lostreasonbox").css( {display:'none'});	
 		    $("#holdreasonbox").css( {display:'none'});	
 		    $("#stg3reasonbox").css( {display:'block'});	
 		    
@@ -1979,7 +2291,7 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 		    $("#loilostreasonbox").css( {display:'block'});	
 		    $("#loiholdreasonbox").css( {display:'none'});	
 		   
-     }else if(type === 'LOINL'){
+   }else if(type === 'LOINL'){
 			var qtnDate = qtanDate.split("/").reverse().join("-");
 			var todaydate = new Date();
 			var qtnDate1  = new Date(qtnDate);
@@ -2013,8 +2325,21 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 		    document.getElementById("datepicker-14").value="";
 		    var heading = document.getElementById("poUpdatereasonheading");
 		    heading.innerHTML="PO Update - "+qtnCode+"-"+qtnNo;
-		    $("#poUpdaterequestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'20%'});
-		    $("#poUpdatereasonbox").css( {display:'block'});	
+		 
+		//    $("#poUpdaterequestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'20%'});
+		    var topOffset = window.scrollY + event.clientY - 60;
+          var leftOffset = window.scrollX + event.clientX - msgbox.offsetWidth / 2;
+ 
+ // Set CSS properties
+           $("#poUpdaterequestWindow").css({
+                 top: topOffset + 'px',
+                   left: leftOffset + 'px',
+                     background: '#795548',
+                       opacity: 1,
+                         display: 'block',
+                           position: 'absolute'
+                               });
+		   $("#poUpdatereasonbox").css( {display:'block'});	
 		    
 		  //updateNotLostStatus(id, qtnCode, qtnNo, type);  
 	  }else if(type === 'ExpLOI'){		  
@@ -2025,8 +2350,21 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 		    document.getElementById("datepicker-17").value="";
 		    var heading = document.getElementById("expLOIUpdatereasonheading");
 		    heading.innerHTML="Exp LOI Update - "+qtnCode+"-"+qtnNo;
-		    $("#expLOIDateUpdaterequestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'20%'});
+		 //  $("#expLOIDateUpdaterequestWindow").css( {background:'#795548', opacity: 1,  display:'block', position:'absolute', top: topDimn, right:'20%'});
+		    var topOffset = window.scrollY + event.clientY - 60;
+          var leftOffset = window.scrollX + event.clientX - msgbox.offsetWidth / 2;
+ 
+ // Set CSS properties
+           $("#expLOIDateUpdaterequestWindow").css({
+                 top: topOffset + 'px',
+                   left: leftOffset + 'px',
+                     background: '#795548',
+                       opacity: 1,
+                         display: 'block',
+                           position: 'absolute'
+                               });
 		    $("#expLOIUpdatereasonbox").css( {display:'block'});	
+		    
 		    
 		  //updateNotLostStatus(id, qtnCode, qtnNo, type);  
 	  }else if(type === 'ExpOD'){		  
@@ -2115,6 +2453,7 @@ function openLostHoldStg3Window(event,  id, qtnCode, qtnNo, type, qtanDate,segSa
 	  }else{return;}
 	  
 	}
+
 function closeLostHoldStg3RequestWindow(requestWindow,reasonbox,type){
     var msgbox = document.getElementById(requestWindow);
     var reasonbox = document.getElementById(reasonbox);
@@ -2308,70 +2647,77 @@ function updateLostStatus(reason, type,status){
 				}
 			});
 }
-function updateLOILostHostStatus(reason, type,status){
-	 
-		  var segsalescode = document.getElementById("segsalescode").value;
-		 
-		   	$.ajax({
-		   		type: 'POST', 
-		   		url: 'SipStageFollowUpController',
-		   		data: {action: "loilost", qtn:qtnId, rsn: reason.trim(), rtyp:type.trim(),tstuas:status,segsalescode:segsalescode},
-		   		dataType: "json",
-		   		success: function(data) {	
-		   		 var title,reasonData,reasonBox;
-		   		 if(status === 'L'){
-		   			title = document.getElementById("loilostreasonheading");	
-		   		 	reasonData = document.getElementById("loithereason");
-					reasonBox =  document.getElementById("loilostreasonbox");
-				 }else{
-					 title = document.getElementById("loiholdreasonheading");
-					 reasonData = document.getElementById("loitheholdreason");
-					 reasonBox =  document.getElementById("loiholdreasonbox");
-				 }	
-				
-					 if(parseInt(data)=== 1){
-						 if(status === 'L'){
-							 var qtnnId = "nL"+qtnId;
-							 reasonData.value="";
-							 reasonBox.style.display ="none";
-							 document.getElementById(qtnnId).checked = true;
-							 document.getElementById(qtnnId).disabled = true;
-							// document.getElementById("lostWindow").style.display ="none";
-							// document.getElementById("status"+qtnId+"").parentElement.parentElement.innerHTML = "<span class='label label-danger bold'><span id='status"+qtnId+"'>Marked as Lost</span>";
-							// qtnId='';							
-							 title.innerHTML="<strong>Updated!</strong>";					  
-							 return true;	
-						 }else{							 
-							 var qtnnId = "nL"+qtnId;							
-							 reasonData.value="";
-							 reasonBox.style.display ="none";								
-							 document.getElementById(qtnnId).checked = true;
-							 document.getElementById(qtnnId).disabled = true;
-							 //document.getElementById("status"+qtnId+"").parentElement.parentElement.innerHTML = "<span class='label label-success bold'><span id='status"+qtnId+"'>Hold By SEG</span>";		
-							 title.innerHTML="<strong>Updated!</strong>";		
-							 return true;					 
-							 }
-						 
-					 }else{		
-						 if(status === 'L'){
-							 document.getElementById(qtnId).checked = false;
-							 reasonBox.style.display ="none";
-							 document.getElementById("loilostWindow").style.display ="none";
-						 }else{
-							 document.getElementById("nL"+qtnId).checked = false;
-							 reasonBox.style.display ="none";
-							 document.getElementById("loiholdrequestWindow").style.display ="none";
-						 }
-						 alert("Something went wrong. Please refresh the page and try again");
-					 }
-				
-					
-				},error:function(data,status,er) {
-				alert("please click again");
-				return false;
-				}
-			});
+function updateLOILostHostStatus(reason, type, status) {
+    var segsalescode = document.getElementById("segsalescode").value;
+
+    // Debugging input parameters
+    console.log("Parameters - Reason: " + reason + ", Type: " + type + ", Status: " + status + ", Segsalescode: " + segsalescode);
+
+    $.ajax({
+        type: 'POST',
+        url: 'SipStageFollowUpController',
+        data: {
+            action: "loilost",
+            qtn: qtnId,
+            rsn: reason.trim(),
+            rtyp: type.trim(),
+            tstuas: status,
+            segsalescode: segsalescode
+        },
+        dataType: "json",
+        success: function (data) {
+            // Debugging AJAX response
+            console.log("AJAX Success Response: ", data);
+
+            var title, reasonData, reasonBox;
+            if (status === 'L') {
+                title = document.getElementById("loilostreasonheading");
+                reasonData = document.getElementById("loithereason");
+                reasonBox = document.getElementById("loilostreasonbox");
+            } else {
+                title = document.getElementById("loiholdreasonheading");
+                reasonData = document.getElementById("loitheholdreason");
+                reasonBox = document.getElementById("loiholdreasonbox");
+            }
+
+            if (parseInt(data) === 1) {
+                var qtnnId = "nL" + qtnId;
+                reasonData.value = "";
+                reasonBox.style.display = "none";
+                document.getElementById(qtnnId).checked = true;
+                document.getElementById(qtnnId).disabled = true;
+
+                if (status === 'L') {
+                    console.log("Quotation marked as Lost");
+                } else {
+                    console.log("Quotation marked as Hold");
+                }
+
+                title.innerHTML = "<strong>Updated!</strong>";
+                return true;
+            } else {
+                if (status === 'L') {
+                    document.getElementById(qtnId).checked = false;
+                    reasonBox.style.display = "none";
+                    document.getElementById("loilostWindow").style.display = "none";
+                } else {
+                    document.getElementById("nL" + qtnId).checked = false;
+                    reasonBox.style.display = "none";
+                    document.getElementById("loiholdrequestWindow").style.display = "none";
+                }
+                console.error("Update failed. Something went wrong. Please refresh the page and try again.");
+                alert("Something went wrong. Please refresh the page and try again");
+            }
+        },
+        error: function (data, status, er) {
+            // Debugging AJAX error
+            console.error("AJAX Error: ", er);
+            alert("Please click again");
+            return false;
+        }
+    });
 }
+
 function updateStage3Status(loiDate,loiAmount){
 	  var segsalescode = document.getElementById("segsalescode").value;
 	  var typeTxt = "H";
@@ -2537,7 +2883,7 @@ function updateReminder(reminderDate,remDesc,projectname,qtncodeno){
 					});
 				  }
 $(function () {
-	 $("#datepicker-13").datepicker({minDate: new Date(<%=year%>, <%=mon%>, -1, <%=day%>), maxDate: '+1Y', dateFormat: 'dd/mm/yy',  firstDay: 0});
+	 $("#datepicker-13").datepicker({minDate: new Date(<%=year%>, <%=mon%>, -1, <%=day%>), maxDate: '0', dateFormat: 'dd/mm/yy',  firstDay: 0});
 	 $("#datepicker-14").datepicker({minDate: 0, maxDate: '+1Y', dateFormat: 'dd/mm/yy',  firstDay: 0});	
 	 $("#datepicker-16").datepicker({minDate: 1, maxDate: '+1Y', dateFormat: 'dd/mm/yy',  firstDay: 0});
 	 $("#datepicker-17").datepicker({minDate: new Date(<%=year%>, <%=mon%>, -1, <%=day%>), maxDate: '+1Y', dateFormat: 'dd/mm/yy',  firstDay: 0});
@@ -2562,8 +2908,9 @@ function updatePODetails(obj,loiAmount){
 	 // var qtnCode = document.getElementById("qtnCode").value;
 	 // var qtnNo = document.getElementById("qtnNo").value;
 	  if(!poDate){
-		  alert("Please select Expected PO date");
-		  return false;
+		 // alert("Please select Expected PO date");
+		  //return false;
+		  poDate='';
 	     }
 		   	$.ajax({
 		   		type: 'POST', 
@@ -2575,6 +2922,7 @@ function updatePODetails(obj,loiAmount){
 				 if(parseInt(data)=== 1){
 					 reasonBox.style.display ="none";
 					 document.getElementById("po"+qtnId+"").parentElement.parentElement.innerHTML = poDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='po"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"PO\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
+					 closeLostHoldStg3RequestWindow();
 					 return true;					 
 				 }else{		
 					 alert("Something went wrong. Please refresh the page and try again")
@@ -2605,8 +2953,14 @@ function updateExpLOIDetails(obj,loiAmount){
 		   		success: function(data) {
 				 if(parseInt(data)=== 1){
 					 reasonBox.style.display ="none";
-					 //document.getElementById("ExpLOI"+qtnId+"").parentElement.parentElement.innerHTML = poDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpLOI"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
-					  title.innerHTML="<strong>Updated! Please refresh the page</strong>";
+					 document.getElementById("ExpLOI"+qtnId+"").parentElement.parentElement.innerHTML = expLOIDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpLOI"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
+			      //	 title.innerHTML = "<strong>Updated! Please refresh the page</strong>";
+
+                    // var expLOIElement = document.getElementById("ExpLOI" + qtnId).parentElement.parentElement.innerHTML;
+                    //expLOIElement = expLOIDate + "<input type='radio' name='poupdate' id='ExpLOI" + qtnId + "' onclick='openLostHoldStg3Window(event,\"" + qtnId + "\",\"" + data.qtnCode + "\",\"" + data.qtnNo + "\",\"ExpLOI\",\"" + data.qtnDt.substring(0, 10).split("-").reverse().join("/") + "\",\"" + segsalescode + "\")'> Update";
+         
+					 //title.innerHTML="<strong>Updated! Please refresh the page</strong>";
+					 expLOIDateUpdaterequestWindow.style.display = "none";
 					 return true;					 
 				 }else{		
 					 alert("Something went wrong. Please refresh the page and try again")
@@ -2621,6 +2975,7 @@ function updateExpLOIDetails(obj,loiAmount){
 			});
 
 }
+
 function updateExpOrderDetails(obj,loiAmount){
 	  var expOrderDate= document.getElementById('datepicker-18').value;		
 	  var title = document.getElementById("expOrderDateUpdatereasonheading");	
@@ -2656,7 +3011,11 @@ function updateExpBillingDetails(obj,loiAmount){
 	  var title = document.getElementById("expBillingDateUpdatereasonheading");	
 	  var reasonBox = document.getElementById("expBillingDateUpdatereasonbox");	  
 	  var segsalescode = document.getElementById("segsalescode").value;
-	
+	  if(!expBillingDate){
+			 // alert("Please select Expected PO date");
+			  //return false;
+			  expBillingDate='';
+		     }
 		   	$.ajax({
 		   		type: 'POST', 
 		   		url: 'SipStageFollowUpController',
@@ -2666,7 +3025,9 @@ function updateExpBillingDetails(obj,loiAmount){
 				 if(parseInt(data)=== 1){
 					 reasonBox.style.display ="none";
 					 //document.getElementById("ExpLOI"+qtnId+"").parentElement.parentElement.innerHTML = poDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpLOI"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'>&nbsp;Update </label>";
-					  title.innerHTML="<strong>Updated! Please refresh the page</strong>";
+					  title.innerHTML="<strong>Updated</strong>";
+					 document.getElementById("ExpBD"+qtnId+"").parentElement.parentElement.innerHTML = expBillingDate+  "<label style='color:blue;'><input type='radio' name='poupdate' id='ExpBD"+qtnId+"' onClick='openLostHoldStg3Window(\"event\",\""+qtnId+"\", \""+qtCode+"\",\""+qtNo+"\",\"ExpLOI\",\"\",\""+segsalescode+"\")'> </label>";
+					 expBillingDateUpdaterequestWindow.style.display = "none";
 					 return true;					 
 				 }else{		
 					 alert("Something went wrong. Please refresh the page and try again")
@@ -2727,8 +3088,9 @@ function updateINVDetails(obj,loiAmount){
 	  var reasonBox = document.getElementById("invUpdaterequestWindow");	  
 	  var segsalescode = document.getElementById("segsalescode").value;
 	  if(!invDate){
-		  alert("Please select Expected Invoice date");
-		  return false;
+		/*   alert("Please select Expected Invoice date");
+		  return false; */
+		  invDate='';
 	     }
 		   	$.ajax({
 		   		type: 'POST', 

@@ -5,7 +5,9 @@
  <c:set var="syrtemp" value="${selected_Year}" scope="page" />
 <!DOCTYPE html>
 <html>
+
 <head>  
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var scodeSelect = document.getElementById('scode');
@@ -15,7 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
         sm_performance_booking(); // Call the function with the default value
     }
 });
+
 </script>
+
 
 <style>
 table.dataTable thead th,table.dataTable thead td {
@@ -39,12 +43,15 @@ table.dataTable thead th,table.dataTable thead td {
 <style>
 
 
+
 .align-right {
     display: inline-block;
     text-align: right;
     width: 100px; /* Adjust width as needed */
 }
+
 .stage-details-graph {z-index: 50; background: rgba(255, 255, 255, 0.7); border: 2px solid #3c8dbc;font-size: 15px; color: #3c8dbc; position: absolute; padding: 2px 0px 2px 6px;cursor: pointer; top: 5px; right: 150px; border-radius: 5px;}
+
 .info-section {
     margin-bottom: 2px;
     display: flex;
@@ -63,6 +70,7 @@ table.dataTable thead th,table.dataTable thead td {
     align-items: center;
     margin-top: 1px;
     padding: 10px;
+
 }
 
 .gauge-box {
@@ -85,7 +93,6 @@ table.dataTable thead th,table.dataTable thead td {
     background-color: #99ff99;
 }
 </style>
-
 
 
 
@@ -298,12 +305,13 @@ table.dataTable thead th,table.dataTable thead td {
     </button>
 </form>
 
-</div>
-
-
 
 </div>
 
+
+
+
+</div>
 
 <script>
     google.charts.setOnLoadCallback(function() { drawGuageGraph(${actual}, ${guage_bkng_ytd_target}, 'guage_test_booking', 'Booking'); });
@@ -311,12 +319,13 @@ table.dataTable thead th,table.dataTable thead td {
 </script>
 
 
+
           
 <div class="container">
     <div class="row">
         <!-- Second Section (Now First) -->
         <div class="col-lg-5 col-md-12">
-            <section style="margin-top: 8px;border-top: 3px solid #9e9e9e;width:100%;height:274px; border-radius: 3px;margin-bottom: 5px;">
+            <section style="margin-top: 2px;border-top: 3px solid #9e9e9e;width:100%;height:274px; border-radius: 3px;margin-bottom: 5px;">
                 <div class="nav-tabs-custom">
                     <div class="tab-content">
                         <div id="bb1-meter" class="tab-pane fade in active">
@@ -392,7 +401,7 @@ table.dataTable thead th,table.dataTable thead td {
                                     <div class="col-lg-1 col-xs-0"></div>
                                 </div>
                             </div>
-                                  <div id="performance_container" style="margin-left: 70px;"></div>
+                                  <div id="performance_container" style="margin-left: 40px;"></div>
 
                         </div>
                     </div>
@@ -421,80 +430,118 @@ table.dataTable thead th,table.dataTable thead td {
 }
 
 </style>
+<style>
+#performance_container .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#performance_container .col-sm-6 {
+    padding-left: 25px;
+    padding-right: 5px;
+    margin-left: -10px;
+}
+#performance_container .btn {
+    letter-spacing: 1px; /* Adjust the spacing between letters */
+}
+
+
+/* Additional styles for responsiveness */
+@media (max-width: 576px) {
+    #performance_container .col-sm-6 {
+        margin-left: 0;
+        margin-bottom: 10px; /* Ensure spacing is adequate on small screens */
+    }
+    /* Ensure proper spacing and prevent overlap */
+ /* Flexbox layout for header and icons */
+
+</style>
         <!-- First Section (Now Second) -->
-        <div class="col-lg-5 col-md-12">
-            <section style="margin-top: 8px;border-top: 3px solid #9e9e9e;width:90%;height:274px; border-radius: 3px;margin-bottom: 5px;">
-                <div class="stage-details-graph" id="openModalBtn">
-						<i class="fa fa-bar-chart fa-1x"></i>
-			 </div>
-                <div class="nav-tabs-custom">
-              
-                
-                    <div class="tab-content">
-                        <div class="box-header with-border" style="margin-top: -18px;"> 
-                            <h3 class="box-title">STAGE DETAILS</h3>
-                            <div class="help-right" id="help-stages">
-                                <i class="fa fa-info-circle pull-left"></i>
-                            </div>
-                           
- 
-
-
-                           
+       <!-- First Section (Now Second) -->
+<div class="col-lg-5 col-md-12">
+    <section class="stage-details-section">
+        <div class="nav-tabs-custom">
+            <div class="tab-content">
+                <div class="box-header with-border d-flex justify-content-between align-items-center" style="margin-top: -10px;">
+                    <h3 class="box-title">STAGE DETAILS</h3>
+                    <div class="d-flex align-items-center">
+                        <div class="stage-details-graph" id="openModalBtn">
+                            <i class="fa fa-bar-chart fa-1x"></i>
                         </div>
-                        <div id="stages-dt" class="tab-pane fade in active">
-                            <div class="row">
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="small-box bg-red">
-                                        <div class="inner">
-                                            <h3>Stage 2</h3>
-                                            <p id="Stage2"><strong>0</strong></p>
-                                        </div>
-                                        <div class="icon"><i class="fa fa-pie-chart"></i></div>
-                                        <a href="#" onclick="s2Details();"  class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
+                        <div class="help-right ml-2" id="help-stages">
+                            <i class="fa fa-info-circle"></i>
+                        </div>
+                    </div>
+                </div>
+                <div id="stages-dt" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="small-box bg-red">
+                                <div class="inner">
+                                    <h3>Stage 2</h3>
+                                    <p id="Stage2"><strong>0</strong></p>
                                 </div>
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="small-box bg-yellow">
-                                        <div class="inner">
-                                            <h3>Stage 3</h3>
-                                            <p id="Stage3"><strong>0</strong></p>
-                                        </div>
-                                        <div class="icon"><i class="fa fa-pie-chart"></i></div>
-                                       <a href="#" onclick="s3Details();"  class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                   
-                                </div>
+                                <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                                <a href="#" onclick="s2Details();" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
-                            <div class="row" style="margin-top:-17px;">
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="small-box bg-blue">
-                                        <div class="inner">
-                                            <h3>Stage 4</h3>
-                                            <p id="Stage4"><strong>0</strong></p>
-                                            <input type="hidden" id="s3sum_temp" value="0" />
-                                        </div>
-                                        <div class="icon"><i class="fa fa-pie-chart"></i></div>
-                                        <a href="#" onclick="s4Details();"  class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3>Stage 3</h3>
+                                    <p id="Stage3"><strong>0</strong></p>
                                 </div>
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="small-box bg-green">
-                                        <div class="inner">
-                                            <h3>Stage 5</h3>
-                                            <p id="Stage5"><strong>0</strong></p>
-                                            <input type="hidden" id="s4sum_temp" value="0" />
-                                        </div>
-                                        <div class="icon"><i class="fa fa-pie-chart"></i></div>
-                                        <a href="#" onclick="s5Details();"  class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
+                                <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                                <a href="#" onclick="s3Details();" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="small-box bg-blue">
+                                <div class="inner">
+                                    <h3>Stage 4</h3>
+                                    <p id="Stage4"><strong>0</strong></p>
+                                    <input type="hidden" id="s3sum_temp" value="0" />
                                 </div>
+                                <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                                <a href="#" onclick="s4Details();" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>Stage 5</h3>
+                                    <p id="Stage5"><strong>0</strong></p>
+                                    <input type="hidden" id="s4sum_temp" value="0" />
+                                </div>
+                                <div class="icon"><i class="fa fa-pie-chart"></i></div>
+                                <a href="#" onclick="s5Details();" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
+    </section>
+</div>
+
+<style>
+    .stage-details-section {
+        border-top: 3px solid #9e9e9e;
+        width: 90%;
+        height: 274px;
+        border-radius: 3px;
+        margin-bottom: 5px;
+    }
+
+    @media (max-width: 576px) { /* Adjust based on your mobile breakpoint */
+        .stage-details-section {
+            margin-top: 70px; /* Apply margin-top on mobile screens only */
+        }
+    }
+</style>
+       
     </div>
 </div>
  
@@ -637,7 +684,7 @@ table.dataTable thead th,table.dataTable thead td {
 				</div>
 							<!-- /.modal-dialog -->
 			</div>
-					
+
 			<div class="modal fade" id="s5-modal-graph" role="dialog" >
 			
 			        <div class="modal-dialog" style="width:97%;">
@@ -654,6 +701,7 @@ table.dataTable thead th,table.dataTable thead td {
 						     </div>
 				   	 </div>   	 		   	 
  			</div>
+
 		 	<div class="modal fade" id="s3-modal-graph" role="dialog" >
                   <div class="modal-dialog" style="width:97%;">
                            <!-- Modal content-->
@@ -669,6 +717,7 @@ table.dataTable thead th,table.dataTable thead td {
                          </div> 
                   </div>  
           </div>
+
           <div class="modal fade" id="s4-modal-graph" role="dialog" >					
 		        <div class="modal-dialog" style="width:97%;">
 		     		<!-- Modal content-->
@@ -767,6 +816,7 @@ data-dismiss="modal">Close</button>
 </div>
 <!-- /.modal-dialog -->
 </div> 
+
 	  
 
   <!-- /.content-wrapper -->
@@ -1161,11 +1211,13 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
 	 var printttl = 'Salesman Performance '+smCodeName +'<br/>  Week - '+${currWeek} + ' and Year - '+${CURR_YR} +'<br/>';
 	 var ttl = 'Sales Manager Performance '+smCodeName +' and Current week - '+${currWeek}  + ' and Year - '+${CURR_YR};
 	}
+
 	
 	 $("#salesman_performance_modal .modal-title").html(smName);  
 	 $("#salesman_performance_modal .modal-subtitle").html(subTtl);
 	
 	$("#salesman_performance_modal .modal-title").html(exTtl);
+
 	$.ajax({ 
 	type: 'POST',
 	url: 'salesManagerPerf',  
@@ -1283,6 +1335,7 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
 			     break;
 		}
 	} 
+
 		document.getElementById('StageGraph2').innerHTML = extractValue(stage2JIH);
         document.getElementById('StageGraph3').innerHTML = extractValue(stage3LOI);      
 		document.getElementById('StageGraph4').innerHTML = extractValue(stage4LPO);
@@ -1293,6 +1346,7 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
          document.getElementById('Stage3').innerHTML = extractValue(stage3LOI);       
 		 document.getElementById('Stage4').innerHTML = extractValue(stage4LPO);
          document.getElementById('Stage5').innerHTML = extractValue(stage5LOI);
+
 
 		 document.getElementById('bookingTargetValue').innerHTML = formatNumber(ytdTargetBkng);
          document.getElementById('bookingActualValue').innerHTML = formatNumber(bookingActual);
@@ -1370,11 +1424,13 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
 				 +	"<tr><td style='text-align:left;font-weight: bold;' > Total %</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;font-weight: bold;'>"+Math.round((((percentageachievedbooking*10)/100)+((percentageachievedbilling*5)/100)+((percentageachievedcustvisit*5)/100)+((percentageachievedgeGp*50)/100)+billingactualtotalper+jihpercentageval))+"</td></tr>";
  
     			output+="</tbody></table>"; 
-    			   var buttonHtmlBooking = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
+
+    			   var buttonHtmlBooking = "<div class='col-sm-6'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
 
     	    		// Define the button HTML for billing details
     	    		//var buttonHtmlBilling = "<div class='col-sm-3'><button type='button' class='btn btn-primary btn-block' onclick='printAllSalesEngineerBillingCodes(\"" + $.trim(data[i].smCode)+"\", \"SC\")'>Billing Details</button></div>";
-    	    	    var buttonHtmlBilling = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBillingCodes(\"" +$.trim(smCode) + "\", \"SC\")'>Billing Details</button></div>";
+    	    	    var buttonHtmlBilling = "<div class='col-sm-6'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBillingCodes(\"" +$.trim(smCode) + "\", \"SC\")'>Billing Details</button></div>";
+
 
     	    		// Combine both button HTMLs within a Bootstrap row
     	    		var combinedButtonsHtml = "<div class='row'>" + buttonHtmlBooking + buttonHtmlBilling + "</div>";
@@ -1403,6 +1459,7 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
     			         {
  			        	    extend: 'print', 
  			        	    text:      '<i class="fa fa-print" style="color: #1979a9; font-size: 1em;">Print</i>',  
+
  			        	    title: printttl + " Conversion Ratio: "+formatNumber(converratio),
  			        	    customize: (win) => {
  			        	    	$(win.document.head).append('<style>h1 { font-size: 14px; }</style>'); // Adjust the font size of the title
@@ -1681,11 +1738,11 @@ function sm_performance_booking(){
 				      handle: ".modal-header"
 				  });
     	 */
-    	    var buttonHtmlBooking = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
+    	    var buttonHtmlBooking = "<div class='col-sm-6'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
 
     		// Define the button HTML for billing details
     		//var buttonHtmlBilling = "<div class='col-sm-3'><button type='button' class='btn btn-primary btn-block' onclick='printAllSalesEngineerBillingCodes(\"" + $.trim(data[i].smCode)+"\", \"SC\")'>Billing Details</button></div>";
-    	    var buttonHtmlBilling = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBillingCodes(\"" + smCode + "\")'>Billing Details</button></div>";
+    	    var buttonHtmlBilling = "<div class='col-sm-6'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBillingCodes(\"" + smCode + "\")'>Billing Details</button></div>";
 
     		// Combine both button HTMLs within a Bootstrap row
     		var combinedButtonsHtml = "<div class='row'>" + buttonHtmlBooking + buttonHtmlBilling + "</div>";
@@ -1993,25 +2050,31 @@ function sm_performance_details(){
     			         {
  			        	    extend: 'print', 
  			        	    text:      '<i class="fa fa-print" style="color: #1979a9; font-size: 1em;">Print</i>',    			        	  
+
  			        	    title: printttl + " Conversion Ratio: "+formatNumber(converratio),
-			        	    customize: (win) => {
-			        	    	$(win.document.head).append('<style>h1 { font-size: 14px; }</style>'); // Adjust the font size of the title
-			        	    	$(win.document.body)    			        	        
-	                            .css("height", "auto")
-		        	            .css("min-height", "0");
-			        	        $(win.document.body).find( 'table' )
-			                    .addClass( 'compact' )
-			                    .css( 'font-size', 'inherit' );
-			        	        $(win.document.body).find('table').css('border-collapse', 'collapse');
-			        	        $(win.document.body).find('th, td').css('border', '1px solid black');
-			        	        $(win.document.body).find('title').css('font-size', '1px');
-			        	    }
- 			         }
+ 			        	    customize: (win) => {
+ 			        	    	$(win.document.head).append('<style>h1 { font-size: 14px; }</style>'); // Adjust the font size of the title
+ 			        	    	$(win.document.body)    			        	        
+ 	                            .css("height", "auto")
+ 		        	            .css("min-height", "0");
+ 			        	        $(win.document.body).find( 'table' )
+ 			                    .addClass( 'compact' )
+ 			                    .css( 'font-size', 'inherit' );
+ 			        	        $(win.document.body).find('table').css('border-collapse', 'collapse');
+ 			        	        $(win.document.body).find('th, td').css('border', '1px solid black');
+ 			        	        $(win.document.body).find('title').css('font-size', '1px');
+ 			        	    }
+  			         }
+    			      
+    			       
     			    ]
     			 } );
+    		
 		
 	},error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
 }
+
+
 
 function printAllSalesEngineerBillingCodes(smCode,datatype) {
     console.log("All Sales Engineer Codes: "+ smCode);
@@ -2125,6 +2188,7 @@ function printAllSalesEngineerBookingCodes(smCode) {
         }
     });
 }
+
 //stage 2 detail normal se page
 function s2Details() {
 	$('#laoding').show();
@@ -2296,6 +2360,7 @@ function extractValue(value) {
     : (Math.abs(Number(value))).toFixed(2);
     
 }   
+
 </script> 
 <!-- page script -->
 

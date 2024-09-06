@@ -2280,9 +2280,12 @@ public class SipChartDbUtil {
 		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
 		try {
 			myCon = orcl.getOrclConn();
-			// ----listing of Stage5 transactions for a given Sales Egr, as on Current
-			// running date
-			String sql = "SELECT * FROM SIP_SM_BLNG_TBL WHERE SM_CODE =  ?  AND TO_CHAR(DOC_DATE,'YYYY') = TO_CHAR(SYSDATE,'YYYY') order by DOC_DATE";
+			int currentYear = LocalDate.now().getYear();
+			// Extract the last two digits
+			String lastTwoDigits = String.valueOf(currentYear).substring(2);
+
+			String sql = "SELECT * FROM ORION.SIP_SM_BLNG_TBL WHERE SM_CODE =  ?  AND TO_CHAR(DOC_DATE,'YYYY') = TO_CHAR(SYSDATE,'YYYY') AND WEEK LIKE'"
+					+ lastTwoDigits + "-%' order by DOC_DATE";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, sales_man_code);
 
@@ -2316,7 +2319,9 @@ public class SipChartDbUtil {
 		}
 	}
 
+
 	public List<Stage5Details> stage5SummaryBillingDetailsForSE(String smCode) throws SQLException {
+
 		List<Stage5Details> s5DetailsList = new ArrayList<>();
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
@@ -2325,10 +2330,12 @@ public class SipChartDbUtil {
 
 		try {
 			int currentYear = LocalDate.now().getYear();
+
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			myCon = orcl.getOrclConn();
 			// Build SQL query with IN clause for multiple salesperson codes
 			String sql = "SELECT * FROM SIP_SM_BLNG_TBL WHERE SM_CODE = ? AND TO_CHAR(DOC_DATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') AND WEEK LIKE '"
+
 					+ lastTwoDigits + "-%' ORDER BY DOC_DATE";
 
 			myStmt = myCon.prepareStatement(sql);
@@ -2363,7 +2370,9 @@ public class SipChartDbUtil {
 		}
 	}
 
+
 	public List<Stage5Details> stage5SummaryBillingDetailsForPerf(String smCode) throws SQLException {
+
 		List<Stage5Details> s5DetailsList = new ArrayList<>();
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
@@ -2372,11 +2381,13 @@ public class SipChartDbUtil {
 
 		try {
 			int currentYear = LocalDate.now().getYear();
+
 			// Extract the last two digits
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			myCon = orcl.getOrclConn();
 			// Build SQL query with IN clause for multiple salesperson codes
 			String sql = "SELECT * FROM ORION.SIP_SM_BLNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN  WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND TO_CHAR(DOC_DATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') AND WEEK LIKE '"
+
 					+ lastTwoDigits + "-%' ORDER BY DOC_DATE";
 
 			myStmt = myCon.prepareStatement(sql);
@@ -2427,6 +2438,7 @@ public class SipChartDbUtil {
 			// Extract the last two digits
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			// SQL Query
+
 			// commented as Arun told to match summary and detailss
 			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT,  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED  FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND WEEK LIKE '"
 					+ lastTwoDigits + "-%'";
@@ -2434,6 +2446,7 @@ public class SipChartDbUtil {
 //					+ "  QUOT_DT, QUOT_NO, LOI_RCD_DT, AMOUNT " + " FROM STG3_DETAIL "
 //					+ " WHERE SALES_EGR_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?)  "
 //					+ " ORDER BY LOI_RCD_DT desc ";
+
 			System.out.println("query in stage3SummaryDetailsss " + sql);
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, sales_man_code);
@@ -2503,6 +2516,7 @@ public class SipChartDbUtil {
 			// Extract the last two digits
 			String lastTwoDigits = String.valueOf(currentYear).substring(2);
 			// SQL Query
+
 			// Commented as Arun told to match the summary with details
 			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT, "
 					+ "  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED FROM ORION.SIP_SM_BKNG_TBL WHERE SM_CODE = ? AND WEEK LIKE '"
@@ -2510,6 +2524,7 @@ public class SipChartDbUtil {
 //			String sql = " SELECT  WEEK, ZONE, SALES_EGR_CODE, PROJECT_NAME, CONSULTANT, "
 //					+ "  QUOT_DT, QUOT_NO, LOI_RCD_DT, AMOUNT " + " FROM STG3_DETAIL " + " WHERE SALES_EGR_CODE = ? "
 //					+ " ORDER BY LOI_RCD_DT desc ";
+
 			System.out.println("query in stage3SummaryDetailsss " + sql);
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, salesManCode);
@@ -2710,3 +2725,5 @@ public class SipChartDbUtil {
 		}
 	}
 }
+
+

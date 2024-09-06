@@ -844,8 +844,7 @@ public class BusinessTripLVApplication {
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
-					;
-				psmt.close();
+					psmt.close();
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -959,8 +958,7 @@ public class BusinessTripLVApplication {
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
-					;
-				psmt.close();
+					psmt.close();
 				con.closeConnection();
 			} catch (SQLException e) {
 
@@ -1015,8 +1013,7 @@ public class BusinessTripLVApplication {
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
-					;
-				psmt.close();
+					psmt.close();
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -1069,8 +1066,7 @@ public class BusinessTripLVApplication {
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
-					;
-				psmt.close();
+					psmt.close();
 				con.closeConnection();
 			} catch (SQLException e) {
 
@@ -1234,11 +1230,12 @@ public class BusinessTripLVApplication {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 			} catch (SQLException e) {
 
@@ -1331,11 +1328,12 @@ public class BusinessTripLVApplication {
 
 		} finally {
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (psmt != null)
-					;
-				psmt.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 			} catch (SQLException e) {
 
