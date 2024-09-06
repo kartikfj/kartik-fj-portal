@@ -121,7 +121,9 @@
 			        <h5 class="card-text">Category- A+,A,B Benefits </h5>
 			        <p class="card-text">Cat-A+,A,B table of benefits.</p>
 			        <form id="myDownloadServlet" action="downloadInsDocs" method="post">	
+
 				        <input type="hidden" id="fileName" name = 'fileName' value="CAT-A+ A Btable_of_benefits.pdf" />
+
 						<input type="submit" id="btnDownload" name="btnDownload" class="btn btn-sm btn-success" value="Download" />
 					</form>
 			      </div>

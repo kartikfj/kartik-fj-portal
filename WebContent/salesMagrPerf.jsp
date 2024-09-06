@@ -5,7 +5,9 @@
  <c:set var="syrtemp" value="${selected_Year}" scope="page" />
 <!DOCTYPE html>
 <html>
+
 <head>  
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var scodeSelect = document.getElementById('scode');
@@ -15,7 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
         sm_performance_booking(); // Call the function with the default value
     }
 });
+
 </script>
+
 
 <style>
 table.dataTable thead th,table.dataTable thead td {
@@ -39,12 +43,15 @@ table.dataTable thead th,table.dataTable thead td {
 <style>
 
 
+
 .align-right {
     display: inline-block;
     text-align: right;
     width: 100px; /* Adjust width as needed */
 }
+
 .stage-details-graph {z-index: 50; background: rgba(255, 255, 255, 0.7); border: 2px solid #3c8dbc;font-size: 15px; color: #3c8dbc; position: absolute; padding: 2px 0px 2px 6px;cursor: pointer; top: 5px; right: 150px; border-radius: 5px;}
+
 .info-section {
     margin-bottom: 2px;
     display: flex;
@@ -63,6 +70,7 @@ table.dataTable thead th,table.dataTable thead td {
     align-items: center;
     margin-top: 1px;
     padding: 10px;
+
 }
 
 .gauge-box {
@@ -85,7 +93,6 @@ table.dataTable thead th,table.dataTable thead td {
     background-color: #99ff99;
 }
 </style>
-
 
 
 
@@ -317,17 +324,19 @@ table.dataTable thead th,table.dataTable thead td {
     </button>
 </form>
 
-</div>
-
-
 
 </div>
 
+
+
+
+</div>
 
 <script>
     google.charts.setOnLoadCallback(function() { drawGuageGraph(${actual}, ${guage_bkng_ytd_target}, 'guage_test_booking', 'Booking'); });
     google.charts.setOnLoadCallback(function() { drawGuageGraph(${actualbl}, ${guage_blng_ytd_target}, 'guage_test_billing', 'Billing'); });
 </script>
+
 
 
           
@@ -656,7 +665,7 @@ table.dataTable thead th,table.dataTable thead td {
 				</div>
 							<!-- /.modal-dialog -->
 			</div>
-					
+
 			<div class="modal fade" id="s5-modal-graph" role="dialog" >
 			
 			        <div class="modal-dialog" style="width:97%;">
@@ -673,6 +682,7 @@ table.dataTable thead th,table.dataTable thead td {
 						     </div>
 				   	 </div>   	 		   	 
  			</div>
+
 		 	<div class="modal fade" id="s3-modal-graph" role="dialog" >
                   <div class="modal-dialog" style="width:97%;">
                            <!-- Modal content-->
@@ -688,6 +698,7 @@ table.dataTable thead th,table.dataTable thead td {
                          </div> 
                   </div>  
           </div>
+
           <div class="modal fade" id="s4-modal-graph" role="dialog" >					
 		        <div class="modal-dialog" style="width:97%;">
 		     		<!-- Modal content-->
@@ -786,6 +797,7 @@ data-dismiss="modal">Close</button>
 </div>
 <!-- /.modal-dialog -->
 </div> 
+
 	  
 
   <!-- /.content-wrapper -->
@@ -1172,11 +1184,13 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
 	 var printttl = 'Salesman Performance '+smCodeName +'<br/>  Week - '+${currWeek} + ' and Year - '+${CURR_YR} +'<br/>';
 	 var ttl = 'Sales Manager Performance '+smCodeName +' and Current week - '+${currWeek}  + ' and Year - '+${CURR_YR};
 	}
+
 	
 	 $("#salesman_performance_modal .modal-title").html(smName);  
 	 $("#salesman_performance_modal .modal-subtitle").html(subTtl);
 	
 	$("#salesman_performance_modal .modal-title").html(exTtl);
+
 	$.ajax({ 
 	type: 'POST',
 	url: 'salesManagerPerf',  
@@ -1294,6 +1308,7 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
 			     break;
 		}
 	} 
+
 		document.getElementById('StageGraph2').innerHTML = extractValue(stage2JIH);
         document.getElementById('StageGraph3').innerHTML = extractValue(stage3LOI);
       
@@ -1305,6 +1320,7 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
          document.getElementById('Stage3').innerHTML = extractValue(stage3LOI);       
 		 document.getElementById('Stage4').innerHTML = extractValue(stage4LPO);
          document.getElementById('Stage5').innerHTML = extractValue(stage5LOI);
+
 
 		 document.getElementById('bookingTargetValue').innerHTML = formatNumber(ytdTargetBkng);
          document.getElementById('bookingActualValue').innerHTML = formatNumber(bookingActual);
@@ -1382,11 +1398,13 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
 				 +	"<tr><td style='text-align:left;font-weight: bold;' > Total %</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;font-weight: bold;'>"+Math.round((((percentageachievedbooking*10)/100)+((percentageachievedbilling*5)/100)+((percentageachievedcustvisit*5)/100)+((percentageachievedgeGp*50)/100)+billingactualtotalper+jihpercentageval))+"</td></tr>";
  
     			output+="</tbody></table>"; 
+
     			   var buttonHtmlBooking = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBookingCodes(\"" + $.trim(smCode) + "\", \"SC\")'>Booking Details</button></div>";
 
     	    		// Define the button HTML for billing details
     	    		//var buttonHtmlBilling = "<div class='col-sm-3'><button type='button' class='btn btn-primary btn-block' onclick='printAllSalesEngineerBillingCodes(\"" + $.trim(data[i].smCode)+"\", \"SC\")'>Billing Details</button></div>";
     	    	    var buttonHtmlBilling = "<div class='col-sm-5'><button type='button' class='btn btn-primary btn-block' style='width:100%' onclick='printAllSalesEngineerBillingCodes(\"" +$.trim(smCode) + "\", \"SC\")'>Billing Details</button></div>";
+
 
     	    		// Combine both button HTMLs within a Bootstrap row
     	    		var combinedButtonsHtml = "<div class='row'>" + buttonHtmlBooking + buttonHtmlBilling + "</div>";
@@ -1415,6 +1433,7 @@ function showSalesEngineerPerfBooking(salesCode,smName,smPage) {
     			         {
  			        	    extend: 'print', 
  			        	    text:      '<i class="fa fa-print" style="color: #1979a9; font-size: 1em;">Print</i>',  
+
  			        	    title: printttl + " Conversion Ratio: "+formatNumber(converratio),
  			        	    customize: (win) => {
  			        	    	$(win.document.head).append('<style>h1 { font-size: 14px; }</style>'); // Adjust the font size of the title
@@ -1996,25 +2015,31 @@ function sm_performance_details(){
     			         {
  			        	    extend: 'print', 
  			        	    text:      '<i class="fa fa-print" style="color: #1979a9; font-size: 1em;">Print</i>',    			        	  
+
  			        	    title: printttl + " Conversion Ratio: "+formatNumber(converratio),
-			        	    customize: (win) => {
-			        	    	$(win.document.head).append('<style>h1 { font-size: 14px; }</style>'); // Adjust the font size of the title
-			        	    	$(win.document.body)    			        	        
-	                            .css("height", "auto")
-		        	            .css("min-height", "0");
-			        	        $(win.document.body).find( 'table' )
-			                    .addClass( 'compact' )
-			                    .css( 'font-size', 'inherit' );
-			        	        $(win.document.body).find('table').css('border-collapse', 'collapse');
-			        	        $(win.document.body).find('th, td').css('border', '1px solid black');
-			        	        $(win.document.body).find('title').css('font-size', '1px');
-			        	    }
- 			         }
+ 			        	    customize: (win) => {
+ 			        	    	$(win.document.head).append('<style>h1 { font-size: 14px; }</style>'); // Adjust the font size of the title
+ 			        	    	$(win.document.body)    			        	        
+ 	                            .css("height", "auto")
+ 		        	            .css("min-height", "0");
+ 			        	        $(win.document.body).find( 'table' )
+ 			                    .addClass( 'compact' )
+ 			                    .css( 'font-size', 'inherit' );
+ 			        	        $(win.document.body).find('table').css('border-collapse', 'collapse');
+ 			        	        $(win.document.body).find('th, td').css('border', '1px solid black');
+ 			        	        $(win.document.body).find('title').css('font-size', '1px');
+ 			        	    }
+  			         }
+    			      
+    			       
     			    ]
     			 } );
+    		
 		
 	},error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
 }
+
+
 
 function printAllSalesEngineerBillingCodes(smCode,datatype) {
     console.log("All Sales Engineer Codes: "+ smCode);
@@ -2128,6 +2153,7 @@ function printAllSalesEngineerBookingCodes(smCode) {
         }
     });
 }
+
 //stage 2 detail normal se page
 function s2Details() { 
 	$('#laoding').show();
@@ -2287,6 +2313,7 @@ function extractValue(value) {
     : (Math.abs(Number(value))).toFixed(2);
     
 }   
+
 </script> 
 <!-- page script -->
 

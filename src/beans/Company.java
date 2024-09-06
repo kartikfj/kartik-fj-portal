@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author  
+ * @author
  */
 public class Company {
 	private String compCode;
@@ -36,8 +36,7 @@ public class Company {
 	}
 
 	/**
-	 * @param compCode
-	 *            the compCode to set
+	 * @param compCode the compCode to set
 	 */
 	public void setCompCode(String compCode) {
 		this.compCode = compCode;
@@ -98,8 +97,12 @@ public class Company {
 
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -167,8 +170,12 @@ public class Company {
 
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -225,8 +232,8 @@ public class Company {
 				ParamValue p = new ParamValue();
 				p.setFrom(from);
 				p.setTo(to);
-				p.setValue(convertedTm);				
-				//System.out.println("START DAY FROM: "+from+" TO: "+to+" "+convertedTm);
+				p.setValue(convertedTm);
+				// System.out.println("START DAY FROM: "+from+" TO: "+to+" "+convertedTm);
 				getStfStartSch().add(p);
 			}
 
@@ -236,8 +243,12 @@ public class Company {
 
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -297,7 +308,7 @@ public class Company {
 				p.setFrom(from);
 				p.setTo(to);
 				p.setValue(convertedTm);
-				//System.out.println("END DAY FROM: "+from+" TO: "+to+" "+convertedTm);
+				// System.out.println("END DAY FROM: "+from+" TO: "+to+" "+convertedTm);
 				getStfEndSch().add(p);
 			}
 
@@ -307,8 +318,12 @@ public class Company {
 
 		} finally {
 			try {
-				rs.close();
-				psmt.close();
+				if (rs != null) {
+					rs.close();
+				}
+				if (psmt != null) {
+					psmt.close();
+				}
 				con.closeConnection();
 
 			} catch (SQLException e) {
@@ -328,8 +343,7 @@ public class Company {
 	}
 
 	/**
-	 * @param lbStartSch
-	 *            the lbStartSch to set
+	 * @param lbStartSch the lbStartSch to set
 	 */
 	public void setLbStartSch(ArrayList lbStartSch) {
 		this.lbStartSch = lbStartSch;
@@ -343,8 +357,7 @@ public class Company {
 	}
 
 	/**
-	 * @param lbEndSch
-	 *            the lbEndSch to set
+	 * @param lbEndSch the lbEndSch to set
 	 */
 	public void setLbEndSch(ArrayList lbEndSch) {
 		this.lbEndSch = lbEndSch;
@@ -358,8 +371,7 @@ public class Company {
 	}
 
 	/**
-	 * @param stfStartSch
-	 *            the stfStartSch to set
+	 * @param stfStartSch the stfStartSch to set
 	 */
 	public void setStfStartSch(ArrayList stfStartSch) {
 		this.stfStartSch = stfStartSch;
@@ -373,8 +385,7 @@ public class Company {
 	}
 
 	/**
-	 * @param stfEndSch
-	 *            the stfEndSch to set
+	 * @param stfEndSch the stfEndSch to set
 	 */
 	public void setStfEndSch(ArrayList stfEndSch) {
 		this.stfEndSch = stfEndSch;
@@ -388,8 +399,7 @@ public class Company {
 	}
 
 	/**
-	 * @param curProcMonth
-	 *            the curProcMonth to set
+	 * @param curProcMonth the curProcMonth to set
 	 */
 	public void setCurProcMonth(Date curProcMonth) {
 		this.curProcMonth = curProcMonth;

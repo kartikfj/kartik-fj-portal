@@ -19,6 +19,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+//import org.bouncycastle.jsse.provider.BouncyCastleJsseProvider;
+
 /**
  *
  * @author
@@ -35,17 +37,32 @@ public class SSLMail {
 	private String userName = null;
 	private String ccaddr = null;
 
+//	public SSLMail() {
+	// Add Bouncy Castle as a security provider
+	// Security.addProvider(new BouncyCastleJsseProvider());
+	// }
+
 	@SuppressWarnings("finally")
 	public int sendMail(String urlAddress) {
-		readDefaultSenderMailProps();
+		/*
+		 * readDefaultSenderMailProps(); Properties props = new Properties();
+		 * props.put("mail.smtp.host", this.host); props.put("mail.smtp.auth", "true");
+		 * props.setProperty("mail.smtp.ssl.enable", "true");
+		 * props.put("mail.smtp.port", port);
+		 * props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+		 * props.put("mail.smtp.ssl.trust", "*");
+		 */
 		Properties props = new Properties();
 		props.put("mail.smtp.host", this.host);
 		props.put("mail.smtp.auth", "true");
-		props.setProperty("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.port", port);
-		props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
-		props.put("mail.smtp.ssl.trust", "*");
-		// props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+		props.put("mail.smtp.ssl.enable", "true");
+		props.put("mail.smtp.port", String.valueOf(port));
+		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+		props.put("mail.smtp.ssl.trust", this.host); // Trust the server host
+
+		// Debugging SSL/TLS
+		System.setProperty("javax.net.debug", "ssl,handshake,data,trustmanager");
+
 		int status = 0;
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
@@ -58,7 +75,10 @@ public class SSLMail {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(this.fromaddr, "FJGroup No_Reply"));
 			System.out.println(this.toaddr);
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("nufail.a@fjtco.com"));
+			// message.setRecipients(Message.RecipientType.TO,InternetAddress.parse("rafiuddin.m@fjtco.com"
+			// + "," + "rajakumari.ch@fjtco.com" + ","+ "arun@fjtco.com" + "," +
+			// "katrina.j@fjcare.com" + "," + "ashok.m@fjcare.com"));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("rajakumari.ch@fjtco.com"));
 			// message.setRecipients(Message.RecipientType.TO,
 			// InternetAddress.parse(this.toaddr));
 //			if (this.ccaddr != null) {
@@ -162,44 +182,46 @@ public class SSLMail {
 
 	private int readDefaultSenderMailProps() {
 		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
-		Connection mcon = con.getMysqlConn();
-		if (mcon == null)
-			return -2;
-		int retval = 0;
+		Connection mcon = null;
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
-		String usql = "select emailid,password,host,port,is_ssl,user_name from  emailconf where usagetype='ITDEPT'";
+		int retval = 0;
+		String usql = "SELECT emailid, password, host, port, is_ssl, user_name FROM emailconf WHERE usagetype='ITDEPT'";
+
 		try {
+			mcon = con.getMysqlConn();
+			if (mcon == null)
+				return -2;
+
 			psmt = mcon.prepareStatement(usql);
 			rs = psmt.executeQuery();
 			if (rs.next()) {
-				this.fromaddr = rs.getString(1);
-				this.password = rs.getString(2);
-				this.host = rs.getString(3);
-				this.port = rs.getInt(4);
-				this.is_ssl = rs.getInt(5);
-				this.userName = rs.getString(6);
-				// System.out.println(this.fromaddr+ " "+ this.password+ " "+host+" "+port+ "
-				// "+is_ssl);
+				this.fromaddr = rs.getString("emailid");
+				this.password = rs.getString("password");
+				this.host = rs.getString("host");
+				this.port = rs.getInt("port");
+				this.is_ssl = rs.getInt("is_ssl");
+				this.userName = rs.getString("user_name");
 			} else {
-				System.out.println("no mail details");
+				System.out.println("No mail details found.");
 				retval = -1;
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			retval = -2;
-
 		} finally {
 			try {
+
 				if (rs != null)
 					rs.close();
 				if (psmt != null)
 					psmt.close();
+
 				con.closeConnection();
 
 			} catch (SQLException e) {
-
 				System.out.println("Exception in closing DB resources");
+				e.printStackTrace();
 				retval = -2;
 			}
 		}

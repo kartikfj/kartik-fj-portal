@@ -154,7 +154,7 @@ public class SipStageFollowpDbUtil {
 			}
 			StringBuilder sqlQuery = new StringBuilder(
 					"SELECT  CQHSYSID, SALES_EGR_CODE, SALES_ENG_NAME, QTN_DT, QTN_CODE, QTN_NO, CUST_NAME, PROJECT_NAME, CONSULTANT, QTN_AMOUNT,  QTN_PRI, QTN_STAT, QTN_REMARKS, QTN_MOD_BY,  QTN_MOD_DT, CONSULTANTWIN, CONTRACTORWIN, TOTALWIN, (SELECT COUNT(1) FROM  SIP_REMINDER WHERE H_SYS_ID = ST2.CQHSYSID) REMINDERCNT,  "
-							+ " EXP_LOI_DT, SALESWIN,SUB_STATUS_CODE,APPR_CONS 	 FROM FJT_SM_STG2_TBL ST2 WHERE  SALES_EGR_CODE  IN ("
+							+ " EXP_LOI_DT, SALESWIN,SUB_STATUS_CODE,APPR_CONS,LH_STATUS 	 FROM FJT_SM_STG2_TBL ST2 WHERE  SALES_EGR_CODE  IN ("
 							+ seCode + ")  ");
 			int counter = 1;
 			if (!priority.equalsIgnoreCase("-")) {
@@ -260,10 +260,11 @@ public class SipStageFollowpDbUtil {
 				String sewinper = myRes.getString(21);
 				String submittalcode = myRes.getString(22);
 				String isApproved = myRes.getString(23);
+				String lhStatus = myRes.getString(24);
 				SipStageFollowUp tempstageList = new SipStageFollowUp(id, se_code, se_name, qtnDt, qtnCode, qtnNo,
 						custName, projName, consultant, amount, priorityOrg, statusOrg, remarks, updatedBy, updatedOn,
 						reminderCount, consltWin, contractorWin, totalWin, expLOIDate, sewinper, submittalcode,
-						isApproved);
+						isApproved, lhStatus);
 				stageList.add(tempstageList);
 			}
 			return stageList;
@@ -292,8 +293,8 @@ public class SipStageFollowpDbUtil {
 			amountgreaterthan = checkFilterValue(amountgreaterthan);
 			StringBuilder sqlQuery = new StringBuilder(
 					"SELECT  CQHSYSID, SALES_EGR_CODE, SALES_ENG_NAME, QTN_DT, QTN_CODE, QTN_NO, CUST_NAME, PROJECT_NAME, CONSULTANT, QTN_AMOUNT,  QTN_PRI, QTN_STAT, QTN_REMARKS, QTN_MOD_BY,  QTN_MOD_DT,EXP_PO_DT,EXP_INV_DT, CONSULTANTWIN, CONTRACTORWIN, TOTALWIN, (SELECT COUNT(1) FROM  SIP_REMINDER WHERE H_SYS_ID = ST3.CQHSYSID) REMINDERCNT,  "
-							+ "	EXP_ORD_DT, SALESWIN FROM FJT_SM_STG3_TBL ST3  WHERE  SALES_EGR_CODE IN ( " + seCode
-							+ ")  ");
+							+ "	EXP_ORD_DT, SALESWIN,LH_STATUS FROM FJT_SM_STG3_TBL ST3  WHERE  SALES_EGR_CODE IN ( "
+							+ seCode + ")  ");
 			int counter = 1;
 			if (!priority.equalsIgnoreCase("-")) {
 				sqlQuery.append(" AND   QTN_PRI =   ? ");
@@ -395,9 +396,11 @@ public class SipStageFollowpDbUtil {
 					expODate = formatDate(myRes.getString(22));
 				}
 				String sewinper = myRes.getString(23);
+				String lhStatus = myRes.getString(24);
 				SipStageFollowUp tempstageList = new SipStageFollowUp(id, se_code, se_name, qtnDt, qtnCode, qtnNo,
 						custName, projName, consultant, amount, priorityOrg, statusOrg, remarks, updatedBy, updatedOn,
-						poDate, invoiceDate, reminderCount, consltWin, contractorWin, totalWin, expODate, sewinper);
+						poDate, invoiceDate, reminderCount, consltWin, contractorWin, totalWin, expODate, sewinper,
+						lhStatus);
 				stageList.add(tempstageList);
 			}
 			return stageList;
@@ -797,6 +800,41 @@ public class SipStageFollowpDbUtil {
 		return logType;
 	}
 
+	public int updateStageRemarks(String seCode, String remarks, String id, String sales_eng_Emp_code, String stage) {
+		int logType = -2;
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+
+		try {
+			myCon = orcl.getOrclConn();
+			// "UPDATE FJT_SM_STG1_TBL "
+			// String sql = "UPDATE " + stage + "SET QTN_REMARKS = ?, QTN_MOD_BY = ?,
+			// QTN_MOD_DT = SYSDATE, UPD_DT = SYSDATE "+ "WHERE SALES_EGR_CODE = ? AND
+			// CQHSYSID = ?";
+			String sql = "UPDATE " + stage
+					+ " SET QTN_REMARKS = ?, QTN_MOD_BY = ?, QTN_MOD_DT = SYSDATE, UPD_DT = SYSDATE "
+					+ "WHERE SALES_EGR_CODE = ? AND CQHSYSID = ?";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, remarks);
+			myStmt.setString(2, sales_eng_Emp_code);
+			myStmt.setString(3, seCode);
+			myStmt.setString(4, id);
+
+			logType = myStmt.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.out.println("Exception in closing DB resources at the time of stage update for " + id);
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+			// System.out.println("Updated and closed db Successfully ");
+		}
+		return logType;
+	}
+
 	public int updateStage4ItemsDetails(String seCode, String soId, String sales_eng_Emp_code,
 			ArrayList<SipStageFollowUp> itemDetails) throws SQLException {
 		int logType = -2;
@@ -898,82 +936,88 @@ public class SipStageFollowpDbUtil {
 
 		int logType = -2;
 		int retval = 0;
-		// String newStatus = "L";
-		String mailSubject = "FJPortal-Quotation marked as Lost with reason - NOT IN VENDOR LIST";
-		String text;
-		if (newStatus.equals("L")) {
-			text = "Marked as Lost by ";
-		} else {
-			text = "Marked as Hold by ";
-		}
-		String remarks = reason + ", " + text + saleEngEmpCode + " through FJPORTAL, updated on " + previousDay() + "";
+		String mailSubject = "FJPortal-Quotation marked as " + (newStatus.equals("L") ? "Lost" : "Hold");
+		String text = newStatus.equals("L") ? "Marked as Lost by " : "Marked as Hold by ";
+		String remarks = reason + ", " + text + saleEngEmpCode + " through FJPORTAL, updated on " + previousDay();
+
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
-		ResultSet myRes = null;
 		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+
 		try {
 			myCon = orcl.getOrclConn();
 
-			String sql = " UPDATE FJT_SM_STG3_TBL  "
-					+ " SET LH_STATUS = ?, LH_REMARKS = ? , LHREMARKS_TYPE = ?, UPD_DT = SYSDATE"
-					+ " WHERE SALES_EGR_CODE = ?  AND CQHSYSID = ? ";
+			String sql = "UPDATE FJT_SM_STG3_TBL SET LH_STATUS = ?, LH_REMARKS = ?, LHREMARKS_TYPE = ?, UPD_DT = SYSDATE "
+					+ "WHERE SALES_EGR_CODE = ? AND CQHSYSID = ?";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, newStatus);
 			myStmt.setString(2, remarks);
 			myStmt.setString(3, remarkType);
 			myStmt.setString(4, segSalesCode);
 			myStmt.setString(5, qtn_id);
+
+// Debugging statements
+			System.out.println("Executing SQL: " + sql);
+			System.out.println("Parameters: [" + newStatus + ", " + remarks + ", " + remarkType + ", " + segSalesCode
+					+ ", " + qtn_id + "]");
+
 			logType = myStmt.executeUpdate();
+			System.out.println("Update result: " + logType);
+
+			if (logType == 0) {
+				System.out.println("No rows were updated. Check the conditions and input parameters.");
+			}
 
 			if (newStatus.equals("L") && remarkType.equals("VL")) {
+// Send email logic
 				SipJihDues sipJihdues = getJihDueDetailsForQuatation(saleEngEmpCode, qtn_id);
 				SSLMail sslmail = new SSLMail();
 				String msg = getLostwithNotInVendorListMailBody(fjtuser, reason, sipJihdues);
-				System.out.println("approver emailid -- " + fjtuser.getApproverId() + " logged inuser emaild--"
-						+ fjtuser.getEmailid());
+
+				System.out.println("Sending email to marketing team...");
 				sslmail.setToaddr(getMarketingTeamEmailId());
 				sslmail.setCcaddr(fjtuser.getApproverId() + "," + fjtuser.getEmailid() + ","
 						+ new MktSalesLeadsDbUtil().getDmEmailIdByEmpcode(fjtuser.getEmp_code()));
 				sslmail.setMessageSub(mailSubject + " - " + fjtuser.getUname());
 				sslmail.setMessagebody(msg);
 				int status = sslmail.sendMail(fjtuser.getUrlAddress());
+
 				if (status != 1) {
 					System.out.print("Error in sending Email when quotation was lost with not in vendor reason...");
 					retval = -1;
 				} else {
-					System.out.print("sent when quotation was lost with not in vendor reason...");
+					System.out.print("Email sent successfully when quotation was lost with not in vendor reason...");
 					retval = 1;
 				}
 
-				// sending email to IT dept
-
+// sending email to IT dept
 				SSLMail sslmailtoIT = new SSLMail();
 				String msg1 = getLostwithNotInVendorListMailBody(fjtuser, reason, sipJihdues);
-				sslmailtoIT.setToaddr("arun@fjtco.com" + "," + "rajakumari.ch@fjtco.com");
+				sslmailtoIT.setToaddr("arun@fjtco.com, rajakumari.ch@fjtco.com");
 				sslmailtoIT.setMessageSub(mailSubject + " - " + fjtuser.getUname());
 				sslmailtoIT.setMessagebody(msg1);
 				int status1 = sslmailtoIT.sendMail(fjtuser.getUrlAddress());
+
 				if (status1 != 1) {
-					System.out.print("Error in sending Email when quotation was lost with not in vendor reason...");
+					System.out.print(
+							"Error in sending Email to IT department when quotation was lost with not in vendor reason...");
 					retval = -1;
 				} else {
-					System.out.print("sent when quotation was lost with not in vendor reason...");
+					System.out.print(
+							"Email sent to IT department successfully when quotation was lost with not in vendor reason...");
 					retval = 1;
 				}
-
 			}
 
 		} catch (SQLException ex) {
-			System.out.println("Exception in closing DB resources at the time of qtn lost update for " + qtn_id);
+			System.out.println("SQL Exception: " + ex.getMessage());
+			ex.printStackTrace();
 		} finally {
-			// close jdbc objects
-			close(myStmt, myRes);
+			close(myStmt, null);
 			orcl.closeConnection();
-			// System.out.println("Updated and closed db Successfully ");
 		}
 
 		return logType;
-
 	}
 
 	private String formatDate(String sqlDate) {
@@ -1560,53 +1604,70 @@ public class SipStageFollowpDbUtil {
 
 	}
 
-	public int moveToStage1(String qtn_id, String sales_Egr_Code) throws SQLException {
-
-		int logCount = 0, sysId = 0;
+	public int moveToStage1(String qtn_id, String salesEgrCode) throws SQLException {
+		int logCount = 0;
+		int sysId = 0;
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
 		ResultSet myRes = null;
 		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+
 		try {
 			if (qtn_id != null) {
 				sysId = Integer.parseInt(qtn_id);
 			}
+
 			myCon = orcl.getOrclConn();
 			myCon.setAutoCommit(false);
-			String sql = " UPDATE ORION.OT_CUST_QUOT_HEAD SET CQH_FLEX_03 = 1,CQH_UPD_UID = ?,CQH_UPD_DT = SYSDATE WHERE CQH_SYS_ID = ?";
+
+			String sql = "UPDATE ORION.OT_CUST_QUOT_HEAD SET CQH_FLEX_03 = 1, CQH_UPD_UID = ?, CQH_UPD_DT = SYSDATE WHERE CQH_SYS_ID = ?";
 			myStmt = myCon.prepareStatement(sql);
-			myStmt.setString(1, sales_Egr_Code);
+			myStmt.setString(1, salesEgrCode);
 			myStmt.setInt(2, sysId);
+
 			logCount = myStmt.executeUpdate();
+			System.out.println("Update count: " + logCount); // Log the update count
+
 			if (logCount == 1) {
-				int logupdate = deleteFromStage2Table(qtn_id);
-				if (logupdate != 1) {
+				int logUpdate = deleteFromStage2Table(qtn_id);
+				if (logUpdate != 1) {
 					myCon.rollback();
-					System.out.print("Error in moveToStage1...");
-					logCount = -1;
+					System.err.println("Error in deleteFromStage2Table, rolling back...");
+					return -1;
+				} else {
+					myCon.commit();
 				}
 			} else {
-				System.out.print("sent moveToStage1...");
 				myCon.commit();
-				logCount = 1;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			if (myCon != null) {
 				try {
-					System.out.println("Error while short closeing updateShortClose" + logCount);
-					logCount = 0;
-				} catch (Exception ex) {
-					ex.printStackTrace();
+					myCon.rollback();
+					System.err.println("Error during SQL execution, rolling back: " + e.getMessage());
+				} catch (SQLException ex) {
+					System.err.println("Error during rollback: " + ex.getMessage());
 				}
 			}
-
+			throw e;
 		} finally {
-			close(myStmt, myRes);
+			if (myStmt != null) {
+				try {
+					myStmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (myCon != null) {
+				try {
+					myCon.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 			orcl.closeConnection();
 		}
 		return logCount;
-
 	}
 
 	public int deleteFromStage2Table(String sysId) throws SQLException {
@@ -1809,53 +1870,88 @@ public class SipStageFollowpDbUtil {
 		return logType;
 	}
 
-	public int moveToStage2(String qtn_id, String sales_Egr_Code) throws SQLException {
-
-		int logCount = 0, sysId = 0;
+	public int moveToStage2(String qtn_id, String salesEgrCode) throws SQLException {
+		int logCount = 0;
+		int sysId = 0;
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
 		ResultSet myRes = null;
 		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+
 		try {
 			if (qtn_id != null) {
 				sysId = Integer.parseInt(qtn_id);
-			}
-			myCon = orcl.getOrclConn();
-			myCon.setAutoCommit(false);
-			String sql = " UPDATE ORION.OT_CUST_QUOT_HEAD SET CQH_FLEX_03 = 2,CQH_UPD_UID = ?,CQH_UPD_DT = SYSDATE WHERE CQH_SYS_ID = ?";
-			myStmt = myCon.prepareStatement(sql);
-			myStmt.setString(1, sales_Egr_Code);
-			myStmt.setInt(2, sysId);
-			logCount = myStmt.executeUpdate();
-			if (logCount == 1) {
-				int logupdate = deleteFromStage1Table(qtn_id);
-				if (logupdate != 1) {
-					myCon.rollback();
-					System.out.print("Error in moveToStage1...");
-					logCount = -1;
-				}
-			} else {
-				System.out.print("sent moveToStage1...");
-				myCon.commit();
-				logCount = 1;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			if (myCon != null) {
-				try {
-					System.out.println("Error while short closeing updateShortClose" + logCount);
-					logCount = 0;
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+				System.out.println("Received qtn_id: " + qtn_id); // Log the received qtn_id
 			}
 
+			myCon = orcl.getOrclConn();
+			myCon.setAutoCommit(false);
+
+			String sql = "UPDATE ORION.OT_CUST_QUOT_HEAD SET CQH_FLEX_03 = 2, CQH_UPD_UID = ?, CQH_UPD_DT = SYSDATE WHERE CQH_SYS_ID = ?";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, salesEgrCode);
+			myStmt.setInt(2, sysId);
+
+			logCount = myStmt.executeUpdate();
+			System.out.println("Update count: " + logCount); // Log the update count
+
+			if (logCount == 1) {
+				int logUpdate = deleteFromStage1Table(qtn_id);
+				if (logUpdate != 1) {
+					myCon.rollback();
+					System.err.println("Error in deleteFromStage1Table, rolling back...");
+					return -1;
+				} else {
+					myCon.commit();
+				}
+			} else {
+				myCon.commit();
+			}
+		} catch (SQLException e) {
+			if (myCon != null) {
+				try {
+					myCon.rollback();
+					System.err.println("Error during SQL execution, rolling back: " + e.getMessage());
+				} catch (SQLException ex) {
+					System.err.println("Error during rollback: " + ex.getMessage());
+				}
+			}
+			throw e;
 		} finally {
-			close(myStmt, myRes);
+			if (myStmt != null) {
+				try {
+					myStmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (myCon != null) {
+				try {
+					myCon.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 			orcl.closeConnection();
 		}
 		return logCount;
+	}
 
+	private void close(PreparedStatement myStmt, ResultSet myRes) {
+		if (myStmt != null) {
+			try {
+				myStmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		if (myRes != null) {
+			try {
+				myRes.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public int deleteFromStage1Table(String sysId) throws SQLException {
