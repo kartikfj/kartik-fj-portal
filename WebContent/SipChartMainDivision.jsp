@@ -1517,16 +1517,17 @@ function s2Details() { var dmCode= '${DFLTDMCODE}';$('#laoding').show();
                 <span class="bg-color-3"> Billing Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actualbl}"/></span></span>
             </h6>
         </div>
-        <div class="row">
+         <div class="row">
             <div class="col-lg-1 col-xs-0"></div>
             <div class="col-lg-5 col-xs-6 sep">
-                <div id="guage_test_booking" style="background-color: #ff9999; padding: 1px; box-sizing: border-box;  height: 180px;"></div>
+                <div id="guage_test_booking" style="background: linear-gradient(to bottom, transparent 20px, #ff9999 20px); padding: 1px; box-sizing: border-box;  height: 166px; margin-top:-20px"></div>
             </div>
             <div class="col-lg-5 col-xs-6">
-                <div id="guage_test_billing" style="background-color: #99ff99; padding: 1px; box-sizing: border-box;  height: 180px;"></div>
+                <div id="guage_test_billing" style="background:linear-gradient(to bottom, transparent 20px, #99ff99 20px);  padding: 1px; box-sizing: border-box;  height: 166px;margin-top:-20px"></div>
             </div>
             <div class="col-lg-1 col-xs-0"></div>
         </div>
+        
     </div>
 </div>
        </div>
@@ -1622,7 +1623,7 @@ function s2Details() { var dmCode= '${DFLTDMCODE}';$('#laoding').show();
                     
                     <th>Division</th>
                     <th>Jan</th> <th>Feb</th> <th>Mar</th> <th>Apr</th> <th>May</th>  <th>Jun</th> <th>Jul</th>
-					<th>Aug</th> <th>Sep</th> <th>Oct</th> <th>Nov</th> <th>Dec</th>  <th>Total</th>
+					<th>Aug</th> <th>Sep</th> <th>Oct</th> <th>Nov</th> <th>Dec</th>  <th>Total</th> <th>Total GP</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -1722,6 +1723,13 @@ function s2Details() { var dmCode= '${DFLTDMCODE}';$('#laoding').show();
 					</c:when><c:otherwise>0</c:otherwise>
 				</c:choose>
 				</td>
+				<td align="right"> 
+				<c:choose>
+				<c:when test="${!empty subdivnBlng.gpytm_total or subdivnBlng.gpytm_total ne null}">
+				<fmt:formatNumber type='number'  pattern = '#,###.#' value='${subdivnBlng.gpytm_total}'/>
+					</c:when><c:otherwise>0</c:otherwise>
+				</c:choose>
+				</td>
 				</tr>
 				</c:forEach>
                	</c:if>
@@ -1734,6 +1742,7 @@ function s2Details() { var dmCode= '${DFLTDMCODE}';$('#laoding').show();
 		          <th style="text-align:right;font-size:90%;"></th><th style="text-align:right;font-size:90%;"></th>
 		          <th style="text-align:right;font-size:90%;"></th><th style="text-align:right;font-size:90%;"></th>
 		          <th style="text-align:right;font-size:90%;"></th><th style="text-align:right;font-size:90%;"></th>
+		          <th style="text-align:right;font-size:90%;"></th>
 		          </tr>
 	            </tfoot>
              
@@ -3529,6 +3538,7 @@ $(document).ready(function() {
             var total11 = api.column( 11 ).data().reduce( function (a, b){return intVal(a) + intVal(b);}, 0 );
             var total12 = api.column( 12 ).data().reduce( function (a, b){return intVal(a) + intVal(b);}, 0 );
             var total13 = api.column( 13 ).data().reduce( function (a, b){return intVal(a) + intVal(b);}, 0 );
+            var total14 = api.column( 14 ).data().reduce( function (a, b){return intVal(a) + intVal(b);}, 0 );
 	        // Update footer
 	                     $( api.column(1).footer()).html(formatNumber(total1));
 	                     $( api.column(2).footer()).html(formatNumber(total2));
@@ -3543,6 +3553,7 @@ $(document).ready(function() {
 	            		 $( api.column(11).footer()).html(formatNumber(total11));
 	                     $( api.column(12).footer()).html(formatNumber(total12));
 	                     $( api.column(13).footer()).html(formatNumber(total13));
+	                     $( api.column(14).footer()).html(formatNumber(total14));
 	            
 	            
 	        }

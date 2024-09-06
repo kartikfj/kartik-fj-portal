@@ -1517,26 +1517,69 @@ $('#s1dexport').DataTable( {
       </h3>
      <%--  <h6>YTD Booking Target : <fmt:formatNumber type="number"   value="${guage_bkng_ytd_target}"/>   || YTD Billing Target : <fmt:formatNumber type="number"   value="${guage_blng_ytd_target}"/>   </h6>
       <h6>YTD Booking Actual : <fmt:formatNumber type="number"   value="${actual}"/>    || YTD Billing Actual : <fmt:formatNumber type="number"   value="${actualbl}"/>   </h6>  --%>
-     <h6>
-    YTD Booking Target : <fmt:formatNumber type="number" value="${guage_bkng_ytd_target}"/>   
-      &nbsp; &nbsp; &nbsp; ||&nbsp; &nbsp; &nbsp;
-    YTD Billing Target : <fmt:formatNumber type="number" value="${guage_blng_ytd_target}"/>
-</h6>
-<h6>
-    YTD Booking Actual : <fmt:formatNumber type="number" value="${actual}"/>    
-    &nbsp; &nbsp; ||&nbsp; &nbsp; &nbsp;
-    YTD Billing Actual : <fmt:formatNumber type="number" value="${actualbl}"/>
-</h6>
+         <style>
+                .bg-color-1 {
+                    background-color: #ff9999; /* Change to your desired color */
+                    padding: 2px; /* Adjust as needed */
+                    border-radius: 4px; /* Optional: for rounded corners */
+                }
+
+                .bg-color-3 {
+                    background-color: #99ff99; /* Change to your desired color */
+                    padding: 2px; /* Adjust as needed */
+                    border-radius: 4px; /* Optional: for rounded corners */
+                }
+
+                .align-right {
+                    display: inline-block;
+                    text-align: right;
+                    width: 60px; /* Adjust width as needed */
+                }
+
+                #guage_test_booking, #guage_test_billing {
+                    box-sizing: border-box;
+                    width: 100%; /* Full width of the container */
+                    height: 120px; /* Set height as needed */
+                }
+
+                @media (max-width: 768px) {
+                    #guage_test_booking, #guage_test_billing {
+                        height: 150px; /* Adjust height for smaller screens */
+                    }
+
+                    .align-right {
+                        width: auto; /* Adjust width for smaller screens */
+                    }
+                }
+            </style>
+            <h6>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <span class="bg-color-1"> Booking Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_bkng_ytd_target}"/></span></span>
+                &nbsp; &nbsp; || &nbsp; &nbsp;
+                <span class="bg-color-3"> Billing Target: <span class="align-right"><fmt:formatNumber type="number" value="${guage_blng_ytd_target}"/></span></span>
+            </h6>
+
+            <h6>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <span class="bg-color-1"> Booking Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actual}"/></span></span>
+                &nbsp; &nbsp; || &nbsp; &nbsp;
+                <span class="bg-color-3"> Billing Actual: <span class="align-right"><fmt:formatNumber type="number" value="${actualbl}"/></span></span>
+            </h6>
+        
      
       </div>		
-	   <div class="row">
-	   			 <div class="col-lg-1 col-xs-0" ></div>
-	   			 
-	   			 <div class="col-lg-5 col-xs-6  sep" ><div id="guage_test_booking"></div> </div>
-	   		
-       	          <div class="col-lg-5 col-xs-6"> <div id="guage_test_billing"></div>
-		          </div><div class="col-lg-1 col-xs-0" ></div>
-		          </div>
+	    <div class="row">
+            <div class="col-lg-1 col-xs-0"></div>
+            <div class="col-lg-5 col-xs-6 sep">
+    <div id="guage_test_booking" style="background: linear-gradient(to bottom, transparent 20px, #ff9999 20px); padding: 1px; box-sizing: border-box; height: 175px;  margin-top:-20px"></div>
+</div>
+            
+            <div class="col-lg-5 col-xs-6">
+                <div id="guage_test_billing" style="background: linear-gradient(to bottom, transparent 20px, #99ff99 20px); padding: 1px; box-sizing: border-box;  height: 175px;  margin-top:-20px"></div>
+            </div>
+            <div class="col-lg-1 col-xs-0"></div>
+        </div>
+	  
      </div>
        </div>
      </div>

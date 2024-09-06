@@ -1594,10 +1594,11 @@ $('#mrInfJihLstGrpTbl').DataTable( {
         <div class="row">
             <div class="col-lg-1 col-xs-0"></div>
             <div class="col-lg-5 col-xs-6 sep">
-                <div id="guage_test_booking" style="background-color: #ff9999; padding: 1px; box-sizing: border-box;  height: 180px;"></div>
-            </div>
+    <div id="guage_test_booking" style="background: linear-gradient(to bottom, transparent 20px, #ff9999 20px); padding: 1px; box-sizing: border-box; height: 175px;  margin-top:-20px"></div>
+</div>
+            
             <div class="col-lg-5 col-xs-6">
-                <div id="guage_test_billing" style="background-color: #99ff99; padding: 1px; box-sizing: border-box;  height: 180px;"></div>
+                <div id="guage_test_billing" style="background: linear-gradient(to bottom, transparent 20px, #99ff99 20px); padding: 1px; box-sizing: border-box;  height: 175px;  margin-top:-20px"></div>
             </div>
             <div class="col-lg-1 col-xs-0"></div>
         </div>
@@ -3696,7 +3697,37 @@ $('#s1dexport').DataTable( {
 
 },error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
 }      
+function s5Details(val){ $('#laoding').show(); 
+var ttl="<b>Stage 5 Details of <strong style='color:blue;'><i>${selected_salesman_code} </i></strong></b>";
+var excelTtl="Stage 5 Details of ${selected_salesman_code}"
+$("#s5-modal-graph .modal-title").html(ttl);$.ajax({ type: 'POST',url: 'sip', data: {fjtco: "s5_dt", sd1:"${selected_salesman_code}"}, dataType: "json",success: function(data) {
+$('#laoding').hide();var output="<table id='s5-excl' class='table table-bordered small'><thead><tr>"+"<th>#</th><th>Comp Code</th><th>Week</th><th>Doc ID</th><th>Doc Date</th><th>Sm Code</th>"+
+"<th>Sm Name</th><th>Party Name</th><th>Contact</th><th>Contact No</th><th>Project Name</th>"+ " <th>Zone</th><th>Currency</th><th>Amount</th> </tr></thead><tbody>";
+var j=0;for (var i in data) { j=j+1; output+="<tr><td>"+j+"</td><td><span>" + $.trim(data[i].d1)+ "</span></td>"+
+"<td>" + $.trim(data[i].d2)+ "</td><td>" + $.trim(data[i].d3) + "</td>"+ "<td>" +$.trim(data[i].d4.substring(0, 10)).split("-").reverse().join("/")+ "</td><td>"  + $.trim(data[i].d5 )+ "</td>"+
+"<td>" + $.trim(data[i].d6 )+ "</td><td>" +$.trim( data[i].d7 )+ "</td>"+ "<td>" + $.trim(data[i].d8 )+ "</td><td>" + $.trim(data[i].d9 )+ "</td>"+ "<td>" + $.trim(data[i].d10 )+ "</td><td>" + $.trim(data[i].d12 )+ "</td>"+
+"<td>" + $.trim(data[i].d13 )+ "</td><td>" + $.trim(data[i].d14 )+ "</td></tr>"; } 
+//output+="<tr><td colspan='16'><b>Total</b></td><td><b>"+val+"</b></td></tr>"; 
+output+="</tbody></table>";  $("#s5-modal-graph .modal-body").html(output);$("#s5-modal-graph").modal("show");
+$('#s5-excl').DataTable( {
+    dom: 'Bfrtip',  
+    "columnDefs" : [{"targets":[1, 10], "type":"date-eu"}],
+    buttons: [
+        {
+            extend: 'excelHtml5',
+            text:      '<i class="fa fa-file-excel-o" style="color: green; font-size: 2em;"></i>',
+            filename: excelTtl,
+            title: excelTtl,
+            messageTop: 'File Processed on : ${currCal} ,The information in this file is copyright to Faisal Jassim Group.'
+            
+            
+        }
+      
+       
+    ]
+} );
 
+},error:function(data,status,er) { $('#laoding').hide(); alert("please click again");} });} 
 function sm_view_details() {
 	try {
 		selectElement = document.querySelector('#scode');		
