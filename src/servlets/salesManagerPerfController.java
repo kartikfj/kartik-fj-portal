@@ -123,7 +123,7 @@ public class salesManagerPerfController extends HttpServlet {
 				break;
 			case "allse_perfBooking":
 				try {
-					getStage3_Details(request, response);
+					getAcutalBooking_DetailsYTD(request, response);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -247,9 +247,46 @@ public class salesManagerPerfController extends HttpServlet {
 			// Fetch data from the database
 
 			if (fjtuser.getSalesDMYn() >= 1 || result.equals("Yes")) {
-				theStage3DtList = sipChartDbUtil.stage3BookingDetailsForPerf(smEmpCode);
+				theStage3DtList = sipChartDbUtil.getStage3_Details(smEmpCode);
 			} else {
 				theStage3DtList = sipChartDbUtil.stage3SummaryDetails(smCode);
+			}
+			// Set response content type and write JSON
+			response.setContentType("application/json");
+			new Gson().toJson(theStage3DtList, response.getWriter());
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			new Gson().toJson(Collections.singletonMap("error", "An error occurred"), response.getWriter());
+			e.printStackTrace();
+
+		}
+
+	}
+
+	private void getAcutalBooking_DetailsYTD(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException {
+		try {
+
+			fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
+			String smCode = request.getParameter("c1");
+			String dataType = request.getParameter("c2");
+			String smEmpCode = null;
+			if (dataType != null && dataType.equals("SC")) {
+				smEmpCode = sipChartDbUtil.getEmployeeCodeBySalesCode(smCode);
+			} else {
+				smEmpCode = smCode;
+			}
+
+			List<Stage3Details> theStage3DtList = null;
+			String result = sipChartDbUtil.checkSalesMgrPerfTabisAllowed(smEmpCode);
+			// Fetch data from the database
+
+			if (fjtuser.getSalesDMYn() >= 1 || result.equals("Yes")) {
+				theStage3DtList = sipChartDbUtil.AcutalBooking_DetailsYTD(smEmpCode);
+			} else {
+				theStage3DtList = sipChartDbUtil.AcutalBooking_DetailsYTDForSE(smCode);
 			}
 			// Set response content type and write JSON
 			response.setContentType("application/json");
