@@ -2319,7 +2319,6 @@ public class SipChartDbUtil {
 		}
 	}
 
-
 	public List<Stage5Details> stage5SummaryBillingDetailsForSE(String smCode) throws SQLException {
 
 		List<Stage5Details> s5DetailsList = new ArrayList<>();
@@ -2369,7 +2368,6 @@ public class SipChartDbUtil {
 			orcl.closeConnection();
 		}
 	}
-
 
 	public List<Stage5Details> stage5SummaryBillingDetailsForPerf(String smCode) throws SQLException {
 
@@ -2679,7 +2677,50 @@ public class SipChartDbUtil {
 		}
 	}
 
-	public List<Stage3Details> stage3BookingDetailsForPerf(String sales_man_code) throws SQLException {
+	public List<Stage3Details> AcutalBooking_DetailsYTD(String sales_man_code) throws SQLException {
+		List<Stage3Details> s3DetailsList = new ArrayList<>();// aging details
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		try {
+			myCon = orcl.getOrclConn();
+			// --LISTING OF STAGE3 TRANSACTIONS FOR A GIVEN SALES EGR AS ON RUNNING DATE.
+
+//			String sql = " SELECT  WEEK, ZONE, SALES_EGR_CODE, PROD_CATG, PROD_SUB_CATG, PROJECT_NAME, CONSULTANT, "
+//					+ " CUSTOMER, QUOT_DT, QUOT_CODE, QUOT_NO, AMOUNT, AVG_GP, LOI_RCD_DT, EXP_PO_DT, INVOICING_YEAR "
+//					+ " FROM STG3_DETAIL "
+//					+ " WHERE SALES_EGR_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) ORDER BY LOI_RCD_DT desc ";
+			String sql = "SELECT WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT,  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED FROM ORION.SIP_SM_BKNG_TBL  WHERE SM_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) AND WEEK LIKE '24-%' ";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, sales_man_code);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				String week = myRes.getString(1);
+				String zone = myRes.getString(2);
+				String sales_eg_code = myRes.getString(3);
+				// String prod_cat = myRes.getString(4);
+				// String prod_sub_catg = myRes.getString(5);
+				String prjct_name = myRes.getString(4);
+				String consultnt = myRes.getString(5);
+				// String custmr = myRes.getString(8);
+				String qt_dt = myRes.getString(6);
+				String qtn_code = myRes.getString(7);
+				// String qtn_num = myRes.getString(11);
+				String loi_rcd_dt = myRes.getString(8);
+				int amount = myRes.getInt(9);
+				Stage3Details temps3DetailsList = new Stage3Details(week, zone, sales_eg_code, prjct_name, consultnt,
+						qt_dt, qtn_code, loi_rcd_dt, amount);
+				s3DetailsList.add(temps3DetailsList);
+			}
+			return s3DetailsList;
+		} finally { // close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
+
+	public List<Stage3Details> getStage3_Details(String sales_man_code) throws SQLException {
 		List<Stage3Details> s3DetailsList = new ArrayList<>();// aging details
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
@@ -2693,6 +2734,7 @@ public class SipChartDbUtil {
 					+ " CUSTOMER, QUOT_DT, QUOT_CODE, QUOT_NO, AMOUNT, AVG_GP, LOI_RCD_DT, EXP_PO_DT, INVOICING_YEAR "
 					+ " FROM STG3_DETAIL "
 					+ " WHERE SALES_EGR_CODE IN (SELECT SM_CODE FROM SMGR_MAP, OM_SALESMAN     WHERE SMGR_SMCODE = SM_CODE AND MGR_EMPCODE = ?) ORDER BY LOI_RCD_DT desc ";
+
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, sales_man_code);
 			myRes = myStmt.executeQuery();
@@ -2724,6 +2766,43 @@ public class SipChartDbUtil {
 			orcl.closeConnection();
 		}
 	}
+
+	public List<Stage3Details> AcutalBooking_DetailsYTDForSE(String sales_man_code) throws SQLException {
+		List<Stage3Details> s3DetailsList = new ArrayList<>();// aging details
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		try {
+			myCon = orcl.getOrclConn();
+			// --LISTING OF STAGE3 TRANSACTIONS FOR A GIVEN SALES EGR AS ON RUNNING DATE.
+
+			String sql = " SELECT  WEEK, ZONE, SM_CODE, PROJ_NAME, CONSULTANT,  DOC_DATE, DOC_ID, LOI_RCVD_DT, AMOUNT_AED FROM ORION.SIP_SM_BKNG_TBL  WHERE SM_CODE = ? AND WEEK LIKE '24-%'";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, sales_man_code);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				String week = myRes.getString(1);
+				String zone = myRes.getString(2);
+				String sales_eg_code = myRes.getString(3);
+				// String prod_cat = myRes.getString(4);
+				// String prod_sub_catg = myRes.getString(5);
+				String prjct_name = myRes.getString(4);
+				String consultnt = myRes.getString(5);
+				// String custmr = myRes.getString(8);
+				String qt_dt = myRes.getString(6);
+				String qtn_code = myRes.getString(7);
+				// String qtn_num = myRes.getString(11);
+				String loi_rcd_dt = myRes.getString(8);
+				int amount = myRes.getInt(9);
+				Stage3Details temps3DetailsList = new Stage3Details(week, zone, sales_eg_code, prjct_name, consultnt,
+						qt_dt, qtn_code, loi_rcd_dt, amount);
+				s3DetailsList.add(temps3DetailsList);
+			}
+			return s3DetailsList;
+		} finally { // close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
 }
-
-
