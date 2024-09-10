@@ -108,6 +108,7 @@
 					 			   	 <option value=""> Select Evaluation Term</option>
 					 			   	 <option  value="1" ${selectedTerm == 1 ? 'selected':''}> Term-1</option>
 					 			   	 <option  value="2" ${selectedTerm == 2 ? 'selected':''}> Term-2</option>
+					 			   	 <option  value="3" ${selectedTerm == 3 ? 'selected':''}> Term-3</option>
 					 			   </select>
 					 			   <%-- 
 									<select class="form-control form-control-sm"  id="employeeList"  name="selectedUser" required> 

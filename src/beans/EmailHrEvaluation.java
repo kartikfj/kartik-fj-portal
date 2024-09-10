@@ -108,14 +108,16 @@ public class EmailHrEvaluation {
 
 	@SuppressWarnings("finally")
 	public int sendMail() {
-		readDefaultSenderMailProps();
+		this.readDefaultSenderMailProps();
 		Properties props = new Properties();
 		props.put("mail.smtp.host", this.host);
-
-		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.auth", "true");
-		props.setProperty("mail.smtp.ssl.enable", "true");
-		props.put("mail.smtp.port", port);
+		props.setProperty("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.port", this.port);
+		props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+		props.put("mail.smtp.ssl.trust", "*");
+		// Debugging SSL/TLS
+		System.setProperty("javax.net.debug", "ssl,handshake,data,trustmanager");
 
 		int status = 0;
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {

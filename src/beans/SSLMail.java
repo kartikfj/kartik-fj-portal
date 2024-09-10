@@ -44,22 +44,15 @@ public class SSLMail {
 
 	@SuppressWarnings("finally")
 	public int sendMail(String urlAddress) {
-		/*
-		 * readDefaultSenderMailProps(); Properties props = new Properties();
-		 * props.put("mail.smtp.host", this.host); props.put("mail.smtp.auth", "true");
-		 * props.setProperty("mail.smtp.ssl.enable", "true");
-		 * props.put("mail.smtp.port", port);
-		 * props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
-		 * props.put("mail.smtp.ssl.trust", "*");
-		 */
+
+		readDefaultSenderMailProps();
 		Properties props = new Properties();
 		props.put("mail.smtp.host", this.host);
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.ssl.enable", "true");
-		props.put("mail.smtp.port", String.valueOf(port));
-		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-		props.put("mail.smtp.ssl.trust", this.host); // Trust the server host
-
+		props.setProperty("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.port", this.port);
+		props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+		props.put("mail.smtp.ssl.trust", "*");
 		// Debugging SSL/TLS
 		System.setProperty("javax.net.debug", "ssl,handshake,data,trustmanager");
 
@@ -211,9 +204,9 @@ public class SSLMail {
 			retval = -2;
 		} finally {
 			try {
-
 				if (rs != null)
 					rs.close();
+
 				if (psmt != null)
 					psmt.close();
 
