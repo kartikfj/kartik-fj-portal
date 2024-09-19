@@ -51,7 +51,18 @@
 	<script type="text/javascript" src="././resources/datatables/ajax/excelmake/jszip.min.js"></script>
 	<script type="text/javascript" src="././resources/datatables/buttons-fjtco/js/buttons.html5.min.js"></script>
 	<script type="text/javascript" src="././resources/datatables/buttons-fjtco/js/buttons.print.min.js"></script>
- 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+   <script>
+    $(document).ready(function() {
+        // Initialize select2 for the division multi-select
+        $('#mktDivn').select2({
+            placeholder: 'Select Division',
+            width: '100%'
+        });
+    });
+  </script>
   <!-- Theme style -->
   <link rel="stylesheet" href="././resources/dist/css/AdminLTE.min.css">
   <link rel="stylesheet" href="././resources/dist/css/skins/_all-skins.min.css">
@@ -94,7 +105,36 @@ color:#008ac1;
 #fj-page-head-box{border: none;}
 .btn-group.open .dropdown-toggle {max-width: 180px !important;overflow: hidden  !important;}
 </style>
+  <style>
+        /* Table Styling */
+        #displayLeads {
+            border-top: 1px solid #4a46465e !important;
+            width: 100%; /* Ensures the table takes up the full width of its container */
+        }
+        
+        #displayLeads th, #displayLeads td {
+            padding: 8px; /* Adjust padding for better spacing */
+            text-align: left; /* Align text to the left */
+            border-bottom: 1px solid #ddd; /* Add border to separate rows */
+        }
 
+       /*  #displayLeads th:nth-child(2) {
+            width: 90px; /* Width for Status */
+        } */
+        #displayLeads th:nth-child(10) {
+            width: 80px; /* Width for Updated on */
+        }
+        #displayLeads th:nth-child(11) {
+            width: 80px; /* Width for Action, if applicable */
+        }
+        
+        /* Optional: Responsive adjustments */
+        @media (max-width: 768px) {
+            #displayLeads th, #displayLeads td {
+                font-size: 12px; /* Adjust font size on smaller screens */
+            }
+        }
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
  <c:if test="${empty fjtuser.emp_code}"> <jsp:forward page="index.jsp"/> </c:if>
@@ -176,7 +216,7 @@ color:#008ac1;
           <c:if test="${!empty service.rows}">  
          	<li><a href="SupportRequest"><i class="fa fa-table"></i><span> BDM Support Request </span></a></li>
          </c:if>         
-         <li class="active "><a href="ProjectLeads"  class="active"><i class="fa fa-columns"></i><span>Project Stages 0 & 1</span></a></li>         
+      <li class="active "><a href="ProjectLeads" class="active"><i class="fa fa-columns"></i><span>Major Projects</span></a></li>
          <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li>
 		 <li><a href="ConsultantVisits"><i class="fa fa-columns"></i><span>Consultant Visits</span></a></li> 
 		 <li><a href="ConsultantLeads"><i class="fa fa-line-chart"></i><span>Consultant Approval Status</span></a></li>
@@ -191,7 +231,7 @@ color:#008ac1;
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1> Projects Stages 0 & 1 <small>Marketing Portal</small> </h1>
+    <h1>Major Projects<small>Marketing Portal</small> </h1>
       <ol class="breadcrumb">
         <li><a href="homepage.jsp"><i class="fa fa-calendar"></i> Home</a></li>
         <li class="active">Marketing</li>
@@ -224,16 +264,18 @@ color:#008ac1;
 		              <table class="table table-hover small marketing-dtls-table" id="displayLeads" style="border-top: 1px solid #4a46465e !important;" >		        		 
 		        		    <thead>
 		        			 <tr>		        			    
-		        				<th>Opportunities</th>
+		        				<th>Major Project</th>
 		                        <th>Status</th>
 		                        <th>Location</th>
-		                         <th>Leads</th>
+		                         <th>Main Contact</th>
 		                         <th>Division</th>
-		                         <th>Product</th>
+		                         <th>Remark</th>
+		                          <th>Client</th> 
 		                         <th>Main Contractor</th>
 		                         <th>MEP Contractor</th>
 		                         <th  width="67">Updated on </th>
 		                      <c:if test="${fjtuser.role eq 'mkt'}">   <th  width="66">Action</th></c:if>
+		                   
 		                     </tr>
 		                     </thead>
 		                     <c:set var="mcount" value="0"/>
@@ -253,15 +295,17 @@ color:#008ac1;
 		                         <td><p class="long-letters">${mktLst.contactDtls} </p></td>                 
 		                         <td>                 
 		                         
-		                           <c:forEach var="dvnLst"  items="${DLFCL}" >
+		                         <%--   <c:forEach var="dvnLst"  items="${DLFCL}" >
 		             <c:choose>
 		             <c:when test="${mktLst.products eq dvnLst.divn_code}">
 		               <b> ${dvnLst.divn_name}</b>		              
 		             </c:when>		           
 		             </c:choose>
-		            </c:forEach>         
+		            </c:forEach>          --%>
+		                        <p class="long-letters">${mktLst.products}</p> 
 		                         </td>		                       		                         
 		                         <td><p class="long-letters">${mktLst.remarks}</p></td>
+		                          <td><p class="long-letters">${mktLst.client}</p></td> 
 		                         <td><p class="long-letters">${mktLst.mainContractor}</p></td>
 		                         <td><p class="long-letters">${mktLst.mepContractor}</p></td>
 		                         <td>		                         
@@ -282,6 +326,7 @@ color:#008ac1;
 										        	</form>
 										        	</td>
 										        	</c:if>
+										        	<%-- <td><p class="Long-letters">${mktList.client }</p></td> --%>
 		                     </tr>		                     		                     
 		                         <c:if test="${fjtuser.role eq 'mkt'}">    <div class="row">
 						<div class="modal fade" id="editMktleads${mcount}" role="dialog">
@@ -292,7 +337,7 @@ color:#008ac1;
 						      <div class="modal-content">
 						        <div class="modal-header">
 						          <button type="button" class="close" data-dismiss="modal">&times;</button>
-						          <h4 class="modal-title">Edit Project Under Design Details</h4>
+						          <h4 class="modal-title">Edit  Major Projects Under Design Details</h4>
 						        </div>
 						        <div class="modal-body">						         		                        
 		  							<form action="ProjectLeads" method="POST" class="form-vertical" name="gi_form_edit">		  						 			                    
@@ -301,24 +346,26 @@ color:#008ac1;
 			                  <div class="row">  
 		               <div class="col-md-8">
 		                <div class="form-group">
-		                  <label for="mktOpportunity">Opportunity</label>
-		                  <textarea class="form-control" rows="3" id="mktOpportunity" placeholder="Enter Opportunity " name="mktOpportunity" required>${mktLst.opt}</textarea>		             
+		                  <label for="mktOpportunity">Major Project</label>
+		                  <input type="text" class="form-control"  id="mktOpportunity" placeholder="Enter Opportunity " name="mktOpportunity" value="${mktLst.opt}">		             
 		                </div>           
 		                <div class="form-group">
-		                  <label for="mktContact">Leads</label>
+		                  <label for="mktContact">Main Contact Details</label>
 		                  <input type="text" class="form-control" id="mktContact" placeholder="Enter Contact Details" name="mktContact" value="${mktLst.contactDtls}">
 		                </div>
-		               <div class="form-group">
-		                  <label for="mktRmrk">Product</label>
-		                  <input type="text" class="form-control"    name="prodct" readonly value="${mktLst.remarks}" />
+		                <div class="form-group">
+		                <label for="clientInput">Client:</label>
+		                <input type="text" class="form-control" id="clientInput" name="mktClient" value="${mktLst.client}" />
 		                </div>
+                           
 		                 <div class="form-group">
 		                  <label for="mktLocation">Main Contractor</label>  
 		                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Main Contractor Details" name="mktMainCont" value="${mktLst.mainContractor}">
 		                </div>
-		                 <div class="form-group">
-		                  <label for="mktLocation">MEP Contractor</label>  
-		                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}">
+		               
+		                  <div class="form-group">
+		                  <label for="mktRmrk">Remarks:</label>
+		                  <input type="text" class="form-control"    name="prodct"  value="${mktLst.remarks}" />
 		                </div>
 		                </div>
 		                <div class="col-md-4">
@@ -346,6 +393,11 @@ color:#008ac1;
 		                  <label>Division</label>
 		                  <input type="text" class="form-control"  readonly name="mkDivn" value="${mktLst.products}">
 		                </div>
+		                  <div class="form-group">
+		                  <label for="mktLocation">MEP Contractor</label>  
+		                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}">
+		                </div>
+		                
 		               <input type="hidden" value="${currWeek}" name="mktWeek" />
 		                
 		                </div>
@@ -399,7 +451,7 @@ color:#008ac1;
 				      <div class="modal-content">
 				        <div class="modal-header">
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
-				          <h4 class="modal-title">Enter Under Design Details</h4>
+				        <h4 class="modal-title">Enter Major Projects Details</h4>
 				        </div>
 				        <div class="modal-body">
 				          
@@ -409,32 +461,26 @@ color:#008ac1;
                <div class="row">  
                <div class="col-md-8">
                 <div class="form-group">
-                  <label for="mktOpportunity">Opportunity</label>
-                  <textarea class="form-control" rows="3" id="mktOpportunity" placeholder="Enter Opportunity " name="mktOpportunity" required></textarea>
-             
+                   <label for="mktOpportunity">Major Projects Name</label>
+                  <input type="text" class="form-control"  id="mktOpportunity" placeholder="Enter Major Projects Name " name="mktOpportunity" required>
                 </div>          
                 <div class="form-group">
-                  <label for="mktContact">Leads</label>
+                  <label for="mktContact">Main Contact Details</label>
                   <input type="text" class="form-control" id="mktContact" placeholder="Enter Contact Details" name="mktContact" >
                 </div>
-                   <div class="form-group" >
-                  <label>Division</label>
-                   <select class="form-control" name="mkDivn" required>
-                  <option value="" >Select Division</option>
-                    <c:forEach var="dvnLst"  items="${DLFCL}" >
-                    <option value="${dvnLst.divn_code}">${dvnLst.divn_name}</option>
-                    </c:forEach>
-                    
-                  </select>
-                </div>  
+                 
+                  <div class="form-group">
+                  <label for="clientInput">Client:</label>
+                 <input type="text"  class="form-control" id="clientInput" name="mktClient" placeholder="Enter client name" required/>
+                </div>
+                  
                  <div class="form-group">
                   <label for="mktLocation">Main Contractor</label>  
                   <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Main Contractor Details" name="mktMainCont" value="${mktLst.mainContractor}">
                 </div>
-                 <div class="form-group">
-                  <label for="mktLocation">MEP Contractor</label>  
-                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}">
-                </div>
+                 
+                 <label for="clientInput">Remarks:</label>
+                  <input type="text"  class="form-control" id="clientInput" name="mktRmrk" placeholder="Enter remarks name"  required/>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
@@ -447,17 +493,30 @@ color:#008ac1;
 <!--                     <option value="JIH">JIH</option> -->
                   </select>
                 </div>
+                   <div class="form-group">
+                    <label>Division</label>
+                    <select class="form-control" id="mktDivn" multiple="multiple" name="mktDivn" required>
+                        <option value="" disabled>Select Division</option>
+                        <c:forEach var="dvnLst" items="${DLFCL}">
+                            <option value="${dvnLst.divn_code}">${dvnLst.divn_name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
                 <input type="hidden" value="Consultant" name="mkLeads"/>
                
-			     <div class="form-group" id="productDiv">
+			    <!--  <div class="form-group" id="productDiv">
 			       <select  class="form-control form-control-sm"  style="width: 100%;"   id="productsOpt" multiple="multiple"  name="prodct" required>
 			        </select>
-			     </div>
+			     </div> -->
                
                
                  <div class="form-group">
                   <label for="mktLocation">Location</label>         
                   <input type="text" class="form-control" id="mktLocation" placeholder="Enter Location Details" name="mktLocation" >
+                </div>
+                <div class="form-group">
+                  <label for="mktLocation">MEP Contractor</label>  
+                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}">
                 </div>
                  <input type="hidden" value="${currWeek}" name="mktWeek" />
                 </div>
@@ -502,6 +561,8 @@ color:#008ac1;
 <script src="././resources/dist/js/adminlte.min.js"></script>
 <!-- page script start -->
 <script>
+console.log($('#statusfoot').val()); // Check the selected value of status before sending it
+
 $(document).ready(function() {
 	 $('#laoding').hide();
 	if ( window.history.replaceState ) {//script to avoid page resubmission of form on reload
@@ -592,10 +653,11 @@ $(document).ready(function() {
 	        	 url: 'ProjectLeads',
 	        	 data: {octjf: "dlcav"},
 		  		 success: function(data) {
+		  			 alert(data);
 			     var op="";
 			     var outdate="";
 		  			var output="<table id='all-table' class='table table-bordered small'><thead><tr>"+"<th>#</th><th>Consultant</th><th>Product</th><th>Status</th>"+
-		  			 "<th>Division</th><th>Remarks</th><th>Last Updated</th><th>Action</th></tr></thead><tbody>";
+		  			 "<th>Division</th><th>Remarks</th><th>Client</th><th>Last Updated</th><th>Action</th></tr></thead><tbody>";
 		  			 var j=0;for (var i in data) { 
 		  				if(data[i].updated_date == '' || data[i].updated_date == undefined){
 		  					outdate=$.trim(data[i].created_date.substring(0, 10)).split("-").reverse().join("/");
@@ -603,7 +665,8 @@ $(document).ready(function() {
 		  						outdate=$.trim(data[i].updated_date);
 		  						}
 		  				 j=j+1; output+="<tr><td>"+j+"</td><td><span>" + $.trim(data[i].conslt_name)+ "</span></td>"+
-		  			 "<td>" + $.trim(data[i].product)+ "</td><td>" + $.trim(data[i].status) + "</td>"+ "<td>" +$.trim(data[i].division)+ "</td><td>" + $.trim(data[i].remarks )+ "</td>"+		  
+		  			 "<td>" + $.trim(data[i].product)+ "</td><td>" + $.trim(data[i].status) + "</td>"+ "<td>" +$.trim(data[i].division)+ "</td><td>" + $.trim(data[i].remarks )+ "</td>"+
+		  			"<td>" + $.trim(data[i].client) + "</td>"+
 					 "<td>" +outdate+ "</td>"+
 		  			 "<td>"+
 		  			"<a href='#'  id='cedt' class='btn btn-primary btn-xs' data-backdrop='static' data-keyboard='false' data-toggle='modal' data-target='#editCDtls"+$.trim(data[i].cnslt_id)+"' >"+
@@ -673,7 +736,30 @@ $(document).ready(function() {
 	   $('#dvnfltr select.filter > option:first-child')
 	    .text('Select By Division');
 });
-
+$(document).ready(function() {
+    // Event listener for the status dropdown
+    $('#statusfoot').on('change', function() {
+        var selectedStatus = $(this).val().toLowerCase();
+        // Loop through each row in the table
+        $('#displayLeads tbody tr').each(function() {
+            var rowStatus = $(this).find('td:nth-child(2)').text().toLowerCase(); // Assuming status is in the 2nd column
+            if (selectedStatus === '' || rowStatus === selectedStatus) {
+                $(this).show(); // Show matching row
+            } else {
+                $(this).hide(); // Hide non-matching row
+            }
+        });
+    });
+});
+$('#statusfoot').on('change', function() {
+    console.log($(this).val()); 
+    alert($(statusfoot));
+    // Log the selected status
+});
+$('#ldsfoot').on('change', function() {
+    console.log($(this).val());  // Log the selected status
+    alert($(ldsfoot));
+});
 function validate(evt) {
 	  var theEvent = evt || window.event;
 
@@ -737,10 +823,10 @@ function getProducts(){
 }
 function getSeletedval(){
 	
-    var selectedValues = [];    
+  /*   var selectedValues = [];    
     $("#productsOpt :selected").each(function(){
         selectedValues.push($(this).val()); 
-    });
+    }); */
     return true;
     //alert(selectedValues);
    

@@ -35,36 +35,36 @@ public class MarketingLeadsDbUtil {
 		try {
 			myCon = con.getMysqlConn();
 
-			String sql = "insert into marketing(oprtunity, status, location, leads, contact, product, remark, main_contractor, mep_contractor, updated_year, updated_by,week, updated_date, created_date) values(?,?,?,?,?,?,?,?,?,?,?,?,sysdate(),sysdate())";
+			String sql = "INSERT INTO marketing(oprtunity, status, location, leads, contact, product, remark, main_contractor, mep_contractor, updated_year, updated_by, week, created_date, updated_date, marketing_location, client) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(), sysdate(), ?, ?)";
 
-			// very important
+			// Prepare the statement
 			myStmt = myCon.prepareStatement(sql);
 
-			// set the param values for the student
-			myStmt.setString(1, theMLData.getOpt());
-			myStmt.setString(2, theMLData.getStatus());
-			myStmt.setString(3, theMLData.getLocation());
-			myStmt.setString(4, theMLData.getLeads());
-			myStmt.setString(5, theMLData.getContactDtls());
-			myStmt.setString(6, theMLData.getProducts());
-			myStmt.setString(7, theMLData.getRemarks());
-			myStmt.setString(8, theMLData.getMainContractor());
-			myStmt.setString(9, theMLData.getMepContractor());
-			myStmt.setString(10, theMLData.getUpdatedYr());
-			myStmt.setString(11, theMLData.getUpdatedBy());
-			myStmt.setString(12, theMLData.getUpdtdWeek());
+			// Set the parameter values in the correct order
+			myStmt.setString(1, theMLData.getOpt()); // Opportunity
+			myStmt.setString(2, theMLData.getStatus()); // Status
+			myStmt.setString(3, theMLData.getLocation()); // Location
+			myStmt.setString(4, theMLData.getLeads()); // Leads
+			myStmt.setString(5, theMLData.getContactDtls()); // Contact
+			myStmt.setString(6, theMLData.getProducts()); // Product (mapped to divisions)
+			myStmt.setString(7, theMLData.getRemarks()); // Remark
+			myStmt.setString(8, theMLData.getMainContractor());// Main Contractor
+			myStmt.setString(9, theMLData.getMepContractor()); // MEP Contractor
+			myStmt.setString(10, theMLData.getUpdatedYr()); // Updated Year
+			myStmt.setString(11, theMLData.getUpdatedBy()); // Updated By (Employee ID)
+			myStmt.setString(12, theMLData.getUpdtdWeek()); // Week
+			myStmt.setString(13, theMLData.getLocation()); // Marketing Location
+			myStmt.setString(14, theMLData.getClient()); // Client
 
-			// execute sql query
+			// Execute the SQL query
 			myStmt.execute();
 
 		} finally {
-			// close jdbc objects
-
+			// Close JDBC objects
 			close(myStmt, myRes);
 			con.closeConnection();
-
 		}
-
 	}
 
 	public List<MarketingLeads> getMarketingLeadsDetails(String currYear) throws SQLException {
@@ -108,6 +108,7 @@ public class MarketingLeadsDbUtil {
 				String updateWeek_tmp = myRes.getString(13);
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -119,7 +120,8 @@ public class MarketingLeadsDbUtil {
 
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
-						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus);
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client);
 				// System.out.println("goal_list"+goal_id);
 				// add this to a array list of AppraisalHr
 				marketLeadsList.add(tempmarketLeadsList);
@@ -179,6 +181,7 @@ public class MarketingLeadsDbUtil {
 				String updateWeek_tmp = myRes.getString(13);
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -190,7 +193,8 @@ public class MarketingLeadsDbUtil {
 
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
-						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus);
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client);
 				// System.out.println("goal_list"+goal_id);
 				// add this to a array list of AppraisalHr
 				marketLeadsList.add(tempmarketLeadsList);
@@ -249,6 +253,7 @@ public class MarketingLeadsDbUtil {
 				String updateWeek_tmp = myRes.getString(13);
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -260,7 +265,8 @@ public class MarketingLeadsDbUtil {
 
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
-						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus);
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client);
 
 				marketLeadsList.add(tempmarketLeadsList);
 
@@ -321,6 +327,7 @@ public class MarketingLeadsDbUtil {
 				String updateWeek_tmp = myRes.getString(13);
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -332,7 +339,8 @@ public class MarketingLeadsDbUtil {
 
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
-						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus);
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client);
 
 				marketLeadsList.add(tempmarketLeadsList);
 
@@ -368,7 +376,7 @@ public class MarketingLeadsDbUtil {
 		try {
 			myCon = con.getMysqlConn();
 
-			String sql = "update marketing set oprtunity = ?, status =?, location =?, leads =?, contact =?, product =?, remark =?, main_contractor = ?, mep_contractor = ?, updated_year =?, updated_by =?, week=?, updated_date = sysdate() "
+			String sql = "update marketing set oprtunity = ?, status =?, location =?, leads =?, contact =?, product =?, remark =?, main_contractor = ?, mep_contractor = ?, updated_year =?, updated_by =?, week=?, updated_date = sysdate(),client=? "
 					+ " where id = ? ";
 
 			// very important
@@ -387,8 +395,8 @@ public class MarketingLeadsDbUtil {
 			myStmt.setString(10, theMLData.getUpdatedYr());
 			myStmt.setString(11, theMLData.getUpdatedBy());
 			myStmt.setString(12, theMLData.getUpdtdWeek());
-			myStmt.setString(13, theMLData.getId());
-
+			myStmt.setString(13, theMLData.getClient());
+			myStmt.setString(14, theMLData.getId());
 			// execute sql query
 			myStmt.execute();
 

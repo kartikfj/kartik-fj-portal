@@ -10,8 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse; 
- 
+import javax.servlet.http.HttpServletResponse;
+
 import beans.ConsultantLeads;
 import beans.MarketingLeads;
 import beans.fjtcouser;
@@ -123,6 +123,11 @@ public class MktProjectUnderDesign extends HttpServlet {
 
 		if (userRole.equals("mkt") || userRole.equals("mg")) {
 			List<MarketingLeads> mktAll_Details = marketingLeadsDbUtil.getMarketingLeadsDetails(currYear);
+			// Log details to console
+			System.out.println("Marketing Leads Details (All): ");
+			for (MarketingLeads lead : mktAll_Details) {
+				System.out.println(lead.getClient());
+			}
 			request.setAttribute("MLAD", mktAll_Details);
 			request.setAttribute("MLWD", mktAll_Details);
 		} else {
@@ -131,6 +136,10 @@ public class MktProjectUnderDesign extends HttpServlet {
 			String divnCode = fjtuser.getEmp_divn_code();
 			List<MarketingLeads> mktWeek_Details = marketingLeadsDbUtil.getAllMarketingLeadsDetailsforSalesEng(currYear,
 					companyCode, divnCode);
+			System.out.println("Marketing Leads Details (Weekly): ");
+			for (MarketingLeads lead : mktWeek_Details) {
+				System.out.println(lead);
+			}
 			request.setAttribute("MLWD", mktWeek_Details);
 		}
 
@@ -204,9 +213,11 @@ public class MktProjectUnderDesign extends HttpServlet {
 		String mepCont = request.getParameter("mktMepCont");
 		String week = request.getParameter("mktWeek");
 		String emp_ID = emp_code;
+		String client = request.getParameter("mktClient");
 		String currYear = Calendar.getInstance().get(Calendar.YEAR) + "";
 		MarketingLeads mkt_Details = new MarketingLeads(mlId, oportunity, status, location, leads, contact, division,
-				product, mainCont, mepCont, currYear, emp_ID, week, 0);
+				product, mainCont, mepCont, currYear, emp_ID, week, 0, client);
+		System.out.print("marketikng : " + mkt_Details.getClient());
 		marketingLeadsDbUtil.editUpdateMarketingLeads(mkt_Details);
 		goToMarketingLeads(request, response, userRole);
 
@@ -220,19 +231,30 @@ public class MktProjectUnderDesign extends HttpServlet {
 		String location = request.getParameter("mktLocation");
 		String leads = request.getParameter("mkLeads");
 		String contact = request.getParameter("mktContact");
-		String division = request.getParameter("mkDivn");// division from front end
-		// String remark=request.getParameter("mktRmrk");
-		String[] product_lists = request.getParameterValues("prodct");
-		if (product_lists.length > 0) {
-			products = String.join(", ", product_lists);
+		// String division = request.getParameter("mkDivn");// division from front end
+		String[] division_list = request.getParameterValues("mktDivn");
+		String divisions = "";
+		if (division_list != null && division_list.length > 0) {
+			divisions = String.join(", ", division_list);
+			System.out.println("Received divisions from frontend:");
+			for (String division : division_list) {
+				System.out.println("Division: " + division);
+			}
 		}
+		String remark = request.getParameter("mktRmrk");
+		String client = request.getParameter("mktClient");
+		// String remark=request.getParameter("mktRmrk");
+		/*
+		 * String[] product_lists = request.getParameterValues("prodct"); if
+		 * (product_lists.length > 0) { products = String.join(", ", product_lists); }
+		 */
 		String mainCont = request.getParameter("mktMainCont");
 		String mepCont = request.getParameter("mktMepCont");
 		String week = request.getParameter("mktWeek");
 		String emp_ID = empployee_Code;
 		String currYear = Calendar.getInstance().get(Calendar.YEAR) + "";
-		MarketingLeads mkt_Details = new MarketingLeads(oportunity, status, location, leads, contact, division,
-				products, mainCont, mepCont, currYear, emp_ID, week, 0);
+		MarketingLeads mkt_Details = new MarketingLeads("", oportunity, status, location, leads, contact, divisions,
+				remark, mainCont, mepCont, currYear, emp_ID, week, client);
 		marketingLeadsDbUtil.insertNewMarketingLeads(mkt_Details);
 
 		List<ConsultantLeads> divisonList = marketingLeadsDbUtil.getAllDivisionList();
