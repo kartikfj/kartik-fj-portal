@@ -248,7 +248,7 @@ color:#008ac1;
 					 <div class="box-header">
 		               <div class="pull-left"  style="display:inline-flex">
 		               <div  class="box-title">Under Design Details</div>
-		               <c:if test="${fjtuser.role eq 'mkt'}">
+		               <c:if test="${fjtuser.role eq 'mkt' and (fjtuser.emp_code eq 'E003605' || fjtuser.emp_code eq 'E004885') and !(fjtuser.role eq 'mg')}">
 		               <button type="button" class="btn btn-default add-new" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#newUnderDsgn"><i class="fa fa-plus"></i> Add New</button>
 		               </c:if>
 		               <form method="POST" action="ProjectLeads">
@@ -274,8 +274,11 @@ color:#008ac1;
 		                         <th>Main Contractor</th>
 		                         <th>MEP Contractor</th>
 		                         <th  width="67">Updated on </th>
-		                      <c:if test="${fjtuser.role eq 'mkt'}">   <th  width="66">Action</th></c:if>
-		                   
+		                              <c:if test="${!(fjtuser.role eq 'mg')}">   <th>Ack.Status</th></c:if>
+		                             <!--  allow to edit only baber and ben as per instruction -->
+		                    <%--   <c:if test="${fjtuser.role eq 'mkt' and (fjtuser.emp_code eq 'E003605' || fjtuser.emp_code eq 'E004885')}">   <th  width="66">Action</th></c:if> --%>
+		                  <!--  allow to approve major project  f -->
+		                    <c:if test="${fjtuser.role eq 'mg'}">   <th  width="66">Action</th></c:if>
 		                     </tr>
 		                     </thead>
 		                     <c:set var="mcount" value="0"/>
@@ -312,7 +315,26 @@ color:#008ac1;
 		                         <fmt:parseDate value=" ${mktLst.updatedDate}" var="theDate"    pattern="yyyy-MM-dd HH:mm" />
 		                           <fmt:formatDate value="${theDate}" pattern="MMM-YYYY"/>		                       
 		                         </td>
-		                         <c:if test="${fjtuser.role eq 'mkt'}">
+		                            <c:if test="${!(fjtuser.role eq 'mg')}">
+		                          <td> <c:choose>
+		                        
+			   											   <c:when test="${mktLst.approved=='yes'}">
+			   											 <button type="submit" disabled  class="btn btn-success btn-xs" >
+										        		 Approved</button>   
+			   											   </c:when>
+			   											   <c:otherwise>
+			   											   
+			   											   <input type="hidden" disabled name="octjf" value="approved"/>
+			     									     <button type="submit"  disabled  class="btn btn-Primary btn-xs">
+										        		 Pending</button>
+										     
+			   											   
+			   											   </c:otherwise>
+			   						   
+			   								 </c:choose>
+			   											</td>
+			   												</c:if>				
+		                        <%--  <c:if test="${fjtuser.role eq 'mkt' and (fjtuser.emp_code eq 'E003605' || fjtuser.emp_code eq 'E004885') and !(fjtuser.role eq 'mg')}">
 		                              <td>
 		                          <a href="#"   id="eg" class="btn btn-primary btn-xs" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#editMktleads${mcount}">
 								       		 <i class=" fa fa-pencil" aria-hidden="true"></i>
@@ -325,8 +347,44 @@ color:#008ac1;
 										        		 <i class="fa fa-trash" aria-hidden="true"></i></button>
 										        	</form>
 										        	</td>
-										        	</c:if>
+										        	</c:if> --%>
 										        	<%-- <td><p class="Long-letters">${mktList.client }</p></td> --%>
+								   <c:if test="${fjtuser.role eq 'mg'}">
+								
+		                              <td>
+		                              
+		<%--                           <a href="#"   id="eg" class="btn btn-primary btn-xs" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#editMktleads${mcount}">
+								       		 <i class=" fa fa-pencil" aria-hidden="true"></i>
+								       		 </a>
+								       		 
+ --%>								        	 <!-- delete -->
+                                       <form action="ProjectLeads" method="POST" style="display: inline !important;" name="gs_form_delete">
+			   											 <input type="hidden" value="${mktLst.id}" name="mgappr" />
+			   											 <c:choose>
+			   											   <c:when test="${mktLst.approved=='yes'}">
+			   											 <button type="submit" disabled  class="btn btn-success btn-xs"  onclick="if (!(confirm('Are You sure You Want to Approve this Major Project'))) return false" >
+										        		 Approved</button>   
+			   											   </c:when>
+			   											   <c:otherwise>
+			   											   
+			   											   <input type="hidden" name="octjf" value="approved"/>
+			     									     <button type="submit"   class="btn btn-Primary btn-xs"  onclick="if (!(confirm('Are You sure You Want to Approve this Major Project'))) return false" >
+										        		 Approve</button>
+										     
+			   											   
+			   											   </c:otherwise>
+			   								 </c:choose>
+			   											
+			     								   		
+										        	</form>		
+		   											<%-- <form action="ProjectLeads" method="POST" style="display: inline !important;" name="gs_form_delete">
+			   											 <input type="hidden" value="${mktLst.id}" name="mktli" />
+			     										<input type="hidden" name="octjf" value="delete"/>
+			     									     <button type="submit"   class="btn btn-danger btn-xs"  onclick="if (!(confirm('Are You sure Not to Approve this Major Project'))) return false" >
+										        		 No</button>
+										        	</form> --%>
+										        	</td>
+										        	</c:if>		        	
 		                     </tr>		                     		                     
 		                         <c:if test="${fjtuser.role eq 'mkt'}">    <div class="row">
 						<div class="modal fade" id="editMktleads${mcount}" role="dialog">
@@ -421,7 +479,7 @@ color:#008ac1;
 		                    <tr>
 		                   
 		        				 <th   class="tfoot1" >Opportunities</th>
-		                         <th width="90" id="statusfoot">Status</th>
+		                         <th width="90" id="statusfootss">Status</th>
 		                        <th width="90"  class="tfoot1" >Location</th>
 		                         <th width="90" id="ldsfoot" >Leads</th>
 		                        <!--   <th   class="tfoot1" >Contact Details </th>-->
@@ -561,7 +619,7 @@ color:#008ac1;
 <script src="././resources/dist/js/adminlte.min.js"></script>
 <!-- page script start -->
 <script>
-console.log($('#statusfoot').val()); // Check the selected value of status before sending it
+ // Check the selected value of status before sending it
 
 $(document).ready(function() {
 	 $('#laoding').hide();
@@ -612,7 +670,7 @@ $(document).ready(function() {
            "createdRow": function ( row, data, index ) {      
            },
            initComplete: function () {
-               this.api().columns([1,3,4]).every( function () {
+               this.api().columns([1,2,3,4]).every( function () {
                    var column = this;
                    var selectVal;
                    var selectDefault="Select";
@@ -727,7 +785,7 @@ $(document).ready(function() {
 	   
 	   
 	   
-	   $('#statusfoot select.filter > option:first-child')
+	   $('#statusfootss select.filter > option:first-child')
 	    .text('Select By Status');
 	   
 	   $('#ldsfoot select.filter > option:first-child')
@@ -736,30 +794,7 @@ $(document).ready(function() {
 	   $('#dvnfltr select.filter > option:first-child')
 	    .text('Select By Division');
 });
-$(document).ready(function() {
-    // Event listener for the status dropdown
-    $('#statusfoot').on('change', function() {
-        var selectedStatus = $(this).val().toLowerCase();
-        // Loop through each row in the table
-        $('#displayLeads tbody tr').each(function() {
-            var rowStatus = $(this).find('td:nth-child(2)').text().toLowerCase(); // Assuming status is in the 2nd column
-            if (selectedStatus === '' || rowStatus === selectedStatus) {
-                $(this).show(); // Show matching row
-            } else {
-                $(this).hide(); // Hide non-matching row
-            }
-        });
-    });
-});
-$('#statusfoot').on('change', function() {
-    console.log($(this).val()); 
-    alert($(statusfoot));
-    // Log the selected status
-});
-$('#ldsfoot').on('change', function() {
-    console.log($(this).val());  // Log the selected status
-    alert($(ldsfoot));
-});
+
 function validate(evt) {
 	  var theEvent = evt || window.event;
 

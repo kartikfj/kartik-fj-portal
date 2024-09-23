@@ -17,6 +17,7 @@ import java.util.List;
 
 import beans.ConsultantLeads;
 import beans.ConsultantVisits;
+import beans.EmailConfig;
 import beans.MarketingLeads;
 import beans.MktSalesLeads;
 import beans.MysqlDBConnectionPool;
@@ -39,7 +40,7 @@ public class MarketingLeadsDbUtil {
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(), sysdate(), ?, ?)";
 
 			// Prepare the statement
-			myStmt = myCon.prepareStatement(sql);
+			myStmt = myCon.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
 			// Set the parameter values in the correct order
 			myStmt.setString(1, theMLData.getOpt()); // Opportunity
@@ -59,11 +60,75 @@ public class MarketingLeadsDbUtil {
 
 			// Execute the SQL query
 			myStmt.execute();
+			// get lead id dynamically
+			myRes = myStmt.getGeneratedKeys();
+			if (myRes.next()) {
+				int leadId = myRes.getInt(1); // Retrieve the generated lead ID
+				System.out.println("Inserted lead with ID: " + leadId);
 
+				// Send the approval email with the dynamic lead ID
+				sendMarketingLeadApprovalEmail(theMLData, leadId);
+			} else {
+				System.out.println("Failed to retrieve the generated lead ID.");
+			}
+			// sendMarketingLeadApprovalEmail(theMLData);
 		} finally {
 			// Close JDBC objects
 			close(myStmt, myRes);
 			con.closeConnection();
+		}
+	}
+
+	private void sendMarketingLeadApprovalEmail(MarketingLeads theMLData, int id) {
+		try {
+
+			EmailConfig sslMail = new EmailConfig();
+			// Generate approval and rejection URLs dynamically
+			// String leadId = "123"; // This should be dynamically fetched from the
+			// database after insert
+			String approvalLink = "http://10.10.5.143:8080/FJPORTAL_DEV/approve?leadId=" + id;
+			String rejectionLink = "http://10.10.5.143:8080/FJPORTAL_DEV/reject?leadId=" + id;
+			System.out.println("Approval Link: " + approvalLink);
+			System.out.println("Rejection Link: " + rejectionLink);
+
+			// You can also print additional details for debugging
+			System.out.println("Marketing Lead Details:");
+			System.out.println("Opportunity: " + theMLData.getOpt());
+			System.out.println("Status: " + theMLData.getStatus());
+			System.out.println("Location: " + theMLData.getLocation());
+			System.out.println("Leads: " + theMLData.getLeads());
+			System.out.println("Contact: " + theMLData.getContactDtls());
+			System.out.println("Client: " + theMLData.getClient());
+			// Compose the email message body with both approval and rejection options
+			/*
+			 * String msg = "<p>A new marketing lead has been created:</p>" +
+			 * "<p>Opportunity: " + theMLData.getOpt() + "</p>" + "<p>Status: " +
+			 * theMLData.getStatus() + "</p>" + "<p>Location: " + theMLData.getLocation() +
+			 * "</p>" + "<p>Leads: " + theMLData.getLeads() + "</p>" + "<p>Contact: " +
+			 * theMLData.getContactDtls() + "</p>" + "<p>Client: " + theMLData.getClient() +
+			 * "</p>" + "<p>Please review and take action:</p>" + "<p><a href='" +
+			 * approvalLink + "'>Approve Lead</a></p>" + "<p><a href='" + rejectionLink +
+			 * "'>Reject Lead</a></p>";
+			 */
+			// Set the recipient (approver) and other details
+			/*
+			 * sslMail.setToaddr("kartik.p@fjtco.com"); // Approver email
+			 * sslMail.setMessageSub("New Marketing Lead Approval Request");
+			 * sslMail.setMessagebody(msg); // Setting the email content
+			 */
+			// Send the email
+			// int emailStatus = sslMail.sendMail(); // Modify with your SMTP
+			// settings
+
+			// if (emailStatus != 1) {
+			// System.out.println("Failed to send approval email.");
+			// } else {
+			// System.out.println("Approval email sent successfully.");
+			// }
+
+		} catch (Exception e) {
+			System.out.println("Error sending approval email.");
+			e.printStackTrace();
 		}
 	}
 
@@ -109,6 +174,7 @@ public class MarketingLeadsDbUtil {
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
 				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -121,7 +187,7 @@ public class MarketingLeadsDbUtil {
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
 						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
-						client);
+						client, approved);
 				// System.out.println("goal_list"+goal_id);
 				// add this to a array list of AppraisalHr
 				marketLeadsList.add(tempmarketLeadsList);
@@ -182,6 +248,7 @@ public class MarketingLeadsDbUtil {
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
 				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -194,7 +261,7 @@ public class MarketingLeadsDbUtil {
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
 						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
-						client);
+						client, approved);
 				// System.out.println("goal_list"+goal_id);
 				// add this to a array list of AppraisalHr
 				marketLeadsList.add(tempmarketLeadsList);
@@ -254,6 +321,7 @@ public class MarketingLeadsDbUtil {
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
 				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -266,7 +334,7 @@ public class MarketingLeadsDbUtil {
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
 						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
-						client);
+						client, approved);
 
 				marketLeadsList.add(tempmarketLeadsList);
 
@@ -328,6 +396,7 @@ public class MarketingLeadsDbUtil {
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
 				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -340,7 +409,7 @@ public class MarketingLeadsDbUtil {
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
 						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
-						client);
+						client, approved);
 
 				marketLeadsList.add(tempmarketLeadsList);
 
@@ -372,6 +441,7 @@ public class MarketingLeadsDbUtil {
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
 		ResultSet myRes = null;
+		EmailConfig sslMail = new EmailConfig();
 		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
 		try {
 			myCon = con.getMysqlConn();
@@ -399,7 +469,14 @@ public class MarketingLeadsDbUtil {
 			myStmt.setString(14, theMLData.getId());
 			// execute sql query
 			myStmt.execute();
+			int emailStatus = sslMail.sendMail(); // Modify with your SMTP
+			// settings
 
+			if (emailStatus != 1) {
+				System.out.println("Failed to send approval email.");
+			} else {
+				System.out.println("Approval email sent successfully.");
+			}
 		} finally {
 			// close jdbc objects
 
@@ -420,6 +497,29 @@ public class MarketingLeadsDbUtil {
 
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, mlId);
+			myStmt.execute();
+
+		} finally {
+			// close jdbc objects
+
+			close(myStmt, null);
+			con.closeConnection();
+
+		}
+
+	}
+
+	public void updateApproveMarketingLeads(String mlId) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		try {
+			myCon = con.getMysqlConn();
+			String sql = "update marketing set isApproved=?" + " where id = ? ";
+
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, "yes");
+			myStmt.setString(2, mlId);
 			myStmt.execute();
 
 		} finally {

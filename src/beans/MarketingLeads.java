@@ -18,6 +18,15 @@ public class MarketingLeads {
 	private String mepContractor = null;
 	private String updateStatus = null;
 	private String client = null;
+	private String approved = null;
+
+	public String getApproved() {
+		return approved;
+	}
+
+	public void setApproved(String approved) {
+		this.approved = approved;
+	}
 
 	public String getClient() {
 		return client;
@@ -213,7 +222,7 @@ public class MarketingLeads {
 	public MarketingLeads(String id, String opt, String status, String location, String leads, String contactDtls,
 			String products, String remarks, String mainContractor, String mepContractor, String updatedYr,
 			String updatedBy, String updtdWeek, String createddDate, String updatedDate, String updateStatus,
-			String client) {// display
+			String client, String approved) {// display
 		super();
 		this.id = id;
 		this.opt = opt;
@@ -232,6 +241,7 @@ public class MarketingLeads {
 		this.updatedDate = updatedDate;
 		this.updateStatus = updateStatus;
 		this.client = client;
+		this.approved = approved;
 	}
 
 	@Override

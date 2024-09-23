@@ -75,6 +75,13 @@ public class MktProjectUnderDesign extends HttpServlet {
 					e.printStackTrace();
 				}
 				break;
+			case "approved":
+				try {
+					approvedMarketingLeads(request, response, userRole);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
 			case "UPDATE":
 				try {
 					updateMarketingLeads(request, response, emp_code, userRole);
@@ -196,6 +203,13 @@ public class MktProjectUnderDesign extends HttpServlet {
 			throws SQLException, ServletException, IOException {
 		String mlId = request.getParameter("mktli");
 		marketingLeadsDbUtil.deleteUpdateMarketingLeads(mlId);
+		goToMarketingLeads(request, response, userRole);
+	}
+
+	private void approvedMarketingLeads(HttpServletRequest request, HttpServletResponse response, String userRole)
+			throws SQLException, ServletException, IOException {
+		String mlId = request.getParameter("mgappr");
+		marketingLeadsDbUtil.updateApproveMarketingLeads(mlId);
 		goToMarketingLeads(request, response, userRole);
 	}
 
