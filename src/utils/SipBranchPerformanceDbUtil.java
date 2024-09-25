@@ -276,7 +276,7 @@ public class SipBranchPerformanceDbUtil {
 		try {
 			myCon = orcl.getOrclConn();
 			// --query to get booking details for a given month and year - YTM
-			String sql = " select COMP,WEEK, DOC_ID,DOC_DATE,SM_CODE,SM_NAME,PARTY_NAME,CONTACT,TELEPHONE,PROJ_NAME, PRODUCT, ZONE, LOI_RCVD_DT, CURR,AMOUNT_AED from SIP_SM_BKNG_VIEW where COMP = ? "
+			String sql = " select COMP,WEEK, DOC_ID,DOC_DATE,SM_CODE,SM_NAME,PARTY_NAME,CONTACT,TELEPHONE,PROJ_NAME, PRODUCT, ZONE, LOI_RCVD_DT, CURR,AMOUNT_AED from SIP_SM_BKNG_TBL where COMP = ? "
 					+ " AND SM_CODE IN (" + salesCodesString
 					+ ") and LOI_RCVD_DT between '01-'||?||'-'||? and last_day('01-'||?||'-'||?)  order by LOI_RCVD_DT desc";
 			myStmt = myCon.prepareStatement(sql);

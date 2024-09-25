@@ -557,7 +557,7 @@ public class SipChartDbUtil {
 		try {
 			myCon = orcl.getOrclConn();
 			// --query to get booking details for a given month and year - YTM
-			String sql = "select COMP,WEEK, DOC_ID,DOC_DATE,SM_CODE,SM_NAME,PARTY_NAME,CONTACT,TELEPHONE,PROJ_NAME, PRODUCT, ZONE, LOI_RCVD_DT, CURR,AMOUNT_AED from SIP_SM_BKNG_VIEW where sm_code=? "
+			String sql = "select COMP,WEEK, DOC_ID,DOC_DATE,SM_CODE,SM_NAME,PARTY_NAME,CONTACT,TELEPHONE,PROJ_NAME, PRODUCT, ZONE, LOI_RCVD_DT, CURR,AMOUNT_AED from SIP_SM_BKNG_TBL where sm_code=? "
 					+ "and LOI_RCVD_DT between '01-'||?||'-'||? and last_day('01-'||?||'-'||?)  order by LOI_RCVD_DT desc";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, sales_egr_id);
@@ -610,11 +610,11 @@ public class SipChartDbUtil {
 			// --query to get booking details for a given month and year
 			if (seleYear < currentYear) {
 				sql = "select COMP,WEEK, DOC_ID,DOC_DATE,SM_CODE,SM_NAME,PARTY_NAME,CONTACT,TELEPHONE,PROJ_NAME, PRODUCT, ZONE, LOI_RCVD_DT, CURR,AMOUNT_AED   "
-						+ "from SIP_SM_BKNG_VIEW where sm_code=? "
+						+ "from SIP_SM_BKNG_TBL where sm_code=? "
 						+ "and LOI_RCVD_DT between '01-JAN-'||? and '31-DEC-'||? " + "order by LOI_RCVD_DT desc  ";
 			} else {
 				sql = "select COMP,WEEK, DOC_ID,DOC_DATE,SM_CODE,SM_NAME,PARTY_NAME,CONTACT,TELEPHONE,PROJ_NAME, PRODUCT, ZONE, LOI_RCVD_DT, CURR,AMOUNT_AED   "
-						+ "from SIP_SM_BKNG_VIEW where sm_code=? "
+						+ "from SIP_SM_BKNG_TBL where sm_code=? "
 						+ "and LOI_RCVD_DT between '01-JAN-'||? and to_date(sysdate,'DD/MM/RRRR') "
 						+ "order by LOI_RCVD_DT desc  ";
 			}
@@ -1082,7 +1082,7 @@ public class SipChartDbUtil {
 			myCon = orcl.getOrclConn();
 			// --query to get billing target vs s4 amount details for a given month and year
 			String sql = "select COMP,WEEK, DOC_ID,DOC_DATE,SM_CODE,SM_NAME,PARTY_NAME,CONTACT,TELEPHONE,PROJ_NAME, PRODUCT, ZONE, CURR,AMOUNT_AED     "
-					+ "from SM_STG4_VIEW where sm_code = ?  "
+					+ "from SM_STG4_TBL where sm_code = ?  "
 					+ "and doc_date between '01-JAN-' || ? and to_date(sysdate,'DD/MM/RRRR')   "
 					+ "order by doc_date desc ";
 			myStmt = myCon.prepareStatement(sql);
@@ -1129,7 +1129,7 @@ public class SipChartDbUtil {
 			myCon = orcl.getOrclConn();
 			// --query to get billing target vs s4 amount details for a given month and year
 			String sql = "select COMP,WEEK, DOC_ID,DOC_DATE,SM_CODE,SM_NAME,PARTY_NAME,CONTACT,TELEPHONE,PROJ_NAME, PRODUCT, ZONE, CURR,AMOUNT_AED   "
-					+ "from SM_STG4_VIEW where sm_code = ?   "
+					+ "from SM_STG4_TBL where sm_code = ?   "
 					+ "and doc_date between '01-'|| ? ||'-'|| ?  and last_day('01-'|| ? ||'-'|| ? )  order by doc_date desc ";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, smCode);

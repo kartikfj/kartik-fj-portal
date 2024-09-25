@@ -604,7 +604,7 @@ public class SipMainDivisionChartDbUtil {
 			// --query to get booking details for a given month and year
 			String sql = " SELECT COMP, WEEK, DOC_ID, DOC_DATE, SM_CODE, SM_NAME,"
 					+ " PARTY_NAME, CONTACT, TELEPHONE, PROJ_NAME, PRODUCT, ZONE,DIVN_CODE, CURR, AMOUNT_AED"
-					+ " FROM SIP_DM_BLNG_VIEW WHERE DM_CODE = ?  " + " AND DOC_DATE BETWEEN '01-' || ? || '-' || ? "
+					+ " FROM SIP_DM_BLNG_TBL WHERE DM_CODE = ?  " + " AND DOC_DATE BETWEEN '01-' || ? || '-' || ? "
 					+ " AND LAST_DAY ('01-' || ? || '-' ||  ? ) " + " ORDER BY DOC_DATE DESC  ";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, theDm_Code);
@@ -655,7 +655,7 @@ public class SipMainDivisionChartDbUtil {
 			// --query to get billingdetails for a given month and year
 			String sql = "  SELECT COMP, WEEK, DOC_ID, DOC_DATE, SM_CODE, SM_NAME,PARTY_NAME, "
 					+ "  CONTACT, TELEPHONE, PROJ_NAME, PRODUCT, ZONE, DIVN_CODE, CURR, AMOUNT_AED "
-					+ "  FROM SIP_DM_BLNG_VIEW WHERE DM_CODE = ? " + "  AND DOC_DATE BETWEEN '01-JAN-' || ? "
+					+ "  FROM SIP_DM_BLNG_TBL WHERE DM_CODE = ? " + "  AND DOC_DATE BETWEEN '01-JAN-' || ? "
 					+ "  AND TO_DATE (SYSDATE, 'DD/MM/RRRR') ORDER BY DOC_DATE DESC ";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, theDm_Code);
@@ -1226,7 +1226,7 @@ public class SipMainDivisionChartDbUtil {
 		try {
 			myCon = orcl.getOrclConn();
 			String sql = " SELECT distinct COMP_CODE,WEEK,QTN_DT,QTN_CODE,QTN_NO,CUST_CODE,CUST_NAME,SALES_EGR_CODE,SALES_ENG_NAME,PROJECT_NAME,   "
-					+ " CONSULTANT,INVOICING_YEAR,PROD_TYPE,PROD_CLASSFCN,ZONE,PROFIT_PERC,QTN_AMOUNT,QTN_STATUS from FJT_DM_JIH_AGING_DET_ALL_STAT,FJT_DMSM_TBL  "
+					+ " CONSULTANT,INVOICING_YEAR,PROD_TYPE,PROD_CLASSFCN,ZONE,PROFIT_PERC,QTN_AMOUNT,QTN_STATUS from FJT_DM_JIH_AGING_DET_TBL,FJT_DMSM_TBL  "
 					+ " WHERE DM_CODE = DMEMPCODE AND DM_CODE= ?  AND DMEMPCODE = ?  AND JIH_AGING=  ? "
 					+ " AND QTN_CODE = FJTTXNCODE    ORDER BY QTN_STATUS,QTN_DT ";
 			myStmt = myCon.prepareStatement(sql);
@@ -1432,7 +1432,7 @@ public class SipMainDivisionChartDbUtil {
 			myCon = orcl.getOrclConn();
 			String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 			String sql = " SELECT *FROM( " + "  SELECT SUM(ROUND(AMOUNT_AED)) AS AMOUNT,PARTY_NAME "
-					+ "    FROM SIP_DM_BLNG_VIEW " + "   WHERE     DM_CODE = ? "
+					+ "    FROM SIP_DM_BLNG_TBL " + "   WHERE     DM_CODE = ? "
 					+ "      AND DOC_DATE BETWEEN '01-JAN-' || ? " + "      AND TO_DATE (SYSDATE, 'DD/MM/RRRR') "
 					+ "GROUP BY PARTY_NAME  ORDER BY AMOUNT DESC) WHERE  rownum <= 10";
 			myStmt = myCon.prepareStatement(sql);
@@ -1467,7 +1467,7 @@ public class SipMainDivisionChartDbUtil {
 			myCon = orcl.getOrclConn();
 			String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 			String sql = "  SELECT COMP, WEEK, DOC_ID, DOC_DATE,SM_CODE, SM_NAME, PARTY_NAME,CONTACT,TELEPHONE, PROJ_NAME, PRODUCT,ZONE, DIVN_CODE, CURR,AMOUNT_AED "
-					+ "    FROM SIP_DM_BLNG_VIEW  WHERE     DM_CODE = ?  AND DOC_DATE BETWEEN '01-JAN-' || ?"
+					+ "    FROM SIP_DM_BLNG_TBL  WHERE     DM_CODE = ?  AND DOC_DATE BETWEEN '01-JAN-' || ?"
 					+ "                          AND TO_DATE (SYSDATE, 'DD/MM/RRRR') AND PARTY_NAME =  ?"
 					+ "ORDER BY DOC_DATE DESC";
 			myStmt = myCon.prepareStatement(sql);
@@ -1540,7 +1540,7 @@ public class SipMainDivisionChartDbUtil {
 			// --query to get booking details for a given month and year
 			String sql = " SELECT COMP, WEEK, DOC_ID, DOC_DATE, SM_CODE, SM_NAME,"
 					+ " PARTY_NAME, CONTACT, TELEPHONE, PROJ_NAME, PRODUCT, ZONE,DIVN_CODE, CURR, AMOUNT_AED"
-					+ " FROM SIP_DM_BLNG_VIEW WHERE DM_CODE = ?  AND TO_CHAR(DOC_DATE,'YYYY') = TO_CHAR(SYSDATE,'YYYY') ORDER BY DOC_DATE DESC  ";
+					+ " FROM SIP_DM_BLNG_TBL WHERE DM_CODE = ?  AND TO_CHAR(DOC_DATE,'YYYY') = TO_CHAR(SYSDATE,'YYYY') ORDER BY DOC_DATE DESC  ";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, theDm_Code);
 			myRes = myStmt.executeQuery();

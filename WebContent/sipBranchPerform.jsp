@@ -462,10 +462,8 @@
       <c:if test="${fjtuser.role eq 'mg' or fjtuser.role eq 'gm'}">
       		 <li   class="active"><a href="SipBranchPerformance"><i class="fa fa-building-o"></i><span>Branch Performance</span></a></li>
       </c:if>
-             <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>
-             <c:if test="${isAllowed eq 'Yes' || fjtuser.salesDMYn ge 1}">
-      		 		<li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
-      		</c:if>
+             <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>             
+      		 <li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
              <li><a href="DisionInfo.jsp"><i class="fa fa-line-chart"></i><span>Sub Division Performance</span></a></li>
              <li ><a href="CompanyInfo.jsp"><i class="fa fa-pie-chart"></i><span>Division Performance</span></a></li>
              <li><a href="SipUserActivity"><i class="fa fa-table"></i><span>SE Activity History</span></a></li>
@@ -473,7 +471,8 @@
 <!--              <li><a href="SipLOIDues"><i class="fa fa-table"></i><span>LOI Dues</span></a></li>  -->
              <li><a href="SipStageFollowUpController"><i class="fa fa-database"></i><span>Stage Follow-Up</span></a></li>
              <li><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li>
-         
+             <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
+		     <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>         
       </ul>
     </section>
     <!-- /.sidebar -->

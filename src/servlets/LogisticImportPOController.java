@@ -159,11 +159,17 @@ public class LogisticImportPOController extends HttpServlet {
 						location, remarks, empCode, empName, poNumber, poDate, supplier, finalDestination, reExport,
 						candFETADate);
 				if (actionType == 0 || actionType == 1) {
-					successVal = logisticDashboardDbUtil.updatePODetailsByDivision(poDetails);
+					Boolean isRecordExists = logisticDashboardDbUtil.checkForEntryInDB(poDetails);
+					if (isRecordExists) {
+						successVal = logisticDashboardDbUtil.updatePODetailsByDivision(poDetails);
+					} else {
+						successVal = logisticDashboardDbUtil.insertPODetailsByDivision(poDetails);
+					}
 				}
 
 				if (successVal == 1) {
-					logisticDashboardDbUtil.sendmailToLogisticTeam(poDetails, emailId, actionType, reference);
+					// logisticDashboardDbUtil.sendmailToLogisticTeam(poDetails, emailId,
+					// actionType, reference);
 				}
 			} else {
 				successVal = 40; // logistic team already take action or entry restricted
@@ -211,8 +217,18 @@ public class LogisticImportPOController extends HttpServlet {
 			String divnEmpName = request.getParameter("podl7");
 			String shipDocStatus = request.getParameter("podl8");
 			String deliveryStatus = request.getParameter("podl9");
+			String nominatedOn = request.getParameter("podl10");
+			String currencyType = request.getParameter("podl11");
+			int freightCharges = request.getParameter("podl12") != null
+					? Integer.parseInt(request.getParameter("podl12"))
+					: 0;
+			int insuranceCharges = request.getParameter("podl13") != null
+					? Integer.parseInt(request.getParameter("podl13"))
+					: 0;
+			String forwardedName = request.getParameter("podl14");
 			Logistic poDetails = new Logistic(id, expTimeDeparture, expTimeArrival, remarks, empCode, reference,
-					logEmpName, poNumber, divnEmpCode, divnEmpName, shipDocStatus, deliveryStatus);
+					logEmpName, poNumber, divnEmpCode, divnEmpName, shipDocStatus, deliveryStatus, nominatedOn,
+					currencyType, freightCharges, insuranceCharges, forwardedName);
 			if (!divnEmpCode.isEmpty() && divnEmpCode != null && divnEmpCode != "" && divnEmpCode.length() == 7) {
 				successVal = logisticDashboardDbUtil.updatePODetailsByLogistic(poDetails);
 			}

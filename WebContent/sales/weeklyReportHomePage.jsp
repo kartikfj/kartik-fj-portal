@@ -114,13 +114,15 @@ table.dataTable thead th, table.dataTable thead td { padding: 6px 10px !importan
              <c:when test="${fjtuser.role eq 'mg' and fjtuser.sales_code ne null}"> 
       		 		 <li><a href="SipBranchPerformance"><i class="fa fa-building-o"></i><span>Branch Performance</span></a></li> 
 	                 <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>
+	                 <li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
 					 <li><a href="DisionInfo.jsp"><i class="fa fa-line-chart"></i><span>Sub Division Performance</span></a></li>
-					 <li><a href="CompanyInfo.jsp?empcode=${DFLTDMCODE}"><i class="fa fa-pie-chart"></i><span>Division 	Performance</span></a></li>
+					 <li><a href="CompanyInfo.jsp?empcode=${DFLTDMCODE}"><i class="fa fa-pie-chart"></i><span>Division Performance</span></a></li>
 					 <li><a href="SipUserActivity"><i class="fa fa-table"></i><span>SE Activity History</span></a></li>
 <!-- 					 <li><a href="SipJihDues"><i class="fa fa-table"></i><span>JIH Dues</span></a></li>  -->
 <!-- 					 <li><a href="SipLOIDues"><i class="fa fa-table"></i><span>LOI Dues</span></a></li> -->
 					 <li><a href="SipStageFollowUpController"><i class="fa fa-database"></i><span>Stage Follow-Up</span></a></li> 
-					 <li class="active"><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li>  
+					 <li class="active"><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li> 
+					 <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
 					 <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
                </c:when>
                <c:when test="${!empty fjtuser.subordinatelist and fjtuser.sales_code ne null}">
@@ -128,6 +130,9 @@ table.dataTable thead th, table.dataTable thead td { padding: 6px 10px !importan
 			      		 <li><a href="SipBranchPerformance"><i class="fa fa-building-o"></i><span>Branch Performance</span></a></li>
 			      	</c:if>
 	                  <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>
+	                  <c:if test="${isAllowed eq 'Yes' || fjtuser.salesDMYn ge 1}">
+    		 				<li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
+    		  		  </c:if>
 					  <li><a href="DisionInfo.jsp"><i class="fa fa-line-chart"></i><span>Sub Division Performance</span></a></li>
 					  <li><a href="CompanyInfo.jsp"><i class="fa fa-pie-chart"></i><span>Division 	Performance</span></a></li>
 					  <li><a href="SipUserActivity"><i class="fa fa-table"></i><span>SE Activity History</span></a></li>
@@ -135,15 +140,16 @@ table.dataTable thead th, table.dataTable thead td { padding: 6px 10px !importan
 <!-- 					  <li><a href="SipLOIDues"><i class="fa fa-table"></i><span>LOI Dues</span></a></li> -->
 					  <li><a href="SipStageFollowUpController"><i class="fa fa-database"></i><span>Stage Follow-Up</span></a></li>   
 					  <li class="active"><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li>
+					  <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
 					  <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
                </c:when>
                <c:when test="${fjtuser.sales_code ne null and empty fjtuser.subordinatelist}">
 	                <li><a href="sip.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>	               
 <!-- 	                <li><a href="SipJihDues"><i class="fa fa-table"></i><span>JIH Dues</span></a></li>  -->
-<!-- 	                <li><a href="SipLOIDues"><i class="fa fa-table"></i><span>LOI Dues</span></a></li>   -->
-						<li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
+<!-- 	                <li><a href="SipLOIDues"><i class="fa fa-table"></i><span>LOI Dues</span></a></li>   -->						
 	                <li><a href="SipStageFollowUpController"><i class="fa fa-database"></i><span>Stage Follow-Up</span></a></li>
 	                 <li class="active"><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li>
+	                 <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
 	                <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
                </c:when>              
                <c:otherwise>				

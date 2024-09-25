@@ -151,26 +151,26 @@ background:#fff;color:#008ac1;}
 	    </div>
 	    <!--/.container-fluid -->
 	  </nav> 
-		<div class="grid"> 
+		<div class="grid">
 		  <div class="square"><a href="calendar.jsp"><h1><b>Attendance</b><img src="resources/images/buttons/attendance.jpg" /></h1></a></div>  
-		  <c:choose>		 
-		   <c:when test="${fjtuser.role eq 'mg'  and fjtuser.sales_code ne null and !fjtuser.emp_divn_code.contains('MK')}"> 
-          	 	<div class="square"><a href="consolidatedData.jsp"><h1><b>Finance Dashboard</b><img src="resources/images/buttons/finance.jpg" /></h1></a></div>
-          	 </c:when>
-          	  <c:when test="${fjtuser.salesDMYn ge 1  and fjtuser.sales_code ne null and !fjtuser.emp_divn_code.contains('MK')}">
-          	   <div class="square"><a href="ConsolidatedReport"><h1><b>Finance Dashboard</b><img src="resources/images/buttons/finance.jpg" /></h1></a></div> 	
-          	  </c:when>		  
-		   <c:otherwise>
-		   </c:otherwise>
-		   </c:choose>
-		    <c:if test="${fjtuser.emp_code eq 'E001977'}">
+<%-- 		  <c:choose>		  --%>
+<%-- 		   <c:when test="${fjtuser.role eq 'mg'  and fjtuser.sales_code ne null and !fjtuser.emp_divn_code.contains('MK')}">  --%>
+<!--           	 	<div class="square"><a href="consolidatedData.jsp"><h1><b>Finance Dashboard</b><img src="resources/images/buttons/finance.jpg" /></h1></a></div> -->
+<%--           	 </c:when> --%>
+<%--           	  <c:when test="${fjtuser.salesDMYn ge 1  and fjtuser.sales_code ne null and !fjtuser.emp_divn_code.contains('MK')}"> --%>
+<!--           	   <div class="square"><a href="ConsolidatedReport"><h1><b>Finance Dashboard</b><img src="resources/images/buttons/finance.jpg" /></h1></a></div> 	 -->
+<%--           	  </c:when>		   --%>
+<%-- 		   <c:otherwise> --%>
+<%-- 		   </c:otherwise> --%>
+<%-- 		   </c:choose> --%>
+		    <c:if test="${fjtuser.emp_code eq 'E001977' || fjtuser.role eq 'mg'}">
               	<div class="square"><a href="consolidatedData.jsp"><h1><b>Finance Dashboard</b><img src="resources/images/buttons/finance.jpg" /></h1></a></div>
               </c:if>
 		  <c:choose>
           	<c:when test="${(fjtuser.salesDMYn eq 1 or fjtuser.role eq 'mg') && !fjtuser.emp_divn_code.contains('MK')}">          		 
           		<div class="square"><a href="DisionInfo.jsp"><h1><b>Sales Dashboard</b><img src="resources/images/buttons/salesdashboard.png" /></h1></a></div>          		
           	</c:when>
-          	<c:when test="${fjtuser.sales_code ne null and fjtuser.salesDMYn ne 1 and !fjtuser.emp_divn_code.contains('MK')}"> 
+          	<c:when test="${fjtuser.sales_code ne null and fjtuser.salesDMYn ne 1 and !fjtuser.emp_divn_code.contains('MK') and !fjtuser.sales_code.contains('AC') and !fjtuser.sales_code.contains('IT')}"> 
           		 <div class="square"><a href="sip.jsp"><h1><b>Sales Dashboard</b><img src="resources/images/buttons/salesdashboard.png" /></h1></a></div>
           	</c:when>           	
           	<c:when test="${fjtuser.role eq 'hrmgr'}">           		
@@ -193,8 +193,9 @@ background:#fff;color:#008ac1;}
             	<div class="square"><a href="ExperienceCertificate" ><h1><b>Emp.Self Service</b><img src="resources/images/buttons/selfservice.jpg" /></h1></a></div>
             </c:otherwise>
           </c:choose>     -->  
-          
-          <div class="square"><a href="hrpolicies.jsp" ><h1><b> HR Manual</b><img src="resources/images/buttons/hrmanual.png"/></h1></a></div> 
+          <c:if test="${fjtuser.emp_code eq 'E000001' || fjtuser.emp_code eq 'E000063' || fjtuser.emp_code eq 'E003066' || fjtuser.emp_code eq 'E004272' || fjtuser.emp_code eq 'E004436' || fjtuser.emp_code eq 'E004686'}"> 
+          		<div class="square"><a href="hrpolicies.jsp" ><h1><b> HR Manual</b><img src="resources/images/buttons/hrmanual.png"/></h1></a></div>
+          </c:if> 
           <c:if test="${fjtuser.role eq 'hr'}">
 				<div class="square"><a href="staffworkschedule.jsp" ><h1><b>HR Settings</b><img src="resources/images/buttons/hrsettings.jpg" /></h1></a></div>			           
 		  </c:if>
@@ -229,21 +230,21 @@ background:#fff;color:#008ac1;}
 	      <c:if test="${!empty service.rows}">  
 		 		 <div class="square"><a href="ServiceController" ><h1><b>Service</b><img src="resources/images/buttons/servicereport.jpg" /></h1></a></div> 
 		  </c:if>
-		  <c:if test="${(!empty sobudget.rows || !empty sobudgetsub.rows) && !fjtuser.emp_divn_code.contains('MK')}"> 
+		  <c:if test="${(!empty sobudget.rows || fjtuser.salesDMYn ge 1 || fjtuser.emp_code eq 'E000001' ) && !fjtuser.emp_divn_code.contains('MK')}"> 
 		 		 <div class="square"><a href="SOBudgetController.jsp" ><h1><b>SO Budget</b><img class="rs" src="resources/images/buttons/budget.jpg" /></h1></a></div> 
-		  </c:if>	  		  
-          <c:if test="${(fjtuser.role eq 'mg' or fjtuser.salesDMYn eq 1  or fjtuser.sales_code ne null) && !fjtuser.emp_divn_code.contains('MK')}">
-          		<div class="square"><a href="sipWeeklyReport" ><h1><b>Weekly Report</b><img src="resources/images/buttons/weeklyreport.png" /></h1></a></div> 
-          </c:if> 	      
+		  </c:if>	
+		   <c:choose>
+	          	<c:when test="${(fjtuser.role eq 'mg') && !fjtuser.emp_divn_code.contains('MK')}">          		 
+	          		<div class="square"><a href="sipWeeklyReport" ><h1><b>Weekly Report</b><img src="resources/images/buttons/weeklyreport.png" /></h1></a></div>          		
+	          	</c:when>  		  
+	            <c:when test="${(fjtuser.salesDMYn eq 1  or fjtuser.sales_code ne null) && !fjtuser.emp_divn_code.contains('MK') && !fjtuser.sales_code.contains('AC') && !fjtuser.sales_code.contains('IT')}">
+	          		<div class="square"><a href="sipWeeklyReport" ><h1><b>Weekly Report</b><img src="resources/images/buttons/weeklyreport.png" /></h1></a></div> 
+	            </c:when>
+          </c:choose> 	      
           <div class="square"><a href="https://dms.fjtco.com:7333/fjtcdms/Main/Dashboard.aspx" TARGET = "_blank"><h1><b>DMS</b><img src="resources/images/buttons/dmslogo.png" /></h1></a></div>    
           <c:if test="${fjtuser.emp_code eq 'E004272' || fjtuser.emp_code eq 'E003066'}">
               	<div class="square"><a href="queries.jsp"><h1><b>IT Queries</b><img src="resources/images/buttons/queries.jpeg" /></h1></a></div>
-          </c:if>  
-          <c:if test="${fjtuser.emp_code eq 'E003426' || fjtuser.emp_code eq 'E003589' || fjtuser.emp_code eq 'E003511' || fjtuser.emp_code eq 'E005034' || fjtuser.emp_code eq 'E004272'}"> 
-		         <div class="square"  id="hrdashboard"><a href="CustomerDetails.jsp"><h1><b>KSA Customer Updation</b><img id="hrdashboard" src="resources/images/buttons/custupdate.png" /></h1></a>          	 	 	 
-          	 	 </div>		
-          	 	   
-		   </c:if>	    
+          </c:if> 
 		</div>
 			
 </div>
