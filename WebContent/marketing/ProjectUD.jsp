@@ -276,7 +276,7 @@ color:#008ac1;
 		                         <th  width="67">Updated on </th>
 		                              <c:if test="${!(fjtuser.role eq 'mg')}">   <th>Ack.Status</th></c:if>
 		                             <!--  allow to edit only baber and ben as per instruction -->
-		                    <%--   <c:if test="${fjtuser.role eq 'mkt' and (fjtuser.emp_code eq 'E003605' || fjtuser.emp_code eq 'E004885')}">   <th  width="66">Action</th></c:if> --%>
+		                  <%--     <c:if test="${fjtuser.role eq 'mkt' and (fjtuser.emp_code eq 'E003605' || fjtuser.emp_code eq 'E004885')}">   <th  width="66">Action</th></c:if>  --%>
 		                  <!--  allow to approve major project  f -->
 		                    <c:if test="${fjtuser.role eq 'mg'}">   <th  width="66">Action</th></c:if>
 		                     </tr>
@@ -347,7 +347,7 @@ color:#008ac1;
 										        		 <i class="fa fa-trash" aria-hidden="true"></i></button>
 										        	</form>
 										        	</td>
-										        	</c:if> --%>
+										        	</c:if>  --%>
 										        	<%-- <td><p class="Long-letters">${mktList.client }</p></td> --%>
 								   <c:if test="${fjtuser.role eq 'mg'}">
 								
@@ -524,7 +524,7 @@ color:#008ac1;
                 </div>          
                 <div class="form-group">
                   <label for="mktContact">Main Contact Details</label>
-                  <input type="text" class="form-control" id="mktContact" placeholder="Enter Contact Details" name="mktContact" >
+                  <input type="text" class="form-control" id="mktContact" placeholder="Enter Contact Details" name="mktContact" required>
                 </div>
                  
                   <div class="form-group">
@@ -534,7 +534,7 @@ color:#008ac1;
                   
                  <div class="form-group">
                   <label for="mktLocation">Main Contractor</label>  
-                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Main Contractor Details" name="mktMainCont" value="${mktLst.mainContractor}">
+                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Main Contractor Details" name="mktMainCont" value="${mktLst.mainContractor}" required>
                 </div>
                  
                  <label for="clientInput">Remarks:</label>
@@ -543,7 +543,7 @@ color:#008ac1;
                 <div class="col-md-4">
                   <div class="form-group">
                   <label>Status</label>
-                  <select class="form-control" name="mkstatus" >
+                  <select class="form-control" name="mkstatus"  required>
                     <option value="">Select Status</option>
                     <option value="Concept">Concept</option>
                     <option value="Design">Design</option>
@@ -570,11 +570,11 @@ color:#008ac1;
                
                  <div class="form-group">
                   <label for="mktLocation">Location</label>         
-                  <input type="text" class="form-control" id="mktLocation" placeholder="Enter Location Details" name="mktLocation" >
+                  <input type="text" class="form-control" id="mktLocation" placeholder="Enter Location Details" name="mktLocation"  required>
                 </div>
                 <div class="form-group">
                   <label for="mktLocation">MEP Contractor</label>  
-                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}">
+                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}" required>
                 </div>
                  <input type="hidden" value="${currWeek}" name="mktWeek" />
                 </div>

@@ -32,6 +32,10 @@ public class MarketingLeads {
 		return client;
 	}
 
+	public void setClient(String client) {
+		this.approved = client;
+	}
+
 	public String getId() {
 		return id;
 	}

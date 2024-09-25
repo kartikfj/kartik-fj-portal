@@ -81,50 +81,44 @@ public class MarketingLeadsDbUtil {
 
 	private void sendMarketingLeadApprovalEmail(MarketingLeads theMLData, int id) {
 		try {
-
 			EmailConfig sslMail = new EmailConfig();
+
 			// Generate approval and rejection URLs dynamically
-			// String leadId = "123"; // This should be dynamically fetched from the
-			// database after insert
-			String approvalLink = "http://10.10.5.143:8080/FJPORTAL_DEV/approve?leadId=" + id;
-			String rejectionLink = "http://10.10.5.143:8080/FJPORTAL_DEV/reject?leadId=" + id;
+			String approvalLink = "http://10.10.4.198:8080/FJPORTAL_DEV/MajorProjectApproval?leadId=" + id;
+			// String rejectionLink = "http://10.10.5.143:8080/FJPORTAL_DEV/reject?leadId="
+			// + id;
+
 			System.out.println("Approval Link: " + approvalLink);
-			System.out.println("Rejection Link: " + rejectionLink);
+			String message = "Dear Krikor,<br><br>" + "Please check The Detail of New Major Project<br>" + "<br><br>";
+			// Email message with styled buttons
+			String msg = "<!DOCTYPE html><html><head>" + "<style>"
+					+ "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
+					+ "table { border-collapse: collapse; width: 100%; max-width: 600px; margin: 0 auto; background-color: #fff; }"
+					+ "th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }"
+					+ "th { background-color: #f4f4f4; }" + "p { font-size: 16px; color: #333; margin: 0 0 16px; }"
+					+ ".column1 { width: 30%; font-weight: bold; }" + // Column for labels with bold text
+					".column2 { width: 70%; }" + // Column for details
+					"</style>" + "</head>" + "<body>" + "<p>" + message + "</p>" + "<table>" + "<tr>"
+					+ "<td class='column1'>Major Project</td>" + "<td class='column2'>" + theMLData.getOpt() + "</td>"
+					+ "</tr>" + "<tr>" + "<td class='column1'>Status</td>" + "<td class='column2'>"
+					+ theMLData.getStatus() + "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Location</td>"
+					+ "<td class='column2'>" + theMLData.getLocation() + "</td>" + "</tr>" + "<tr>"
+					+ "<td class='column1'>Division</td>" + "<td class='column2'>" + theMLData.getProducts() + "</td>"
+					+ "</tr>" + "<tr>" + "<td class='column1'>Main Contractor</td>" + "<td class='column2'>"
+					+ theMLData.getMainContractor() + "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Client</td>"
+					+ "<td class='column2'>" + theMLData.getClient() + "</td>" + "</tr>" + "</table>"
+					+ "<p>Please review and take action:</p>" + "<p><a href='" + approvalLink
+					+ "' style='padding: 10px 15px; background-color: green; color: white; text-decoration: none; border-radius: 5px;'>Approve Project</a></p>"
+					+ "</body></html>";
 
-			// You can also print additional details for debugging
-			System.out.println("Marketing Lead Details:");
-			System.out.println("Opportunity: " + theMLData.getOpt());
-			System.out.println("Status: " + theMLData.getStatus());
-			System.out.println("Location: " + theMLData.getLocation());
-			System.out.println("Leads: " + theMLData.getLeads());
-			System.out.println("Contact: " + theMLData.getContactDtls());
-			System.out.println("Client: " + theMLData.getClient());
-			// Compose the email message body with both approval and rejection options
-			/*
-			 * String msg = "<p>A new marketing lead has been created:</p>" +
-			 * "<p>Opportunity: " + theMLData.getOpt() + "</p>" + "<p>Status: " +
-			 * theMLData.getStatus() + "</p>" + "<p>Location: " + theMLData.getLocation() +
-			 * "</p>" + "<p>Leads: " + theMLData.getLeads() + "</p>" + "<p>Contact: " +
-			 * theMLData.getContactDtls() + "</p>" + "<p>Client: " + theMLData.getClient() +
-			 * "</p>" + "<p>Please review and take action:</p>" + "<p><a href='" +
-			 * approvalLink + "'>Approve Lead</a></p>" + "<p><a href='" + rejectionLink +
-			 * "'>Reject Lead</a></p>";
-			 */
-			// Set the recipient (approver) and other details
-			/*
-			 * sslMail.setToaddr("kartik.p@fjtco.com"); // Approver email
-			 * sslMail.setMessageSub("New Marketing Lead Approval Request");
-			 * sslMail.setMessagebody(msg); // Setting the email content
-			 */
 			// Send the email
-			// int emailStatus = sslMail.sendMail(); // Modify with your SMTP
-			// settings
+			int emailStatus = sslMail.sendMail1(msg); // Modify with your SMTP settings
 
-			// if (emailStatus != 1) {
-			// System.out.println("Failed to send approval email.");
-			// } else {
-			// System.out.println("Approval email sent successfully.");
-			// }
+			if (emailStatus != 1) {
+				System.out.println("Failed to send approval email.");
+			} else {
+				System.out.println("Approval email sent successfully.");
+			}
 
 		} catch (Exception e) {
 			System.out.println("Error sending approval email.");
@@ -148,6 +142,77 @@ public class MarketingLeadsDbUtil {
 
 			// Execute sql stamt
 			String sql = "SELECT * from marketing where YEAR(created_date) in (?,?) order by updated_date desc ";
+			myStmt = myCon.prepareStatement(sql);
+
+			// set the param values for the student
+			myStmt.setInt(1, prevYear);
+			myStmt.setInt(2, currentYear);
+			// Execute a SQL query
+			myRes = myStmt.executeQuery();
+
+			// Process the result set
+			while (myRes.next()) {
+				String mktid = myRes.getString(1);
+				String opt_temp = myRes.getString(2);
+				String status_temp = myRes.getString(3);
+				String location_temp = myRes.getString(4);
+				String leads_temp = myRes.getString(5);
+				String contact_temp = myRes.getString(6);
+				String product_temp = myRes.getString(7);
+				String remark_temp = myRes.getString(8);
+				String main_contra_temp = myRes.getString(9);
+				String mep_contra_temp = myRes.getString(10);
+				String update_year_temp = myRes.getString(11);
+				String updateby_temp = myRes.getString(12);
+				String updateWeek_tmp = myRes.getString(13);
+				String created_date_temp = myRes.getString(14);
+				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
+				try {
+					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
+
+					// System.out.println(oppStatus);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
+						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client, approved);
+				// System.out.println("goal_list"+goal_id);
+				// add this to a array list of AppraisalHr
+				marketLeadsList.add(tempmarketLeadsList);
+
+			}
+			return marketLeadsList;
+
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			con.closeConnection();
+
+		}
+	}
+
+	public List<MarketingLeads> getMarketingLeadsDetailsFltr(String currYear) throws SQLException {
+		int currentYear = Integer.parseInt(currYear);
+		int prevYear = currentYear - 1;
+		List<MarketingLeads> marketLeadsList = new ArrayList<>();
+		String oppStatus = "";
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		try {
+
+			// Get Connection
+			myCon = con.getMysqlConn();
+
+			// Execute sql stamt
+			String sql = "SELECT * from marketing where YEAR(created_date) in (?,?)  AND isApproved = 'yes'  order by updated_date desc ";
 			myStmt = myCon.prepareStatement(sql);
 
 			// set the param values for the student
@@ -349,6 +414,78 @@ public class MarketingLeadsDbUtil {
 		}
 	}
 
+	public List<MarketingLeads> getMarketingLeadsforLast2WeekFlterData(String currentYear) throws SQLException {
+		List<MarketingLeads> marketLeadsList = new ArrayList<>();
+		String oppStatus = "";
+
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		try {
+
+			// Get Connection
+			myCon = con.getMysqlConn();
+
+			// Execute sql stamt
+			String sql = " SELECT * FROM marketing  "
+					+ " WHERE week BETWEEN (select max(week) from  newfjtco.marketing  "
+					+ " where updated_year=YEAR(sysdate()))-3 AND (select max(week) from  newfjtco.marketing  "
+					+ " where updated_year=YEAR(sysdate()))  " + " and updated_year= ? " + " AND isApproved = 'yes' "
+					+ " order by updated_date desc ";
+			myStmt = myCon.prepareStatement(sql);
+
+			// set the param values for the student
+			myStmt.setString(1, currentYear);
+			// Execute a SQL query
+			myRes = myStmt.executeQuery();
+
+			// Process the result set
+			while (myRes.next()) {
+				String mktid = myRes.getString(1);
+				String opt_temp = myRes.getString(2);
+				String status_temp = myRes.getString(3);
+				String location_temp = myRes.getString(4);
+				String leads_temp = myRes.getString(5);
+				String contact_temp = myRes.getString(6);
+				String product_temp = myRes.getString(7);
+				String remark_temp = myRes.getString(8);
+				String main_contra_temp = myRes.getString(9);
+				String mep_contra_temp = myRes.getString(10);
+				String update_year_temp = myRes.getString(11);
+				String updateby_temp = myRes.getString(12);
+				String updateWeek_tmp = myRes.getString(13);
+				String created_date_temp = myRes.getString(14);
+				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
+				try {
+					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
+
+					// System.out.println(oppStatus);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
+						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client, approved);
+
+				marketLeadsList.add(tempmarketLeadsList);
+
+			}
+			return marketLeadsList;
+
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			con.closeConnection();
+
+		}
+	}
+
 	public List<MarketingLeads> getMarketingLeadsforLast2Week_Sales_Eng(String currentYear, String companyCode,
 			String divnCode) throws SQLException {
 		List<MarketingLeads> marketLeadsList = new ArrayList<>();
@@ -469,14 +606,14 @@ public class MarketingLeadsDbUtil {
 			myStmt.setString(14, theMLData.getId());
 			// execute sql query
 			myStmt.execute();
-			int emailStatus = sslMail.sendMail(); // Modify with your SMTP
+			// int emailStatus = sslMail.sendMail(); // Modify with your SMTP
 			// settings
+			// sendMarketingLeadApprovalEmail(theMLData, 1);
 
-			if (emailStatus != 1) {
-				System.out.println("Failed to send approval email.");
-			} else {
-				System.out.println("Approval email sent successfully.");
-			}
+			System.out.println("Failed to send approval email.");
+
+			System.out.println("Approval email sent successfully.");
+
 		} finally {
 			// close jdbc objects
 
@@ -509,10 +646,12 @@ public class MarketingLeadsDbUtil {
 
 	}
 
-	public void updateApproveMarketingLeads(String mlId) throws SQLException {
+	public boolean updateApproveMarketingLeads(String mlId) throws SQLException {
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
 		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		EmailConfig ssl = new EmailConfig();
+		MarketingLeads leadData = getMarketingLeadById(mlId);
 		try {
 			myCon = con.getMysqlConn();
 			String sql = "update marketing set isApproved=?" + " where id = ? ";
@@ -522,14 +661,88 @@ public class MarketingLeadsDbUtil {
 			myStmt.setString(2, mlId);
 			myStmt.execute();
 
-		} finally {
+		} catch (SQLException e) {
+			// Log the error for debugging
+			System.out.println("SQL Exception: " + e.getMessage());
+			e.printStackTrace();
+			return false;
+
+		}
+
+		finally {
 			// close jdbc objects
 
 			close(myStmt, null);
 			con.closeConnection();
 
 		}
+		if (leadData != null) {
+			String message = "Dear Marketing and Sales Team,<br><br>"
+					+ "New Major Project is Approved By Krikor Ohanian.<br>"
+					+ "Full Detail of the project is available in FJPORTAL (Major Project Page)<br><br>";
 
+			String leadDetails = "<!DOCTYPE html><html><head>" + "<style>"
+					+ "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
+					+ "table { border-collapse: collapse; width: 100%; max-width: 600px; margin: 0 auto; background-color: #fff; }"
+					+ "th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }"
+					+ "th { background-color: #f4f4f4; }" + "p { font-size: 16px; color: #333; margin: 0 0 16px; }"
+					+ ".column1 { width: 20%; vertical-align: top; font-weight: bold; }" + ".column2 { width: 80%; }"
+					+ "</style>" + "</head>" + "<body>" + "<p>" + message + "</p>" + "<table>" + "<tr>"
+					+ "<td class='column1'>Lead ID</td>" + "<td class='column2'>" + leadData.getId() + "</td>" + "</tr>"
+					+ "<tr>" + "<td class='column1'>Major Project</td>" + "<td class='column2'>" + leadData.getOpt()
+					+ "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Status</td>" + "<td class='column2'>"
+					+ leadData.getStatus() + "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Location</td>"
+					+ "<td class='column2'>" + leadData.getLocation() + "</td>" + "</tr>" + "</table>"
+					+ "</body></html>";
+
+			// Add other details as needed
+			List<String> recipients = Arrays.asList("rajakumari.ch@fjtco.com", "kartik.p@fjtco.com");
+			ssl.sendEmail2(recipients, leadDetails);
+		}
+		return true;
+
+	}
+
+	public MarketingLeads getMarketingLeadById(String leadId) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		MarketingLeads marketingLeadData = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+
+		try {
+			myCon = con.getMysqlConn();
+			String sql = "SELECT * FROM marketing WHERE id = ?";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, leadId);
+
+			myRs = myStmt.executeQuery();
+
+			if (myRs.next()) {
+				// Using the constructor to set values from the database
+				marketingLeadData = new MarketingLeads(myRs.getString("id"), myRs.getString("oprtunity"),
+						myRs.getString("status"), myRs.getString("location"), myRs.getString("leads"),
+						myRs.getString("contact"), myRs.getString("product"), myRs.getString("remark"),
+						myRs.getString("main_contractor"), myRs.getString("mep_contractor"),
+						myRs.getString("updated_year"), myRs.getString("updated_by"), myRs.getString("week"),
+						myRs.getString("created_date"), myRs.getString("updated_date"), "Some Status", // Set this value
+																										// appropriately,
+																										// based on your
+																										// business
+																										// logic
+						myRs.getString("client"), myRs.getString("isApproved") // Assuming this field exists for
+																				// approval
+				);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(myStmt, myRs);
+			con.closeConnection();
+		}
+
+		return marketingLeadData;
 	}
 
 	/*

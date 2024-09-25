@@ -49,14 +49,28 @@ public class MktProjectUnderDesign extends HttpServlet {
 			switch (theDataFromHr) {
 			case "list":
 				try {
-					goToMarketingLeads(request, response, userRole);
+					if ("mg".equals(userRole) || "E004885".equals(emp_code) || "E003605".equals(emp_code)) {
+						goToMarketingLeads(request, response, userRole);
+					} else {
+						System.out.print(userRole + "  test  : " + emp_code + "");
+						System.out.println("this is one filter data");
+						goToMarketingLeadsFilterData(request, response, userRole);
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
 			case "dlmav":
 				try {
-					viewAllMarketingLeadsDetail(request, response, userRole);
+					if ("mg".equals(userRole) || "E004885".equals(emp_code) || "E003605".equals(emp_code)) {
+
+						viewAllMarketingLeadsDetail(request, response, userRole);
+					} else {
+						System.out.print(userRole + "  test  : " + emp_code + "");
+						System.out.println("this is last year filter data");
+						viewAllMarketingLeadsDetailFilterData(request, response, userRole);
+					}
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -130,6 +144,39 @@ public class MktProjectUnderDesign extends HttpServlet {
 
 		if (userRole.equals("mkt") || userRole.equals("mg")) {
 			List<MarketingLeads> mktAll_Details = marketingLeadsDbUtil.getMarketingLeadsDetails(currYear);
+			// Log details to console
+			System.out.println("Marketing Leads Details (All): ");
+			for (MarketingLeads lead : mktAll_Details) {
+				System.out.println(lead.getClient());
+			}
+			request.setAttribute("MLAD", mktAll_Details);
+			request.setAttribute("MLWD", mktAll_Details);
+		} else {
+			fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
+			String companyCode = fjtuser.getEmp_com_code();
+			String divnCode = fjtuser.getEmp_divn_code();
+			List<MarketingLeads> mktWeek_Details = marketingLeadsDbUtil.getAllMarketingLeadsDetailsforSalesEng(currYear,
+					companyCode, divnCode);
+			System.out.println("Marketing Leads Details (Weekly): ");
+			for (MarketingLeads lead : mktWeek_Details) {
+				System.out.println(lead);
+			}
+			request.setAttribute("MLWD", mktWeek_Details);
+		}
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/marketing/ProjectUD.jsp");
+		dispatcher.forward(request, response);
+	}
+
+	private void viewAllMarketingLeadsDetailFilterData(HttpServletRequest request, HttpServletResponse response,
+			String userRole) throws SQLException, ServletException, IOException {
+		String currYear = Calendar.getInstance().get(Calendar.YEAR) + "";
+
+		List<ConsultantLeads> divisonList = marketingLeadsDbUtil.getAllDivisionList();
+		request.setAttribute("DLFCL", divisonList);
+
+		if (userRole.equals("mkt") || userRole.equals("mg")) {
+			List<MarketingLeads> mktAll_Details = marketingLeadsDbUtil.getMarketingLeadsDetailsFltr(currYear);
 			// Log details to console
 			System.out.println("Marketing Leads Details (All): ");
 			for (MarketingLeads lead : mktAll_Details) {
@@ -285,6 +332,29 @@ public class MktProjectUnderDesign extends HttpServlet {
 		request.setAttribute("DLFCL", divisonList);
 		if (userRole.equals("mkt") || userRole.equals("mg")) {
 			List<MarketingLeads> mktWeek_Details = marketingLeadsDbUtil.getMarketingLeadsforLast2Week(currYear);
+			request.setAttribute("MLWD", mktWeek_Details);
+		} else {
+			fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
+			String companyCode = fjtuser.getEmp_com_code();
+			String divnCode = fjtuser.getEmp_divn_code();
+			List<MarketingLeads> mktWeek_Details = marketingLeadsDbUtil
+					.getMarketingLeadsforLast2Week_Sales_Eng(currYear, companyCode, divnCode);
+			request.setAttribute("MLWD", mktWeek_Details);
+		}
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/marketing/ProjectUD.jsp");
+		dispatcher.forward(request, response);
+
+	}
+
+	private void goToMarketingLeadsFilterData(HttpServletRequest request, HttpServletResponse response, String userRole)
+			throws ServletException, IOException, SQLException {
+		String currYear = Calendar.getInstance().get(Calendar.YEAR) + "";
+		List<ConsultantLeads> divisonList = marketingLeadsDbUtil.getAllDivisionList();
+		request.setAttribute("DLFCL", divisonList);
+		if (userRole.equals("mkt") || userRole.equals("mg")) {
+			List<MarketingLeads> mktWeek_Details = marketingLeadsDbUtil
+					.getMarketingLeadsforLast2WeekFlterData(currYear);
 			request.setAttribute("MLWD", mktWeek_Details);
 		} else {
 			fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");

@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -108,8 +110,6 @@ public class EmailConfig {
 		props.put("mail.smtp.host", this.host);
 		props.put("mail.smtp.auth", "true");
 
-	
-
 		props.setProperty("mail.smtp.starttls.enable", "true");
 
 		props.put("mail.smtp.port", port);
@@ -140,6 +140,101 @@ public class EmailConfig {
 			System.out.print(e);
 			// throw new RuntimeException(e);
 			status = -1;
+		} finally {
+			System.out.println("finally in EmailConfig" + status);
+			return status;
+		}
+	}
+
+// send approval mail to mg krickor
+	@SuppressWarnings("finally")
+	public int sendMail1(String msg) {
+		readDefaultSenderMailProps();
+		Properties props = new Properties();
+		props.put("mail.smtp.host", this.host);
+		props.put("mail.smtp.auth", "true");
+
+		props.setProperty("mail.smtp.starttls.enable", "true");
+
+		props.put("mail.smtp.port", port);
+		int status = 0;
+
+		// Create session with properties and authenticator
+		Session session = Session.getInstance(props, new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				System.out.println("2"); // This should print
+				return new PasswordAuthentication(userName, password);
+			}
+		});
+
+		try {
+			System.out.println("3");
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(this.fromaddr)); // Set 'From' address
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("nufail.a@fjtco.com")); // Replace
+			// with
+			// recipient's
+			// email
+
+			message.setSubject("Marketing Major Project Approval Notification");
+			// this.messagebody += getMessageFooter();
+			message.setContent(msg, "text/html");
+			// Send the email
+			Transport transport = session.getTransport("smtp");
+			transport.connect("smtp.gmail.com", userName, password); // Connect with SMTP server
+			transport.sendMessage(message, message.getAllRecipients()); // Send email
+			transport.close();
+			// Transport.send(message);
+			status = 1; // Success
+
+			System.out.println("Done in EmailConfig");
+		} catch (MessagingException e) {
+			System.out.println("4");
+			System.out.println(e); // Print the exception details for further debugging
+			status = -1; // Error occurred
+		} finally {
+			System.out.println("finally in EmailConfig" + status);
+			return status;
+		}
+
+	}
+
+//send confirmaion mail to all the recipents
+	@SuppressWarnings("finally")
+	public int sendEmail2(List<String> recipients, String messageBody) {
+		readDefaultSenderMailProps();
+		Properties props = new Properties();
+		props.put("mail.smtp.host", this.host);
+		props.put("mail.smtp.auth", "true");
+
+		props.setProperty("mail.smtp.starttls.enable", "true");
+
+		props.put("mail.smtp.port", port);
+		int status = 0;
+
+		Session session = Session.getInstance(props, new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(userName, password);
+			}
+		});
+
+		try {
+			for (String recipient : recipients) {
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress(this.fromaddr));
+				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+				message.setSubject("Marketing Major Project Approved Notification");
+				message.setContent(messageBody, "text/html");
+				// message.setText(messageBody);
+
+				Transport.send(message);
+				System.out.println("Email sent successfully to: " + recipient);
+			}
+		} catch (MessagingException e) {
+			System.out.println("Error sending email: " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			System.out.println("finally in EmailConfig" + status);
 			return status;
