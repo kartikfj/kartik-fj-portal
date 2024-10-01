@@ -17,11 +17,12 @@ import java.util.List;
 
 import beans.ConsultantLeads;
 import beans.ConsultantVisits;
-import beans.EmailConfig;
 import beans.MarketingLeads;
 import beans.MktSalesLeads;
 import beans.MysqlDBConnectionPool;
 import beans.OrclDBConnectionPool;
+import beans.SSLMail;
+import beans.fjtcouser;
 
 public class MarketingLeadsDbUtil {
 
@@ -65,13 +66,11 @@ public class MarketingLeadsDbUtil {
 			if (myRes.next()) {
 				int leadId = myRes.getInt(1); // Retrieve the generated lead ID
 				System.out.println("Inserted lead with ID: " + leadId);
-
-				// Send the approval email with the dynamic lead ID
 				sendMarketingLeadApprovalEmail(theMLData, leadId);
 			} else {
 				System.out.println("Failed to retrieve the generated lead ID.");
 			}
-			// sendMarketingLeadApprovalEmail(theMLData);
+
 		} finally {
 			// Close JDBC objects
 			close(myStmt, myRes);
@@ -81,23 +80,15 @@ public class MarketingLeadsDbUtil {
 
 	private void sendMarketingLeadApprovalEmail(MarketingLeads theMLData, int id) {
 		try {
-			EmailConfig sslMail = new EmailConfig();
-
-			// Generate approval and rejection URLs dynamically
-			String approvalLink = "http://10.10.4.198:8080/FJPORTAL_DEV/MajorProjectApproval?leadId=" + id;
-			// String rejectionLink = "http://10.10.5.143:8080/FJPORTAL_DEV/reject?leadId="
-			// + id;
-
-			System.out.println("Approval Link: " + approvalLink);
-			String message = "Dear Krikor,<br><br>" + "Please check The Detail of New Major Project<br>" + "<br><br>";
-			// Email message with styled buttons
+			fjtcouser fusr = new fjtcouser();
+			String message = "Dear Krikor,<br><br>" + "Please check the details of New Major Project<br>" + "<br><br>";
 			String msg = "<!DOCTYPE html><html><head>" + "<style>"
 					+ "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
-					+ "table { border-collapse: collapse; width: 100%; max-width: 600px; margin: 0 auto; background-color: #fff; }"
+					+ "table { border-collapse: collapse;  width: 100%; max-width: 500px; margin: 0 auto; background-color: #fff; }"
 					+ "th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }"
 					+ "th { background-color: #f4f4f4; }" + "p { font-size: 16px; color: #333; margin: 0 0 16px; }"
-					+ ".column1 { width: 30%; font-weight: bold; }" + // Column for labels with bold text
-					".column2 { width: 70%; }" + // Column for details
+					+ ".column1 { width: 10%; font-weight: bold; }" + // Column for labels with bold text
+					".column2 { width: 20%; }" + // Column for details
 					"</style>" + "</head>" + "<body>" + "<p>" + message + "</p>" + "<table>" + "<tr>"
 					+ "<td class='column1'>Major Project</td>" + "<td class='column2'>" + theMLData.getOpt() + "</td>"
 					+ "</tr>" + "<tr>" + "<td class='column1'>Status</td>" + "<td class='column2'>"
@@ -107,19 +98,26 @@ public class MarketingLeadsDbUtil {
 					+ "</tr>" + "<tr>" + "<td class='column1'>Main Contractor</td>" + "<td class='column2'>"
 					+ theMLData.getMainContractor() + "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Client</td>"
 					+ "<td class='column2'>" + theMLData.getClient() + "</td>" + "</tr>" + "</table>"
-					+ "<p>Please review and take action:</p>" + "<p><a href='" + approvalLink
-					+ "' style='padding: 10px 15px; background-color: green; color: white; text-decoration: none; border-radius: 5px;'>Approve Project</a></p>"
+					+ " <br/> <br/><p><a href='" + fusr.getUrlAddress() + "MajorProjectApproval?leadId=" + id
+					+ "' style='padding: 10px 15px; background-color: green; color: white; text-decoration: none; border-radius: 5px;'>Approve</a></p>"
 					+ "</body></html>";
-
-			// Send the email
-			int emailStatus = sslMail.sendMail1(msg); // Modify with your SMTP settings
-
-			if (emailStatus != 1) {
-				System.out.println("Failed to send approval email.");
-			} else {
-				System.out.println("Approval email sent successfully.");
+			String toAddress = "";
+			try {
+				toAddress = getPOCTeamMailIds("COO");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-
+			SSLMail sslmail = new SSLMail();
+			if (msg != null) {
+				sslmail.setToaddr(toAddress);
+				sslmail.setMessageSub("Major Projects Approval Notification");
+				sslmail.setMessagebody(msg);
+				int emailStatus = sslmail.sendMail(fusr.getUrlAddress()); // Modify with your SMTP settings
+				System.out.println("successfully send the email notification: " + emailStatus);
+			} else {
+				System.out.println("error in email generation:");
+			}
 		} catch (Exception e) {
 			System.out.println("Error sending approval email.");
 			e.printStackTrace();
@@ -268,8 +266,7 @@ public class MarketingLeadsDbUtil {
 		}
 	}
 
-	public List<MarketingLeads> getAllMarketingLeadsDetailsforSalesEng(String currYear, String companyCode,
-			String divnCode) throws SQLException {
+	public List<MarketingLeads> getAllMarketingLeadsDetailsforSalesEng(String currYear) throws SQLException {
 		int currentYear = Integer.parseInt(currYear);
 		int prevYear = currentYear - 1;
 		List<MarketingLeads> marketLeadsList = new ArrayList<>();
@@ -284,14 +281,16 @@ public class MarketingLeadsDbUtil {
 			myCon = con.getMysqlConn();
 
 			// Execute sql stamt
-			String sql = "SELECT * from marketing where YEAR(created_date) in(?,?) and product in(?,?,'AD')  order by updated_date desc ";
+			// String sql = "SELECT * from marketing where YEAR(created_date) in(?,?) and
+			// product in(?,?,'AD') order by updated_date desc ";
+			String sql = "SELECT * from marketing where YEAR(created_date) in(?,?) and isApproved = 'yes'  order by updated_date desc ";
 			myStmt = myCon.prepareStatement(sql);
 
 			// set the param values for the student
 			myStmt.setInt(1, prevYear);
 			myStmt.setInt(2, currentYear);
-			myStmt.setString(3, companyCode);
-			myStmt.setString(4, divnCode);
+			// myStmt.setString(3, companyCode);
+			// myStmt.setString(4, divnCode);
 			// Execute a SQL query
 			myRes = myStmt.executeQuery();
 
@@ -360,15 +359,11 @@ public class MarketingLeadsDbUtil {
 					+ " WHERE week BETWEEN (select max(week) from  newfjtco.marketing  "
 					+ " where updated_year=YEAR(sysdate()))-3 AND (select max(week) from  newfjtco.marketing  "
 					+ " where updated_year=YEAR(sysdate()))  " + " and updated_year= ? "
-					+ " order by updated_date desc ";
+					+ " order by isApproved,updated_date asc";
+
 			myStmt = myCon.prepareStatement(sql);
-
-			// set the param values for the student
 			myStmt.setString(1, currentYear);
-			// Execute a SQL query
 			myRes = myStmt.executeQuery();
-
-			// Process the result set
 			while (myRes.next()) {
 				String mktid = myRes.getString(1);
 				String opt_temp = myRes.getString(2);
@@ -433,6 +428,8 @@ public class MarketingLeadsDbUtil {
 					+ " where updated_year=YEAR(sysdate()))-3 AND (select max(week) from  newfjtco.marketing  "
 					+ " where updated_year=YEAR(sysdate()))  " + " and updated_year= ? " + " AND isApproved = 'yes' "
 					+ " order by updated_date desc ";
+			// String sql= "SELECT * FROM FJPORTAL.MARKETING_SALES_USERS where EMPID = ?
+
 			myStmt = myCon.prepareStatement(sql);
 
 			// set the param values for the student
@@ -486,8 +483,7 @@ public class MarketingLeadsDbUtil {
 		}
 	}
 
-	public List<MarketingLeads> getMarketingLeadsforLast2Week_Sales_Eng(String currentYear, String companyCode,
-			String divnCode) throws SQLException {
+	public List<MarketingLeads> getMarketingLeadsforLast2Week_Sales_Eng(String currentYear) throws SQLException {
 		List<MarketingLeads> marketLeadsList = new ArrayList<>();
 		String oppStatus = "";
 
@@ -504,14 +500,13 @@ public class MarketingLeadsDbUtil {
 			String sql = " SELECT * FROM marketing  "
 					+ " WHERE week BETWEEN (select max(week) from  newfjtco.marketing  "
 					+ " where updated_year=YEAR(sysdate()))-3 AND (select max(week) from  newfjtco.marketing  "
-					+ " where updated_year=YEAR(sysdate()))  " + " and  updated_year= ?  and product in(?,?,'AD')  "
+					+ " where updated_year=YEAR(sysdate()))  " + " and  updated_year= ?  and isApproved = 'yes'  "
 					+ " order by updated_date desc ";
+
 			myStmt = myCon.prepareStatement(sql);
 
 			// set the param values for the student
 			myStmt.setString(1, currentYear);
-			myStmt.setString(2, companyCode);
-			myStmt.setString(3, divnCode);
 			// Execute a SQL query
 			myRes = myStmt.executeQuery();
 
@@ -578,7 +573,6 @@ public class MarketingLeadsDbUtil {
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
 		ResultSet myRes = null;
-		EmailConfig sslMail = new EmailConfig();
 		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
 		try {
 			myCon = con.getMysqlConn();
@@ -650,57 +644,66 @@ public class MarketingLeadsDbUtil {
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
 		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
-		EmailConfig ssl = new EmailConfig();
 		MarketingLeads leadData = getMarketingLeadById(mlId);
+		int logupdate = 0;
+		fjtcouser fusr = new fjtcouser();
 		try {
 			myCon = con.getMysqlConn();
 			String sql = "update marketing set isApproved=?" + " where id = ? ";
-
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, "yes");
 			myStmt.setString(2, mlId);
-			myStmt.execute();
-
+			logupdate = myStmt.executeUpdate();
 		} catch (SQLException e) {
-			// Log the error for debugging
 			System.out.println("SQL Exception: " + e.getMessage());
 			e.printStackTrace();
 			return false;
-
-		}
-
-		finally {
-			// close jdbc objects
-
+		} finally {
 			close(myStmt, null);
 			con.closeConnection();
-
 		}
-		if (leadData != null) {
-			String message = "Dear Marketing and Sales Team,<br><br>"
-					+ "New Major Project is Approved By Krikor Ohanian.<br>"
-					+ "Full Detail of the project is available in FJPORTAL (Major Project Page)<br><br>";
 
-			String leadDetails = "<!DOCTYPE html><html><head>" + "<style>"
+		if (leadData != null && logupdate == 1) {
+			String message = "Dear POC Team,<br><br>" + " A New Major Project has been Approved<br>"
+					+ "Full Detail of the project is available in FJPORTAL.<br><br>";
+
+			String messageBody = "<!DOCTYPE html><html><head>" + "<style>"
 					+ "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
 					+ "table { border-collapse: collapse; width: 100%; max-width: 600px; margin: 0 auto; background-color: #fff; }"
 					+ "th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }"
 					+ "th { background-color: #f4f4f4; }" + "p { font-size: 16px; color: #333; margin: 0 0 16px; }"
 					+ ".column1 { width: 20%; vertical-align: top; font-weight: bold; }" + ".column2 { width: 80%; }"
-					+ "</style>" + "</head>" + "<body>" + "<p>" + message + "</p>" + "<table>" + "<tr>"
-					+ "<td class='column1'>Lead ID</td>" + "<td class='column2'>" + leadData.getId() + "</td>" + "</tr>"
+					+ "</style>" + "</head>" + "<body>" + "<p>" + message + "</p>" + "<table>"
+					// + "<tr><td class='column1'>Lead ID</td>" + "<td class='column2'>" +
+					// leadData.getId() + "</td>" + "</tr>"
 					+ "<tr>" + "<td class='column1'>Major Project</td>" + "<td class='column2'>" + leadData.getOpt()
+					+ "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Main Contactor</td>" + "<td class='column2'>"
+					+ leadData.getMainContractor() + "</td>" + "</tr>" + "<tr>"
+					+ "<td class='column1'>MEP Contactor</td>" + "<td class='column2'>" + leadData.getMepContractor()
 					+ "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Status</td>" + "<td class='column2'>"
 					+ leadData.getStatus() + "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Location</td>"
 					+ "<td class='column2'>" + leadData.getLocation() + "</td>" + "</tr>" + "</table>"
 					+ "</body></html>";
 
-			// Add other details as needed
-			List<String> recipients = Arrays.asList("rajakumari.ch@fjtco.com", "kartik.p@fjtco.com");
-			ssl.sendEmail2(recipients, leadDetails);
+			String toAddress = "";
+			try {
+				toAddress = getPOCTeamMailIds("POC");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			SSLMail sslmail = new SSLMail();
+			if (messageBody != null) {
+				sslmail.setToaddr(toAddress);
+				sslmail.setMessageSub("Marketing Major Project Approved Notification");
+				sslmail.setMessagebody(messageBody);
+				int emailStatus = sslmail.sendMail(fusr.getUrlAddress()); // Modify with your SMTP settings
+				System.out.println("successfully send the email notification: " + emailStatus);
+			} else {
+				System.out.println("error in email generation:");
+			}
 		}
 		return true;
-
 	}
 
 	public MarketingLeads getMarketingLeadById(String leadId) throws SQLException {
@@ -725,14 +728,8 @@ public class MarketingLeadsDbUtil {
 						myRs.getString("contact"), myRs.getString("product"), myRs.getString("remark"),
 						myRs.getString("main_contractor"), myRs.getString("mep_contractor"),
 						myRs.getString("updated_year"), myRs.getString("updated_by"), myRs.getString("week"),
-						myRs.getString("created_date"), myRs.getString("updated_date"), "Some Status", // Set this value
-																										// appropriately,
-																										// based on your
-																										// business
-																										// logic
-						myRs.getString("client"), myRs.getString("isApproved") // Assuming this field exists for
-																				// approval
-				);
+						myRs.getString("created_date"), myRs.getString("updated_date"), "Some Status",
+						myRs.getString("client"), myRs.getString("isApproved"));
 			}
 
 		} catch (SQLException e) {
@@ -1822,5 +1819,90 @@ public class MarketingLeadsDbUtil {
 			orcl.closeConnection();
 		}
 
+	}
+
+	public String checkForExtraPrivileges(String empCode) {
+
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		Connection mcon = con.getMysqlConn();
+		ResultSet rs = null;
+		PreparedStatement psmt = null;
+		String extraPrev = null;
+		String usrsql = "select  extraPrev from fjtcouser where user_id =?";
+		try {
+			psmt = mcon.prepareStatement(usrsql);
+			psmt.setString(1, empCode);
+			rs = psmt.executeQuery();
+			if (rs.next()) {
+				extraPrev = rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				psmt.close();
+				con.closeConnection();
+
+			} catch (SQLException e) {
+				System.out.println("Exception in closing DB resources");
+			}
+		}
+		return extraPrev;
+	}
+
+	public String getPOCTeamMailIds(String userType) throws SQLException {
+
+		String mailAddresses = "";
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		try {
+			myCon = con.getMysqlConn();
+			String sql = " select emailid from  emailconf where usagetype = ? ";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, userType);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				mailAddresses = myRes.getString(1);
+			}
+			return mailAddresses;
+
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			con.closeConnection();
+
+		}
+	}
+
+	public boolean checkLoggedinUserisPOCUser(String empcode) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		boolean isPOCUser = false;
+		try {
+			myCon = orcl.getOrclConn();
+			String sql = "SELECT *FROM MARKETING_SALES_USERS WHERE EMPID = ? ";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, empcode);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				isPOCUser = true;
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Exception checkLoggedinUserisPOCUser");
+			e.printStackTrace();
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+
+		}
+		return isPOCUser;
 	}
 }

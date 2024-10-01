@@ -44,11 +44,10 @@ public class MajorProjectApproval extends HttpServlet {
 		if (leadId != null) {
 			// Attempt to approve the marketing lead
 			boolean isUpdated = marketingLeadsDbUtil.updateApproveMarketingLeads(leadId);
-
 			// If the lead is successfully approved
 			if (isUpdated) {
 				out.println("<html><body>");
-				out.println("<h3>Marketing Lead approved successfully!</h3>");
+				out.println("<h3>New Project has been approved successfully!</h3>");
 				out.println("</body></html>");
 			} else {
 				// If the approval failed, show an error message

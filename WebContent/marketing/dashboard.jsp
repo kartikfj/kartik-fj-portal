@@ -182,7 +182,7 @@ color:#008ac1;
          	<li><a href="SupportRequest"><i class="fa fa-table"></i><span> BDM Support Request </span></a></li>
          </c:if>
          <li><a href="ConsultantLeads"><i class="fa fa-line-chart"></i><span>Consultant Approval Status</span></a></li>
-         <li><a href="ProjectLeads"><i class="fa fa-columns"></i><span>Project Stages 0 & 1</span></a></li>                  
+         <li><a href="ProjectLeads"><i class="fa fa-columns"></i><span>Major Projects</span></a></li>                  
          <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>      
       </ul>
     </section>
