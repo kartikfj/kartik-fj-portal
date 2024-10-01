@@ -6,5 +6,6 @@
 .build
 .server
 
-/.classpath
+.classpath
+.WebContent/WEB-INF
 

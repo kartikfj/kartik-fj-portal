@@ -10,8 +10,5 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-
-	<classpathentry kind="lib" path="C:/Users/webdev/Downloads/activation-1.1.1-sources.jar"/>
-
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

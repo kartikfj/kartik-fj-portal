@@ -17,6 +17,24 @@ public class MarketingLeads {
 	private String mainContractor = null;
 	private String mepContractor = null;
 	private String updateStatus = null;
+	private String client = null;
+	private String approved = null;
+
+	public String getApproved() {
+		return approved;
+	}
+
+	public void setApproved(String approved) {
+		this.approved = approved;
+	}
+
+	public String getClient() {
+		return client;
+	}
+
+	public void setClient(String client) {
+		this.approved = client;
+	}
 
 	public String getId() {
 		return id;
@@ -187,7 +205,7 @@ public class MarketingLeads {
 
 	public MarketingLeads(String id, String opt, String status, String location, String leads, String contactDtls,
 			String products, String remarks, String mainContractor, String mepContractor, String updatedYr,
-			String updatedBy, String updtdWeek, int flag) {// update
+			String updatedBy, String updtdWeek, int flag, String client) {// update
 		super();
 		this.id = id;
 		this.opt = opt;
@@ -202,11 +220,13 @@ public class MarketingLeads {
 		this.updatedYr = updatedYr;
 		this.updatedBy = updatedBy;
 		this.updtdWeek = updtdWeek;
+		this.client = client;
 	}
 
 	public MarketingLeads(String id, String opt, String status, String location, String leads, String contactDtls,
 			String products, String remarks, String mainContractor, String mepContractor, String updatedYr,
-			String updatedBy, String updtdWeek, String createddDate, String updatedDate, String updateStatus) {// display
+			String updatedBy, String updtdWeek, String createddDate, String updatedDate, String updateStatus,
+			String client, String approved) {// display
 		super();
 		this.id = id;
 		this.opt = opt;
@@ -224,6 +244,38 @@ public class MarketingLeads {
 		this.createddDate = createddDate;
 		this.updatedDate = updatedDate;
 		this.updateStatus = updateStatus;
+		this.client = client;
+		this.approved = approved;
+	}
+
+	@Override
+	public String toString() {
+		return "MarketingLeads {" + "id='" + id + '\'' + ", opt='" + opt + '\'' + ", status='" + status + '\''
+				+ ", location='" + location + '\'' + ", leads='" + leads + '\'' + ", contactDtls='" + contactDtls + '\''
+				+ ", products='" + products + '\'' + ", remarks='" + remarks + '\'' + ", mainContractor='"
+				+ mainContractor + '\'' + ", mepContractor='" + mepContractor + '\'' + ", updatedYr='" + updatedYr
+				+ '\'' + ", updatedBy='" + updatedBy + '\'' + ", updtdWeek='" + updtdWeek + '\'' + ", createddDate='"
+				+ createddDate + '\'' + ", updatedDate='" + updatedDate + '\'' + ", updateStatus='" + updateStatus
+				+ '\'' + ", client='" + client + '\'' + '}';
+	}
+
+	public MarketingLeads(String id, String opt, String status, String location, String leads, String contactDtls,
+			String products, String remarks, String mainContractor, String mepContractor, String updatedYr,
+			String updatedBy, String updtdWeek, String client) {
+		this.id = id;
+		this.opt = opt;
+		this.status = status;
+		this.location = location;
+		this.leads = leads;
+		this.contactDtls = contactDtls;
+		this.products = products; // assuming products represent divisions
+		this.remarks = remarks;
+		this.mainContractor = mainContractor;
+		this.mepContractor = mepContractor;
+		this.updatedYr = updatedYr;
+		this.updatedBy = updatedBy;
+		this.updtdWeek = updtdWeek;
+		this.client = client;
 	}
 
 }

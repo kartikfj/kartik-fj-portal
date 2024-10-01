@@ -189,7 +189,7 @@ input.right {
          <c:if test="${!empty service.rows}">  
          	<li><a href="SupportRequest"><i class="fa fa-table"></i><span> BDM Support Request </span></a></li>
          </c:if>        
-         <li><a href="ProjectLeads"><i class="fa fa-columns"></i><span>Project Stages 0 & 1</span></a></li>
+         <li><a href="ProjectLeads"><i class="fa fa-columns"></i><span>Major Projects</span></a></li>
          <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li>
          <li><a href="ConsultantVisits"><i class="fa fa-columns"></i><span>Consultant Visit</span></a></li> 
          <li class="active"><a href="ConsultantLeads"><i class="fa fa-line-chart"></i><span>Consultant Approval Status</span></a></li>              
@@ -340,27 +340,25 @@ input.right {
 		            <div class="col-md-6">
 		             <div class="form-group">
 		                  <label>Status</label>
-		                  <select class="form-control" name="ud1"  required>
-		                  
-		                    <option value="${cnsltLst.status}">${cnsltLst.status}</option>
-		                    <option value="Currently Working">Currently Working</option> 
-		                    <option value="Approved">Approved</option>
-		                    <option value="Not Yet Approved">Not Yet Approved</option>
-		                    <option value="Not Initiated">Not Initiated</option>            
+		                  <select class="form-control" id="editStatus${cnsltLst.cnslt_id}" onchange=checkEOA('${cnsltLst.cnslt_id}') required>
+		                    <option value="Currently Working" ${cnsltLst.status == 'Currently Working' ? 'selected':''}>Currently Working</option> 
+		                    <option value="Approved" ${cnsltLst.status == 'Approved' ? 'selected':''}>Approved</option>
+		                    <option value="Not Yet Approved" ${cnsltLst.status == 'Not Yet Approved' ? 'selected':''}>Not Yet Approved</option>
+		                    <option value="Not Initiated" ${cnsltLst.status == 'Not Initiated' ? 'selected':''}>Not Initiated</option>            
 		                  </select>
 		             
 		              </div>
 		            </div>
 		             <div class="col-md-4">
-    <div class="form-group">
-        <label for="ud7">Evidence of Approval</label>
-        <select class="form-control" name="ud7" id="ud7" required>
-            <option value="">Select</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select>
-    </div>
-</div>
+						    <div class="form-group">
+						        <label for="ud7">Evidence of Approval</label>
+						        <select class="form-control" id="eoa${cnsltLst.cnslt_id}" required>
+						         	 <option value="">Select</option>
+						        	 <option  value="Yes" ${cnsltLst.isUpdateByEVM == 'Yes' ? 'selected':''}> Yes</option>
+					 			   	 <option  value="No" ${cnsltLst.isUpdateByEVM == 'No' ? 'selected':''}> No</option>
+						        </select>
+						    </div>
+						</div>
 		             
 		             <div class="col-md-4">
 		 				<div class="form-group" id="productDiv">
@@ -386,29 +384,38 @@ input.right {
 					     <div class="col-md-6">
 						<div class="form-group">
 		                  <label for="mktRmrkg">Contact Details</label>
-		                  <textarea class="form-control" rows="3" id="editConsDetails${cnsltLst.cnslt_id}" placeholder="Enter Contact Details" name="ud4" required>${cnsltLst.contactDetails}</textarea>
+		                  <textarea class="form-control" rows="3" id="editConsDetails${cnsltLst.cnslt_id}" placeholder="Enter Contact Details" required>${cnsltLst.contactDetails}</textarea>
 		                </div>
 		                </div>
 		             <div class="col-md-6">
 		                <div class="form-group">
 		                  <label for="mktRmrk">Remarks</label>
-		                  <textarea class="form-control" rows="3"   placeholder="Enter Contact Details" name="ud2" required>${cnsltLst.remarks}</textarea>
+		                  <textarea class="form-control" rows="3"  id="editRemarks${cnsltLst.cnslt_id}" placeholder="Enter Contact Details" required>${cnsltLst.remarks}</textarea>
 		                </div>
 		             
 		             </div>
 		             
 		             </div>
 		            
-		                </div>
+		             </div>
 		              
 		                 
 		              </div>
 		              <!-- /.box-body -->
-		              <div class="box-footer">
+		              <div class="box-footer">		             
+		              <input type="hidden" value="" name="ud1" id="ud1">
+		              <input type="hidden" name="ud2" id="ud2">
 		              <input type="hidden" value="${cnsltLst.cnslt_id}" name="ud3" id="ud3">
+		              <input type="hidden" name="ud4" id="ud4" value="">
+		              <input type="hidden" name="ud5" id="product" value=""/>
+		              <input type="hidden" name="ud7" id="ud7" value="">
 		              <input type="hidden" value="unclfpad" name="octjf"/>
 		              <input type="hidden" name="ud5" id="product" value=""/>
-		                <button type="button"  onclick="editSeletedval(${cnsltLst.cnslt_id});" class="btn btn-primary">Update</button>
+		                <div class="box-footer">
+			                <button type="button"  onclick="editSeletedval(${cnsltLst.cnslt_id});" class="btn btn-primary">Update</button>
+			                <button type="submit" class="btn" style="border-color:red;margin-left:40%"><a href="https://dms.fjtco.com:7333/fjtcdms/SearchUI/LDBrowse.aspx?FID=64424621931" TARGET = "_blank" sytle="margin-right: 15px;color: cornsilk;">DMS-BD FOLDER LINK</a></button>			
+			              </div>
+		            
 		              </div>
 		            </form>
 											       
@@ -635,8 +642,19 @@ input.right {
           } else {
             $('#bybdmyorno1').prop('disabled', true);
           }
-        });
+        }); 
       });
+      
+      function checkEOA(id){
+    	  var editStatus = $('#editStatus'+id).val();  
+    	  
+          if (editStatus === 'Approved') {
+            $('#eoa'+id).prop('disabled', false);
+          } else {
+        	  $('#eoa' + id).val('');  
+             $('#eoa'+id).prop('disabled', true); 
+          }
+      }
     </script>
 
 	                 
@@ -988,22 +1006,34 @@ function getProducts(){
 }
 function editSeletedval(id){	
     var selectedValues = [];  
-    var editConsDetails =  $('#editConsDetails'+id).val();    
+    var editConsDetails =  $('#editConsDetails'+id).val();  
+    var editStatus = $('#editStatus'+id).val();
+    var editRemarks =  $('#editRemarks'+id).val();
+    var eoaStatus  =  $('#eoa'+id).val();
     $("#editproductsOpt"+id+" :selected").each(function(){
         selectedValues.push($(this).val());               
     });
+    
      $('#product').val(selectedValues);
      $('#ud3').val(id);
-     
 	 if(editConsDetails == null || editConsDetails == ''){
 		 alert("Enter contact details");
 		 return false;
+	 }else{
+		  $('#ud4').val(editConsDetails);
 	 }
-	 var eoaValue = $('#ud7').val();
-
-	    // Set EOA value to hidden input 'ud7'
-	    $('#ud7').val(eoaValue);
-	$('#updateDetails').submit();
+	 if(editRemarks == null || editRemarks == ''){
+		 alert("Enter remarks");
+		 return false;
+	 }
+// 	 if (editStatus === 'Approved') {
+// 		 alert("Please select Evidence of Approval");
+// 		 return false;
+//        } 
+	  $('#ud1').val(editStatus);
+	  $('#ud2').val(editRemarks);	
+	  $('#ud7').val(eoaStatus);	
+	  $('#updateDetails').submit();
     return true;
    
    
