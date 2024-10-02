@@ -1,6 +1,9 @@
 <%-- 
     Document   : LOGISTIC DASHBOAR IMPORT P 
 --%>
+
+
+
 <%@include file="/logistic/header.jsp" %> 
 
  <c:choose>
@@ -85,6 +88,7 @@
 	           
 	                <tr>
 	                  <th class="slid" >SL. No.</th> 
+	                  <th class="slid" >Line No</th> 
 	                 <%--<th>Company</th>  --%>
 	                  <th class="cmnFld" >PO Number</th> 
 	                  <th class="dateFld">PO Date</th>
@@ -92,7 +96,7 @@
 	                  <th class="cmnFld">Payment Term</th>
 	                  <th class="cmnFld">INCOTERM</th>
 <!-- 	                  <th class="divnStyl cmnFld">C&F ETA Date</th> -->
-					  <th class="divnStyl cmnFld">Partial PO</th>
+					  <th class="divnStyl cmnFld"></th>
 	                  <th class="divnStyl cmnFld">Shipment<br/>Mode</th>
 	                  <th class="divnStyl cmnFld">No. Of <br/>Containers</th>
 	                  <th class="divnStyl dateFld">EX Factory<br/>Date</th>
@@ -102,11 +106,7 @@
 	                  <th class="divnStyl cmnFld">Final<br/>Destination/Port</th>
 	                  <th class="divnStyl cmnFld">Division<br/>Remarks</th>
 	                  <th class="divnStyl cmnFld">Division<br/>Initiated</th>
-	                  <%--
-	                  <th class="fnStyl">Payment<br/>Status</th>
-	                  <th class="fnStyl">Finance<br/>Remarks</th>
-	                  <th class="fnStyl">Finance<br/>Updated</th> 
-	                   --%>
+	             
 	                  <th class="lgStyl dateFld">ETD</th>
 	                  <th class="lgStyl dateFld">ETA</th>
 	                  <th class="lgStyl  textAreaFld">Shipping <br/>Doc. Status</th> 
@@ -122,14 +122,16 @@
 	                </tr>
 	                </thead>
 	                <tbody>
-	                
+	                 <c:set var="prevPoNumber" value="" scope="page" />
+                     <c:set var="serialNo" value="0" scope="page" />
 	                <c:forEach var="request" items="${POLST}" >
-	                <c:set var="rqstscount" value="${rqstscount + 1}" scope="page" />	               
+	       
+	                <c:set var="rqstscount" value="${rqstscount + 1}" scope="page" />	              
 	               
 	                <tr id="row${request.id}_${request.lineNo}">
 	                <td class="slid" id="${request.id}">${rqstscount}</td>
-<%-- 	                  <td class="slid"  id="${request.id}">${rqstscount}</td>	                   --%>
-	                  <%--<td>${request.company}</td>--%>    
+
+	                 <td class="slLid" id="${request.id}">${request.lineNo}</td>
 	                  <td id="poNo${request.id}"  class='cmnFld'>${request.poNumber}</td>      
 	                  <td id="poDt${request.id}" class="dateFld"> 
 	                  		<fmt:parseDate value="${request.poDate}" var="thePoDate"  dateStyle="short"   pattern="yyyy-MM-dd HH:mm" />
@@ -182,18 +184,7 @@
 				                  		<c:otherwise><span id="divUpdBy${request.id}" class=""> </span></c:otherwise>
 				                  </c:choose>		                   	                  
 				          </td>
-<%-- 	                 	  <td class="divnStyl cmnFld" style="background-color:white">${request.shipmentTerm} --%>
-<%-- 	                 	  	<input type="text" id="shipTerm${request.id}"    value="${request.shipmentTerm}" autocomplete="off" /> --%>
-<%-- 	                 	  	<select class="fj_mngmnt_dm_slctbx" id="shipTerm${request.id}"  required> --%>
-<!-- 								  <option value="">--Select-- </option> -->
-<%-- 								  <option  value="EX-WORKS" ${selectedVal == 'EX-WORKS' ? 'selected':''}> EX-WORKS</option> --%>
-<%-- 					 			  <option  value="C&F" ${selectedVal == 'C&F' ? 'selected':''}> C&F</option>					  		 --%>
-<!-- 						   	</select> -->
-<!-- 	                 	  </td>   -->
-<!-- 	                 	  <td class="divnStyl dateFld">  -->
-<%-- 	                   	  	 <fmt:parseDate value="${request.candFETADate}" var="theCandFDate"  dateStyle="short"   pattern="yyyy-MM-dd HH:mm" /> --%>
-<%-- 		                  	 <input  class="form-control form-control-xs filetrs candFETADate"   type="text" id="candFETADate${request.id}"  value="<fmt:formatDate value="${theCandFDate}" pattern="dd/MM/yyyy"/>" autocomplete="off"   required/> --%>
-<!-- 	                   	  </td>  -->
+
 	                   	  <td class="divnStyl cmnFld">   
 	                   	  	 <input type="text" id="shipMode${request.id}_${request.lineNo}"    value="${request.shipmentMode}" autocomplete="off" />
 	                   	  </td>  
@@ -201,7 +192,7 @@
 		                  <input  class="form-control form-control-xs filetrs containers"   type="text" id="containers${request.id}_${request.lineNo}"  value="${request.noOfContainers}" autocomplete="off"  pattern="[0-9]+" /></td>
 		                  <td class="divnStyl dateFld">
 		                  <fmt:parseDate value="${request.exFactoryDate}" var="theExFDate"  dateStyle="short"   pattern="yyyy-MM-dd HH:mm" />
-		                  <input  class="form-control form-control-xs filetrs exFacDate"   type="text" id="exFacDate${request.id}_${request.lineNo}"  value="<fmt:formatDate value="${theExFDate}" pattern="dd/MM/yyyy"/>" autocomplete="off"   required/></td>
+		                  <input  class="form-control form-control-xs filetrs exFacDate"   type="text" id="exFacDate${request.id}_${request.lineNo}"  value="<fmt:formatDate value="${theExFDate}" pattern="dd/MM/yyyy"/>"    required/></td>
 		                  <td class="divnStyl cmnFld">
 		                  <c:choose>
 		                  <c:when test="${request.reExport eq 'Y' }"><input  type="checkbox" id="reexport${request.id}" checked  /></c:when>
@@ -228,73 +219,36 @@
 		                  </td>
 	                 	</c:otherwise>
 	                 </c:choose>
-	                <%-- 
-	                  <c:choose> 
-	                 	<c:when test="${request.divnUpdatedBy ne null  and request.exFactoryDate ne null and request.contactDetails ne null and request.pickLocation ne null and fjtuser.emp_divn_code eq 'FN'}"> 
-	                 		<td class="fnStyl"> 
-		                 		 <select class="pmtStatus" id="pmtStatus${request.id}" >
-		                 		 	<option  value="" ${request.paymentStatus eq '' ? 'selected="selected"' : ''} >Select Status</option> 
-		  							<option  value="DONE" ${request.paymentStatus eq 'DONE' ? 'selected="selected"' : ''}>DONE</option> 
-		  							<option  value="NOT DONE" ${request.paymentStatus eq 'NOT DONE' ? 'selected="selected"' : ''} >NOT DONE</option>
-		  			      		</select>	
-		  			  		</td>
-	                 		 <td class="fnStyl"><textarea  rows="1"  class="form-control form-control-xs filetrs-txtArea"  id="finRemarks${request.id}"  >${request.finRemarks}</textarea></td>
-	                  		<td class="fnStyl dtlsHeader">
-	                  		<button class="btn btn-xs btn-primary updateBtn" onClick="updateFinAction('${request.id}');">Update</button> 
-	                  		 <c:choose>
-		                  		<c:when test="${!empty request.finEmpName}">
-		                  			 <span id="finUpdBy${request.id}"  class="dtlsContent"> 
-				                  		 Last Updated By<br/>	 ${request.finEmpName} <br/> 
-				                  		  <fmt:parseDate value="${request.finUpdatedDate}" var="theFinUpdtDate"  dateStyle="short"   pattern="yyyy-MM-dd HH:mm" />
-					                     On <fmt:formatDate value="${theFinUpdtDate}" pattern="dd/MM/yyyy HH:mm"/> 			                     	
-	                  		  		 </span>
-		                  		</c:when>
-		                  		<c:otherwise><span id="finUpdBy${request.id}" class=""> </span></c:otherwise>
-		                     </c:choose>
-	                  		      
-	                 	</c:when>
-	                 	<c:otherwise>
-	                 		<td class="fnStyl"> ${request.paymentStatus}  </td>
-	                 		 <td class="fnStyl dtlsHeader"> ${fn:substring(request.finRemarks, 0, 7)}<c:if test="${!empty request.finRemarks}">...<span class="dtlsContent">${request.finRemarks}</span></c:if></td> 
-	                 		 <td class="fnStyl dtlsHeader"> ${fn:substring(request.finEmpName, 0, 9)}<c:if test="${!empty request.finEmpName}">
-	                 		 <span class="dtlsContent">
-	                 		  By ${request.finEmpName} <br/>  
-	                  		<fmt:parseDate value="${request.finUpdatedDate}" var="theFinUpdtDate"  dateStyle="short"   pattern="yyyy-MM-dd HH:mm" />
-		                    On <fmt:formatDate value="${theFinUpdtDate}" pattern="dd/MM/yyyy HH:mm"/> 
-	                 		 </span></c:if>                 
-	                 		 </td>    
-	                 	</c:otherwise>
-	                 </c:choose>
-	                 --%>                                               	                 	
+	                                  	                 	
 	                  <c:choose>
 	                 	<%-- <c:when test="${fjtuser.emp_divn_code eq 'LG'  and  request.divnUpdatedBy ne null  and   request.finUpdatedBy ne null}">	 --%>   
 	                 	<c:when test="${(fjtuser.emp_divn_code eq 'LG' || fjtuser.emp_divn_code eq 'KSALG') and request.exFactoryDate ne null and request.contactDetails ne null and request.pickLocation ne null and  request.divnUpdatedBy ne null }">                      
 		                  	<td class="lgStyl dateFld">  
 		                  	<fmt:parseDate value="${request.expTimeDeparture}" var="theEDTDate"  dateStyle="short"   pattern="yyyy-MM-dd HH:mm" />
-		                  	<input  class="form-control form-control-xs filetrs exDeptDate"   type="text" id="expDeprtr${request.id}"  value="<fmt:formatDate value="${theEDTDate}" pattern="dd/MM/yyyy"/>" autocomplete="off"   />	                  		                 		                  	 
+		                  	<input  class="form-control form-control-xs filetrs exDeptDate"   type="text" id="expDeprtr${request.id}_${request.lineNo}"  value="<fmt:formatDate value="${theEDTDate}" pattern="dd/MM/yyyy"/>" autocomplete="off"   />	                  		                 		                  	 
 		                  	<span class="hidden-content"><fmt:formatDate value="${theEDTDate}" pattern="dd/MM/yyyy"/></span>
 		                  	</td>
 		                  	<td class="lgStyl dateFld"> 
 		                  	<fmt:parseDate value="${request.expTimeArrival}" var="theExATDate"  dateStyle="short"   pattern="yyyy-MM-dd HH:mm" />
-		                  	<input  class="form-control form-control-xs filetrs exArrvlDate"   type="text" id="expArrvl${request.id}"  value="<fmt:formatDate value="${theExATDate}" pattern="dd/MM/yyyy"/>" autocomplete="off"   />	                  			                  	 
+		                  	<input  class="form-control form-control-xs filetrs exArrvlDate"   type="text" id="expArrvl${request.id}_${request.lineNo}"  value="<fmt:formatDate value="${theExATDate}" pattern="dd/MM/yyyy"/>" autocomplete="off"   />	                  			                  	 
 		                  	<span class="hidden-content"><fmt:formatDate value="${theExATDate}" pattern="dd/MM/yyyy"/></span>
 		                  	</td>
 		                  	<td class="lgStyl textAreaFld">
-		                  	<textarea  rows="1"  class="form-control form-control-xs filetrs-txtArea"  id="lgShipDoc${request.id}" name="lgShipDoc" >${request.shipDocStatus}</textarea> 
+		                  	<textarea  rows="1"  class="form-control form-control-xs filetrs-txtArea"  id="lgShipDoc${request.id}_${request.lineNo}" name="lgShipDoc" >${request.shipDocStatus}</textarea> 
 		                  	</td>
 		                    <td class="lgStyl textAreaFld">
-		                  	<textarea  rows="1"  class="form-control form-control-xs filetrs-txtArea"  id="lgDeliveryStatus${request.id}" name="lgDeliveryStatus" >${request.deliveryStatus}</textarea> 
+		                  	<textarea  rows="1"  class="form-control form-control-xs filetrs-txtArea"  id="lgDeliveryStatus${request.id}_${request.lineNo}" name="lgDeliveryStatus" >${request.deliveryStatus}</textarea> 
 		                  	</td>
 		                  	<td class="lgStyl textAreaFld">
-		                  	<textarea  rows="1"  class="form-control form-control-xs filetrs-txtArea"  id="lgRemarks${request.id}" name="lgRemarks" >${request.logisticRemark}</textarea>
+		                  	<textarea  rows="1"  class="form-control form-control-xs filetrs-txtArea"  id="lgRemarks${request.id}_${request.lineNo}" name="lgRemarks" >${request.logisticRemark}</textarea>
 		                  	</td>
 		                  	<td class="lgStyl dateFld"> 
 			                  	<fmt:parseDate value="${request.nominatedOn}" var="theNominatedDate"  dateStyle="short"   pattern="yyyy-MM-dd" />
-			                  	<input  class="form-control form-control-xs filetrs nominatedOn"   type="text" id="nominatedOn${request.id}"  value="<fmt:formatDate value="${theNominatedDate}" pattern="dd/MM/yyyy"/>" autocomplete="off"   />	                  			                  	 
+			                  	<input  class="form-control form-control-xs filetrs nominatedOn"   type="text" id="nominatedOn${request.id}_${request.lineNo}"  value="<fmt:formatDate value="${theNominatedDate}" pattern="dd/MM/yyyy"/>" autocomplete="off"   />	                  			                  	 
 			                  	<span class="hidden-content"><fmt:formatDate value="${theNominatedDate}" pattern="dd/MM/yyyy"/></span>
 		                  	</td>
 	                 	    <td class="lgStyl cmnFld">
-	                 	    	<select class="fj_mngmnt_dm_slctbx" id="currency${request.id}"  required>
+	                 	    	<select class="fj_mngmnt_dm_slctbx" id="currency${request.id}_${request.lineNo}"  required>
 									  <option value="">--Select-- </option>
 									  <option  value="AED" ${request.currency == 'AED' ? 'selected':''}>AED</option>
 									  <option  value="EURO" ${request.currency == 'EURO' ? 'selected':''}>EURO</option>
@@ -302,12 +256,12 @@
 						 			  <option  value="QAR" ${request.currency == 'QAR' ? 'selected':''}>QAR</option> 
 						 			  <option  value="USD" ${request.currency == 'USD' ? 'selected':''}>USD</option>				  		
 							   	</select></td>	                 	    
-		                  	<td class="lgStyl cmnFld"><input type="text" style="width:70px" id="freightchar${request.id}"    value="${request.freightCharges}" autocomplete="off"/></td>		                  	
-		                  	<td class="lgStyl cmnFld"><input type="text" style="width:70px" id="insurancechar${request.id}"    value="${request.insuranceCharges}" autocomplete="off"/></td>
-		                  	<td class="lgStyl cmnFld"><input type="text" id="forwardedName${request.id}"    value="${request.forwardedName}" autocomplete="off"/></td>
-		                  	<td class="lgStyl cmnFld" id="lgRef${request.id}">${request.reference}</td> 
+		                  	<td class="lgStyl cmnFld"><input type="text" style="width:70px" id="freightchar${request.id}_${request.lineNo}"    value="${request.freightCharges}" autocomplete="off"/></td>		                  	
+		                  	<td class="lgStyl cmnFld"><input type="text" style="width:70px" id="insurancechar${request.id}_${request.lineNo}"    value="${request.insuranceCharges}" autocomplete="off"/></td>
+		                  	<td class="lgStyl cmnFld"><input type="text" id="forwardedName${request.id}_${request.lineNo}"    value="${request.forwardedName}" autocomplete="off"/></td>
+		                  	<td class="lgStyl cmnFld" id="lgRef${request.id}_${request.lineNo}">${request.reference}</td> 
 		                  	<td class="lgStyl dtlsHeader cmnFld">
-		                  		<button class="btn btn-xs btn-primary updateBtn" onClick="updateLogsticAction('${request.id}');">Update</button>
+		                  		<button class="btn btn-xs btn-primary updateBtn" onClick="updateLogsticAction('${request.id}',this);">Update</button>
 		                  		 <c:choose>
 		                  			<c:when test="${!empty request.logEmpName}">
 		                  				<span id="logUpdBy${request.id}" class="lg_dtlsContent"> 
@@ -345,10 +299,10 @@
 		                  	<c:when test="${request.reference ne null}">${fn:substring(request.reference, 0, 9)}</c:when>
 		                  	<c:otherwise>${fn:substring(request.id, 0, 9)}</c:otherwise>
 		                  	</c:choose> 
-		                  	 ..<span class="lg_dtlsContent" id="lgRef${request.id}">
+		                  	 ..<span class="lg_dtlsContent" id="lgRef${request.id}_${request.lineNo}">
 		                  	<c:choose>
 		                  	<c:when test="${request.reference ne null}">${request.reference}</c:when>
-		                  	<c:otherwise>${request.id}</c:otherwise>
+		                  	<c:otherwise>${request.id}_${request.lineNo}</c:otherwise>
 		                  	</c:choose> 
 		                  	 </span></td>  	                  	
 		                  	<td class="lgStyl dtlsHeader cmnFld"> ${fn:substring(request.logEmpName, 0, 9)} <br/>
@@ -382,6 +336,30 @@
 	<!-- page script start -->
 	</div>
 <script>
+$.datepicker.setDefaults({
+    dateFormat: 'dd/mm/yy',
+    yearRange: '2019:2030',
+    minDate: -7
+});
+
+function initializeDatePickers() {
+    $(".orderAckDate, .exFacDate, .exDeptDate, .exArrvlDate").datepicker({
+        "dateFormat": "dd/mm/yy",
+        yearRange: "2019:2030",
+        minDate: -7
+    });
+    
+    $(".nominatedOn").datepicker({
+        "dateFormat": "dd/mm/yy",
+        yearRange: "2019:2030"
+    });
+
+    $("#todate").datepicker({
+        "dateFormat": "dd/mm/yy",
+        maxDate: 0
+    });
+}
+
 var _url = 'LogisticPOController';
 var _method = "POST"; 
 var poList = <%=new Gson().toJson(request.getAttribute("POLST"))%>;  
@@ -422,7 +400,9 @@ $(function(){
  	                        $(api.column(colIdx).header()).index()
  	                    );
  	                    var title = $(cell).text();
- 	                   $(cell).html('<input type="text" placeholder="' + title + '" />');
+ 	                   if (colIdx === 7) return;
+
+ 	                    $(cell).html('<input type="text" placeholder="' + title + '" />');
  	 
  	                    // On every keypress in this input
  	                    $(
@@ -484,26 +464,12 @@ $(function(){
 		});
 });
 function preLoader(){ $('.loader').show();}
+	var shipTerm,candFETADate;
 
-// 	var containers = parseInt($.trim(document.getElementById('containers'+id+'').value));
-// 	var exFacDate = $.trim(document.getElementById('exFacDate'+id+'').value);
-// 	var contact = $.trim(document.getElementById('contact'+id+'').value);
-//  	var reexport = $.trim(document.getElementById('reexport'+id+'').checked); 
-// 	var location = $.trim(document.getElementById('location'+id+'').value);
-// 	var divRemarks = $.trim(document.getElementById('divRemarks'+id+'').value); 
-// 	var shipTerm,candFETADate;
-// 	var shipMode = $.trim(document.getElementById('shipMode'+id+'').value); 
-// 	var finalDest = $.trim(document.getElementById('finalDest'+id+'').value); 
-// 	//var candFETADate = $.trim(document.getElementById('candFETADate'+id+'').value); 
-// 	var poNo = $.trim(document.getElementById('poNo'+id+'').innerHTML); 
-// 	var poDt = $.trim(document.getElementById('poDt'+id+'').innerHTML); 
-// 	var supplr = $.trim(document.getElementById('suplr'+id+'').innerHTML); 
-// 	var divAction = $.trim(document.getElementById('divUpdBy'+id+'').innerHTML);  
-// 	var reference = $.trim(document.getElementById('lgRef'+id+'').innerHTML); 
-// 	var type = 0; 
-// 	var lineNumber = document.getElementById('lineNumber' + id).value;
 	function updateDivnAction(id,button) {
 		// var lineNo = $.trim(document.getElementById('lineNumber'+id).value);
+		console.log(id);
+		alert(id);
 		const buttonId = button.id;
     console.log("Button ID:", buttonId);
     
@@ -521,19 +487,43 @@ function preLoader(){ $('.loader').show();}
         var poNo = document.getElementById('poNo'+id+'').innerHTML;
         var poDt = $.trim(row.find('#poDt' + id).text());
         var supplr = $.trim(row.find('#supplr' + id).text());
-        var exFacDate = $.trim(row.find('#exFacDate' + id).val());
+    
+      /*   var exFacDate = $.trim(document.getElementById('exFacDate'+id+'_'+lineNo).value);
+        alert(exFacDate); */
+        var exFacDateElement = document.getElementById('exFacDate'+id+'_'+lineNo);
+
+        if (exFacDateElement) {
+            var exFacDate = $.trim(exFacDateElement.value);
+            alert(exFacDate);  // Debug to check the value
+        } else {
+            console.error('Datepicker element not found for ID:', 'exFacDate'+id+'_'+lineNo);
+        }
         
-        var contact = $.trim(document.getElementById('contact'+id+'_'+lineNo).value); 
-        var reexport =  $.trim(document.getElementById('reexport' + id+'_'+lineNo).checked); 
-        var location = $.trim(document.getElementById('location'+id+'_'+lineNo).value); 
-        var divRemarks =  $.trim(document.getElementById('divRemarks'+id+'_'+lineNo).value); 
+
+        var contact = $.trim(document.getElementById('contact'+id+'_'+lineNo).value);
+        alert(contact);
+        var reexportCheckbox = document.getElementById('reexport' + id + '_' + lineNo);
+        if (reexportCheckbox) {
+            var reexport = $.trim(reexportCheckbox.checked);
+            alert(reexport);
+        } else {
+          
+            reexport = "YES"; // Set to "YES" if the checkbox is not found
+        }
+        var location = $.trim(document.getElementById('location'+id+'_'+lineNo).value);
+        alert(location);
+        var divRemarks =  $.trim(document.getElementById('divRemarks'+id+'_'+lineNo).value);
+        alert(divRemarks);
         //var shipMode = $.trim(row.find('#shipMode' + id+'_'+lineNo).text()); 
         var shipMode = $.trim(document.getElementById('shipMode'+id+'_'+lineNo).value); 
         //var finalDest = $.trim(row.find('#finalDest' + id).val());
-        var containers =  $.trim(document.getElementById('containers'+id+'_'+lineNo).value); 
+        var containers =  $.trim(document.getElementById('containers'+id+'_'+lineNo).value);
+        alert(containers)
         var finalDest = $.trim(document.getElementById('finalDest'+id+'_'+lineNo).value); 
-        var reference = $.trim(document.getElementById('lgRef'+id+'').innerHTML); 
-        var divAction = $.trim(document.getElementById('divUpdBy'+id+'').innerHTML);  
+         var reference =  id;
+        var divAction = $.trim(document.getElementById('divUpdBy'+id+'').innerHTML); 
+        
+        alert(divAction);
         var type = divAction ? 1 : 0; // Determine type based on divAction existence
 		alert(shipMode);
         // Debugging alerts to track values
@@ -542,8 +532,35 @@ function preLoader(){ $('.loader').show();}
         console.log("Contact: ", contact);
         console.log("Location: ", location);
         console.log("Ship Mode: ", shipMode);
-        console.log("Containers: ", containers);
-
+        console.log("All data");
+        
+        var requestData = {
+                action: "updudea",
+                podd0: id,
+                podd1: containers,
+                podd2: exFacDate,
+                podd3: contact,
+                podd4: location,
+                podd5: divRemarks,
+                podd6: poNo,
+                podd7: poDt,
+                podd8: supplr,
+                podd9: shipTerm, // Assuming this is defined elsewhere
+                podd10: shipMode,
+                podd11: finalDest,
+                podd12: type,
+                podd13: reexport,
+                podl4: reference,
+                podd15: candFETADate, // Assuming this is defined elsewhere
+                podd16:lineNo
+            };
+            
+            // Build the URL with query string
+            const queryString = $.param(requestData);
+            const fullUrl = _url + '?' + queryString;
+            
+            // Log the full URL
+            console.log("URL being sent to backend:", fullUrl);
         // Validate necessary fields
         if (exFacDate && contact && location) {
             if (checkDateFormat(exFacDate, "Ex Factory")) {
@@ -552,7 +569,7 @@ function preLoader(){ $('.loader').show();}
 					$.ajax({
 					 type: _method,
 			    	 url: _url, 
-			    	 data: {action: "updudea", podd0:id, podd1:filteredContainers, podd2:exFacDate, podd3:contact, podd4:location, podd5:divRemarks,   podd6:poNo, podd7:poDt, podd8:supplr, podd9:shipTerm, podd10:shipMode, podd11:finalDest, podd12:type, podd13:reexport, podl4:reference,podd15:candFETADate },
+			    	 data: requestData, 
 			    	 success: function(data) {  
 			    	 $('.loader').hide();
 			    	 if (parseInt(data) == 1) {	 
@@ -590,6 +607,8 @@ function preLoader(){ $('.loader').show();}
         console.error('Row with ID #' + id + ' and lineNo ' + lineNo + ' not found.');
     }
 }
+	
+
 function updateFinAction(id){  
 	var status = $.trim(document.getElementById('pmtStatus'+id+'').value); 
 	var finRemarks = $.trim(document.getElementById('finRemarks'+id+'').value); 
@@ -625,21 +644,70 @@ function updateFinAction(id){
 	}else{alert('No Data Entered');}
 	
 }
-function updateLogsticAction(id){  
-	var departureDate = $.trim(document.getElementById('expDeprtr'+id+'').value);
-	var arrivalDate = $.trim(document.getElementById('expArrvl'+id+'').value); 
-	var remarks = $.trim(document.getElementById('lgRemarks'+id+'').value);
-	var reference = $.trim(document.getElementById('lgRef'+id+'').innerHTML);
-	var poNo = $.trim(document.getElementById('poNo'+id+'').innerHTML);
-	var divnEmpCode = $.trim(document.getElementById('divUpdByVal'+id+'').value);  
-	var divnEmpname = $.trim(document.getElementById('divUpdByName'+id+'').value);  
-	var shipDocStatus = $.trim(document.getElementById('lgShipDoc'+id+'').value);
-	var deliveryStatus = $.trim(document.getElementById('lgDeliveryStatus'+id+'').value);  
-	var nominatedOn = $.trim(document.getElementById('nominatedOn'+id+'').value);
-	var currencyType = $.trim(document.getElementById('currency'+id+'').value);
-	var freightCharges = $.trim(document.getElementById('freightchar'+id+'').value);
-	var insuranceCharges = $.trim(document.getElementById('insurancechar'+id+'').value);
-	var forwardedName = $.trim(document.getElementById('forwardedName'+id+'').value);
+function updateLogsticAction(id,button){ 
+	 const buttonId = button.id;
+	    console.log("Button ID:", buttonId);
+
+	    // Get the row ID and line number
+	    const rowId = $(button).closest('tr').attr('id');
+	    var lineNo = rowId.split('_').pop();
+	    console.log("Row ID:", rowId);
+	    alert(lineNo);
+
+	    // Define a helper function to retrieve values or inner text, logging errors if elements are not found
+	    function getElementValueOrInnerText(elementId, isText = false) {
+	        var element = document.getElementById(elementId);
+	        if (element) {
+	            return isText ? $.trim(element.innerHTML) : $.trim(element.value);
+	        } else {
+	            console.error('Element with ID', elementId, 'not found.');
+	            return null; // Return null if the element is not found
+	        }
+	    }
+
+	    // Example for retrieving value or text for each element
+	    var departureDate = getElementValueOrInnerText('expDeprtr' + id + '_' + lineNo);
+	    if (departureDate) alert(departureDate);
+
+	    var arrivalDate = getElementValueOrInnerText('expArrvl' + id + '_' + lineNo);
+	    if (arrivalDate) alert(arrivalDate);
+
+	    var remarks = getElementValueOrInnerText('lgRemarks' + id + '_' + lineNo);
+	    if (remarks) alert(remarks);
+
+	    var reference = getElementValueOrInnerText('lgRef' + id + '_' + lineNo, true);
+	    if (reference) alert(reference);
+	    var poNo = document.getElementById('poNo'+id+'').innerHTML;
+	   // var poNo = getElementValueOrInnerText('poNo' + id + '_' + lineNo);
+	    if (poNo) alert(poNo);
+
+	    var divnEmpCode = getElementValueOrInnerText('divUpdByVal' + id +'').innerHTML;
+	    if (divnEmpCode) alert(divnEmpCode);
+	    console.log(divnEmpCode);
+	   
+	    var divnEmpname = getElementValueOrInnerText('divUpdByName' + id +'').innerHTML;
+	    if (divnEmpname) alert(divnEmpname);
+
+	    var shipDocStatus = getElementValueOrInnerText('lgShipDoc' + id + '_' + lineNo);
+	    if (shipDocStatus) alert(shipDocStatus);
+
+	    var deliveryStatus = getElementValueOrInnerText('lgDeliveryStatus' + id + '_' + lineNo);
+	    if (deliveryStatus) alert(deliveryStatus);
+
+	    var nominatedOn = getElementValueOrInnerText('nominatedOn' + id + '_' + lineNo);
+	    if (nominatedOn) alert(nominatedOn);
+
+	    var currencyType = getElementValueOrInnerText('currency' + id + '_' + lineNo);
+	    if (currencyType) alert(currencyType);
+
+	    var freightCharges = getElementValueOrInnerText('freightchar' + id + '_' + lineNo);
+	    if (freightCharges) alert(freightCharges);
+
+	    var insuranceCharges = getElementValueOrInnerText('insurancechar' + id + '_' + lineNo);
+	    if (insuranceCharges) alert(insuranceCharges);
+
+	    var forwardedName = getElementValueOrInnerText('forwardedName' + id + '_' + lineNo);
+	    if (forwardedName) alert(forwardedName);
 	
 	if(currencyType == null || currencyType == ''){
 		alert(" Please select Currency");		
@@ -664,7 +732,7 @@ function updateLogsticAction(id){
 				$.ajax({
 					 type: _method,
 			    	 url: _url, 
-			    	 data: {action: "upludea", podl0:id, podl1:departureDate, podl2:arrivalDate, podl3:remarks, podl4:reference, podl5:poNo, podl6: divnEmpCode, podl7:divnEmpname, podl8:shipDocStatus,podl9:deliveryStatus,podl10:nominatedOn,podl11:currencyType,podl12:freightCharges,podl13:insuranceCharges,podl14:forwardedName  },
+			    	 data: {action: "upludea", podl0:id, podl1:departureDate, podl2:arrivalDate, podl3:remarks, podl4:reference, podl5:poNo, podl6: divnEmpCode, podl7:divnEmpname, podl8:shipDocStatus,podl9:deliveryStatus,podl10:nominatedOn,podl11:currencyType,podl12:freightCharges,podl13:insuranceCharges,podl14:forwardedName,podd15:lineNo  },
 			     success: function(data) {  
 			    	 $('.loader').hide();
 			    	 if (parseInt(data) == 1) {	 
@@ -732,78 +800,100 @@ function checkDateFormat(dateStr, dateName){
 	      }   
 	    $(this).val(value.toLocaleString());
 	});
-/* $(document).on('click', '.create-btn', function () {
-     // Get the row that contains the clicked button
-     var currentRow = $(this).closest('tr');
 
-     // Clone the row
-     var clonedRow = currentRow.clone();
+ let cloneCount = {};
 
-     // Insert the cloned row after the current row
-     currentRow.after(clonedRow);
- });*/
+ function getMaxLineNumber(requestId) {
+     return $.ajax({
+         type: _method, // Define _method somewhere in your code
+         url: _url,     // Define _url somewhere in your code
+         data: { action: "getMax", requestId: requestId },
+         dataType: 'json'
+     });
+ }
  function createAction(requestId, lineNo) {
 	    console.log("Creating row for ID: " + requestId);
-	    
-	    // Get the current row based on the request ID and line number
-	    let currentRow = $('#row' + requestId + '_' + lineNo);
 
-	    if (currentRow.length) {
-	        // Get the current line number and increment it
-	        let newLineNo = parseInt(lineNo) + 1;
+	    getMaxLineNumber(requestId).done(function(response) {
+	        // Check if the clone count for this requestId exists, if not, initialize it
+	        if (!cloneCount[requestId]) {
+	            cloneCount[requestId] = response.maxLineNumber; // Use fetched max line number
+	        }
 
-	        // Clone the row
-	        let clonedRow = currentRow.clone();
+	        // Increment the line number for the next clone
+	        let newLineNo = cloneCount[requestId];
 
-	        // Update the new cloned row's lineNo (id and any other references)
-	        clonedRow.attr('id', 'row' + requestId + '_' + newLineNo);  // Update row ID to reflect new line number
+	        // Get the current row based on the request ID and line number
+	        let currentRow = $('#row' + requestId + '_' + lineNo);
+	        if (currentRow.length) {
+	            // Clone the row
+	            let clonedRow = currentRow.clone();
 
-	        // Update the lineNo input field in the cloned row
-	        clonedRow.find('.lineNo').attr('id', 'lineNumber' + requestId + '_' + newLineNo);
-    		clonedRow.find('.lineNo').val(newLineNo); 
+	            // Remove old 'hasDatepicker' classes and IDs
+	            clonedRow.find('.hasDatepicker').removeClass('hasDatepicker').removeAttr('id');  
 
-	        // Update any other IDs and name attributes in the cloned row that need to be unique
-	        clonedRow.find('[id]').each(function() {
-            let originalId = $(this).attr('id');
-            if (originalId) {
-                let newId = originalId.replace('_' + lineNo, '_' + newLineNo);
-                $(this).attr('id', newId);
-            }
-       		 });
+	            // Update the new cloned row's lineNo (id and any other references)
+	            clonedRow.attr('id', 'row' + requestId + '_' + newLineNo); // Update row ID to reflect new line number
 
-        // Update any input fields to have the new line number
-       	 clonedRow.find('input, select, textarea').each(function() {
-            let originalName = $(this).attr('name');
-            if (originalName) {
-                let newName = originalName.replace('_' + lineNo, '_' + newLineNo);
-                $(this).attr('name', newName);
-            }
-       	 });
+	            // Update the lineNo input field in the cloned row
+	            clonedRow.find('[id]').each(function() {
+	                let oldId = $(this).attr('id');
+	                if (oldId) {
+	                    // Replace the old line number with the new one in the id
+	                    let newId = oldId.replace('_' + lineNo, '_' + newLineNo);
+	                    $(this).attr('id', newId);
+	                }
+	            });
 
-	        // Remove the "Create" button from the cloned row
-	        clonedRow.find('.create-btn').remove();
+	            // Update any input fields to have the new line number
+	            clonedRow.find('input, select, textarea').each(function() {
+	                let originalName = $(this).attr('name');
+	                if (originalName) {
+	                    let newName = originalName.replace('_' + lineNo, '_' + newLineNo);
+	                    $(this).attr('name', newName);
+	                }
+	            });
 
-	        // Add a "Minus" button to the cloned row, in the 6th <td>
-	        let removeButtonTd = $('<td class="divnStyl cmnFld"><button class="btn btn-xs btn-danger remove-btn" onclick="removeRow(this)">-</button></td>');
-	        
-	        // Replace the cell at the specified index (6th <td> is index 5)
-	        clonedRow.find('td').eq(6).replaceWith(removeButtonTd);
+	            // Generate the new ID for the exFacDate field using the format `exFacDate_requestId_lineNo`
+	            clonedRow.find('.exFacDate').each(function() {
+	                let newId = 'exFacDate' + requestId + '_' + newLineNo;
+	                $(this).attr('id', newId); // Set the new dynamic ID
+	            });
 
-	        // Clear input fields in the cloned row if any
-	        clonedRow.find('input').val('');
+	            // Remove the "Create" button from the cloned row
+	            clonedRow.find('.create-btn').remove();
 
-	        // Insert the cloned row below the current one
-	        clonedRow.insertAfter(currentRow);
-	        //clonedRow.find('.datepicker').datepicker(); 
-	         //$(".orderAckDate, .exFacDate, .exDeptDate, .exArrvlDate").datepicker({ "dateFormat" : "dd/mm/yy", yearRange: "2019:2030", minDate : -7});
-			 $(".exFacDate").datepicker({ "dateFormat" : "dd/mm/yy", yearRange: "2019:2030", minDate : -7});
-	        // Update the parent row's line number (this increments for further clones)
-	        document.getElementById('lineNumber' + requestId).value = newLineNo;
-	        console.log('New line number is: ' + newLineNo);
+	            // Clear input fields in the cloned row if any
+	            clonedRow.find('input').val('');
 
-	    } else {
-	        console.error("Row with ID #" + requestId + " and lineNo #" + lineNo + " not found.");
-	    }
+	            // Insert the cloned row below the current one
+	            clonedRow.insertAfter(currentRow);
+
+	         // Initialize jQuery Datepicker on the new cloned row's date fields without the image trigger
+	            clonedRow.find('.orderAckDate, .exFacDate, .exDeptDate, .exArrvlDate').each(function() {
+	                // Initialize Datepicker with options and remove the image trigger
+	                $(this).datepicker({
+	                    dateFormat: "dd/mm/yy",  // Your preferred format (dd/mm/yyyy)
+	                    minDate: 0,  // Example: no earlier than today
+	                    showOn: "focus", // Show the datepicker only when the input gains focus
+	                    buttonImageOnly: false // Disable the button image completely
+	                });
+
+	                // Reassign the newId to the datepicker after initialization
+	                $(this).attr('id', $(this).attr('id'));
+	            });
+
+	            // Update the parent row's line number (this increments for further clones)
+	            document.getElementById('lineNumber' + requestId).value = newLineNo;
+	            console.log('New line number is: ' + newLineNo);
+
+
+	        } else {
+	            console.error("Row with ID #" + requestId + " and lineNo #" + lineNo + " not found.");
+	        }
+	    }).fail(function(jqXHR, textStatus, errorThrown) {
+	        console.error("Error fetching max line number:", textStatus, errorThrown);
+	    });
 	}
 
 	function removeRow(button) {
