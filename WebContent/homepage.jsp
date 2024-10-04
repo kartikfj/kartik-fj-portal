@@ -222,9 +222,9 @@ background:#fff;color:#008ac1;}
 		        	<div class="square"><a href="LogisticPOController" ><h1><b>Logistic</b><img src="resources/images/buttons/logistic.jpg" /></h1></a></div>
 		        </c:when >
        	  </c:choose>
-<%-- 		  <c:if test="${fjtuser.role eq 'mkt' or fjtuser.role eq 'mg' or fjtuser.sales_code ne null}"> --%>
+		  <c:if test="${fjtuser.role eq 'mkt' or fjtuser.role eq 'mg' or fjtuser.sales_code ne null}">
 	       		 <div class="square"><a href="ProjectLeads" ><h1><b>Marketing</b><img src="resources/images/buttons/marketing.png" /></h1></a></div>  
-<%-- 	      </c:if> --%>
+	      </c:if>
 	      <div class="square"><a href="insurance.jsp" ><h1><b>Med.Insurance</b><img src="resources/images/buttons/medicalinsurance.jpg" /></h1></a></div> 
 		  <div class="square"><a href="regularisationHistory.jsp" ><h1><b>Reports</b><img src="resources/images/buttons/reports.jpg" /></h1></a></div>
 	      <c:if test="${!empty service.rows}">  

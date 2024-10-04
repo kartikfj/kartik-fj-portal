@@ -51,7 +51,18 @@
 	<script type="text/javascript" src="././resources/datatables/ajax/excelmake/jszip.min.js"></script>
 	<script type="text/javascript" src="././resources/datatables/buttons-fjtco/js/buttons.html5.min.js"></script>
 	<script type="text/javascript" src="././resources/datatables/buttons-fjtco/js/buttons.print.min.js"></script>
- 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+   <script>
+    $(document).ready(function() {
+        // Initialize select2 for the division multi-select
+        $('#mktDivn').select2({
+            placeholder: 'Select Division',
+            width: '100%'
+        });
+    });
+  </script>
   <!-- Theme style -->
   <link rel="stylesheet" href="././resources/dist/css/AdminLTE.min.css">
   <link rel="stylesheet" href="././resources/dist/css/skins/_all-skins.min.css">
@@ -94,7 +105,36 @@ color:#008ac1;
 #fj-page-head-box{border: none;}
 .btn-group.open .dropdown-toggle {max-width: 180px !important;overflow: hidden  !important;}
 </style>
+  <style>
+        /* Table Styling */
+        #displayLeads {
+            border-top: 1px solid #4a46465e !important;
+            width: 100%; /* Ensures the table takes up the full width of its container */
+        }
+        
+        #displayLeads th, #displayLeads td {
+            padding: 8px; /* Adjust padding for better spacing */
+            text-align: left; /* Align text to the left */
+            border-bottom: 1px solid #ddd; /* Add border to separate rows */
+        }
 
+       /*  #displayLeads th:nth-child(2) {
+            width: 90px; /* Width for Status */
+        } */
+        #displayLeads th:nth-child(10) {
+            width: 80px; /* Width for Updated on */
+        }
+        #displayLeads th:nth-child(11) {
+            width: 80px; /* Width for Action, if applicable */
+        }
+        
+        /* Optional: Responsive adjustments */
+        @media (max-width: 768px) {
+            #displayLeads th, #displayLeads td {
+                font-size: 12px; /* Adjust font size on smaller screens */
+            }
+        }
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
  <c:if test="${empty fjtuser.emp_code}"> <jsp:forward page="index.jsp"/> </c:if>
@@ -176,7 +216,7 @@ color:#008ac1;
           <c:if test="${!empty service.rows}">  
          	<li><a href="SupportRequest"><i class="fa fa-table"></i><span> BDM Support Request </span></a></li>
          </c:if>         
-         <li class="active "><a href="ProjectLeads"  class="active"><i class="fa fa-columns"></i><span>Project Stages 0 & 1</span></a></li>         
+      <li class="active "><a href="ProjectLeads" class="active"><i class="fa fa-columns"></i><span>Major Projects</span></a></li>
          <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li>
 		 <li><a href="ConsultantVisits"><i class="fa fa-columns"></i><span>Consultant Visits</span></a></li> 
 		 <li><a href="ConsultantLeads"><i class="fa fa-line-chart"></i><span>Consultant Approval Status</span></a></li>
@@ -191,7 +231,7 @@ color:#008ac1;
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1> Projects Stages 0 & 1 <small>Marketing Portal</small> </h1>
+    <h1>Major Projects<small>Marketing Portal</small> </h1>
       <ol class="breadcrumb">
         <li><a href="homepage.jsp"><i class="fa fa-calendar"></i> Home</a></li>
         <li class="active">Marketing</li>
@@ -207,8 +247,8 @@ color:#008ac1;
 				   <!-- Project Under Design Details Start -->
 					 <div class="box-header">
 		               <div class="pull-left"  style="display:inline-flex">
-		               <div  class="box-title">Under Design Details</div>
-		               <c:if test="${fjtuser.role eq 'mkt'}">
+		               <div  class="box-title">Major Projects</div>
+		               <c:if test="${fjtuser.role eq 'mkt' and (fjtuser.emp_code eq 'E003605' || fjtuser.emp_code eq 'E004885') and !(fjtuser.role eq 'mg')}">
 		               <button type="button" class="btn btn-default add-new" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#newUnderDsgn"><i class="fa fa-plus"></i> Add New</button>
 		               </c:if>
 		               <form method="POST" action="ProjectLeads">
@@ -224,16 +264,21 @@ color:#008ac1;
 		              <table class="table table-hover small marketing-dtls-table" id="displayLeads" style="border-top: 1px solid #4a46465e !important;" >		        		 
 		        		    <thead>
 		        			 <tr>		        			    
-		        				<th>Opportunities</th>
-		                        <th>Status</th>
-		                        <th>Location</th>
-		                         <th>Leads</th>
-		                         <th>Division</th>
-		                         <th>Product</th>
+		        				<th>Major Project</th>		                        
+		                         <th>Main Contact</th>
+		                         <th>Division</th>	
+		                         <th>Client</th> 	                         
 		                         <th>Main Contractor</th>
 		                         <th>MEP Contractor</th>
+		                         <th>Remarks</th>		                         
+		                         <th>Status</th>
+		                        <th>Location</th>
 		                         <th  width="67">Updated on </th>
-		                      <c:if test="${fjtuser.role eq 'mkt'}">   <th  width="66">Action</th></c:if>
+		                              <c:if test="${!(fjtuser.role eq 'mg')}">   <th>Ack.Status</th></c:if>
+		                             <!--  allow to edit only baber and ben as per instruction -->
+		                  <%--     <c:if test="${fjtuser.role eq 'mkt' and (fjtuser.emp_code eq 'E003605' || fjtuser.emp_code eq 'E004885')}">   <th  width="66">Action</th></c:if>  --%>
+		                  <!--  allow to approve major project  f -->
+		                    <c:if test="${fjtuser.role eq 'mg'}">   <th  width="66">Action</th></c:if>
 		                     </tr>
 		                     </thead>
 		                     <c:set var="mcount" value="0"/>
@@ -247,28 +292,50 @@ color:#008ac1;
 		                      
 		                      <span class='highlight'>${mktLst.updateStatus}</span>
 		                      </td>
-		                         <td>${mktLst.status}</td>
-		                        <td>${mktLst.location}</td>
+		                         
 		                        <!-- <td>${mktLst.leads}</td>-->
 		                         <td><p class="long-letters">${mktLst.contactDtls} </p></td>                 
 		                         <td>                 
 		                         
-		                           <c:forEach var="dvnLst"  items="${DLFCL}" >
+		                         <%--   <c:forEach var="dvnLst"  items="${DLFCL}" >
 		             <c:choose>
 		             <c:when test="${mktLst.products eq dvnLst.divn_code}">
 		               <b> ${dvnLst.divn_name}</b>		              
 		             </c:when>		           
 		             </c:choose>
-		            </c:forEach>         
-		                         </td>		                       		                         
-		                         <td><p class="long-letters">${mktLst.remarks}</p></td>
+		            </c:forEach>          --%>
+		                        <p class="long-letters">${mktLst.products}</p> 
+		                         </td>	                       		                         
+		                         <td><p class="long-letters">${mktLst.client}</p></td> 
 		                         <td><p class="long-letters">${mktLst.mainContractor}</p></td>
 		                         <td><p class="long-letters">${mktLst.mepContractor}</p></td>
+		                         <td><p class="long-letters">${mktLst.remarks}</p></td>		                         
+		                         <td>${mktLst.status}</td>
+		                       	 <td>${mktLst.location}</td>
 		                         <td>		                         
 		                         <fmt:parseDate value=" ${mktLst.updatedDate}" var="theDate"    pattern="yyyy-MM-dd HH:mm" />
 		                           <fmt:formatDate value="${theDate}" pattern="MMM-YYYY"/>		                       
 		                         </td>
-		                         <c:if test="${fjtuser.role eq 'mkt'}">
+		                            <c:if test="${!(fjtuser.role eq 'mg')}">
+		                          <td> <c:choose>
+		                        
+			   											   <c:when test="${mktLst.approved=='yes'}">
+			   											 <button type="submit" disabled  class="btn btn-success btn-xs" >
+										        		 Approved</button>   
+			   											   </c:when>
+			   											   <c:otherwise>
+			   											   
+			   											   <input type="hidden" disabled name="octjf" value="approved"/>
+			     									     <button type="submit"  disabled  class="btn btn-Primary btn-xs">
+										        		 Pending</button>
+										     
+			   											   
+			   											   </c:otherwise>
+			   						   
+			   								 </c:choose>
+			   											</td>
+			   												</c:if>				
+		                        <%--  <c:if test="${fjtuser.role eq 'mkt' and (fjtuser.emp_code eq 'E003605' || fjtuser.emp_code eq 'E004885') and !(fjtuser.role eq 'mg')}">
 		                              <td>
 		                          <a href="#"   id="eg" class="btn btn-primary btn-xs" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#editMktleads${mcount}">
 								       		 <i class=" fa fa-pencil" aria-hidden="true"></i>
@@ -281,7 +348,44 @@ color:#008ac1;
 										        		 <i class="fa fa-trash" aria-hidden="true"></i></button>
 										        	</form>
 										        	</td>
-										        	</c:if>
+										        	</c:if>  --%>
+										        	<%-- <td><p class="Long-letters">${mktList.client }</p></td> --%>
+								   <c:if test="${fjtuser.role eq 'mg'}">
+								
+		                              <td>
+		                              
+		<%--                           <a href="#"   id="eg" class="btn btn-primary btn-xs" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#editMktleads${mcount}">
+								       		 <i class=" fa fa-pencil" aria-hidden="true"></i>
+								       		 </a>
+								       		 
+ --%>								        	 <!-- delete -->
+                                       <form action="ProjectLeads" method="POST" style="display: inline !important;" name="gs_form_delete">
+			   											 <input type="hidden" value="${mktLst.id}" name="mgappr" />
+			   											 <c:choose>
+			   											   <c:when test="${mktLst.approved=='yes'}">
+			   											 <button type="submit" disabled  class="btn btn-success btn-xs"  onclick="if (!(confirm('Are You sure You Want to Approve this Major Project'))) return false" >
+										        		 Approved</button>   
+			   											   </c:when>
+			   											   <c:otherwise>
+			   											   
+			   											   <input type="hidden" name="octjf" value="approved"/>
+			     									     <button type="submit"   class="btn btn-Primary btn-xs"  onclick="if (!(confirm('Are You sure You Want to Approve this Major Project'))) return false" >
+										        		 Approve</button>
+										     
+			   											   
+			   											   </c:otherwise>
+			   								 </c:choose>
+			   											
+			     								   		
+										        	</form>		
+		   											<%-- <form action="ProjectLeads" method="POST" style="display: inline !important;" name="gs_form_delete">
+			   											 <input type="hidden" value="${mktLst.id}" name="mktli" />
+			     										<input type="hidden" name="octjf" value="delete"/>
+			     									     <button type="submit"   class="btn btn-danger btn-xs"  onclick="if (!(confirm('Are You sure Not to Approve this Major Project'))) return false" >
+										        		 No</button>
+										        	</form> --%>
+										        	</td>
+										        	</c:if>		        	
 		                     </tr>		                     		                     
 		                         <c:if test="${fjtuser.role eq 'mkt'}">    <div class="row">
 						<div class="modal fade" id="editMktleads${mcount}" role="dialog">
@@ -292,7 +396,7 @@ color:#008ac1;
 						      <div class="modal-content">
 						        <div class="modal-header">
 						          <button type="button" class="close" data-dismiss="modal">&times;</button>
-						          <h4 class="modal-title">Edit Project Under Design Details</h4>
+						          <h4 class="modal-title">Edit Major Projects Details</h4>
 						        </div>
 						        <div class="modal-body">						         		                        
 		  							<form action="ProjectLeads" method="POST" class="form-vertical" name="gi_form_edit">		  						 			                    
@@ -301,24 +405,26 @@ color:#008ac1;
 			                  <div class="row">  
 		               <div class="col-md-8">
 		                <div class="form-group">
-		                  <label for="mktOpportunity">Opportunity</label>
-		                  <textarea class="form-control" rows="3" id="mktOpportunity" placeholder="Enter Opportunity " name="mktOpportunity" required>${mktLst.opt}</textarea>		             
+		                  <label for="mktOpportunity">Major Project</label>
+		                  <input type="text" class="form-control"  id="mktOpportunity" placeholder="Enter Opportunity " name="mktOpportunity" value="${mktLst.opt}">		             
 		                </div>           
 		                <div class="form-group">
-		                  <label for="mktContact">Leads</label>
+		                  <label for="mktContact">Main Contact Details</label>
 		                  <input type="text" class="form-control" id="mktContact" placeholder="Enter Contact Details" name="mktContact" value="${mktLst.contactDtls}">
 		                </div>
-		               <div class="form-group">
-		                  <label for="mktRmrk">Product</label>
-		                  <input type="text" class="form-control"    name="prodct" readonly value="${mktLst.remarks}" />
+		                <div class="form-group">
+		                <label for="clientInput">Client:</label>
+		                <input type="text" class="form-control" id="clientInput" name="mktClient" value="${mktLst.client}" />
 		                </div>
+                           
 		                 <div class="form-group">
 		                  <label for="mktLocation">Main Contractor</label>  
 		                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Main Contractor Details" name="mktMainCont" value="${mktLst.mainContractor}">
 		                </div>
-		                 <div class="form-group">
-		                  <label for="mktLocation">MEP Contractor</label>  
-		                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}">
+		               
+		                  <div class="form-group">
+		                  <label for="mktRmrk">Remarks:</label>
+		                  <input type="text" class="form-control"    name="prodct"  value="${mktLst.remarks}" />
 		                </div>
 		                </div>
 		                <div class="col-md-4">
@@ -346,6 +452,11 @@ color:#008ac1;
 		                  <label>Division</label>
 		                  <input type="text" class="form-control"  readonly name="mkDivn" value="${mktLst.products}">
 		                </div>
+		                  <div class="form-group">
+		                  <label for="mktLocation">MEP Contractor</label>  
+		                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}">
+		                </div>
+		                
 		               <input type="hidden" value="${currWeek}" name="mktWeek" />
 		                
 		                </div>
@@ -368,14 +479,15 @@ color:#008ac1;
 		                    <tfoot>
 		                    <tr>
 		                   
-		        				 <th   class="tfoot1" >Opportunities</th>
-		                         <th width="90" id="statusfoot">Status</th>
-		                        <th width="90"  class="tfoot1" >Location</th>
-		                         <th width="90" id="ldsfoot" >Leads</th>
+		        				 <th   class="tfoot1" >Opportunities</th>		                        
+		                         <th width="90" id="ldsfoot" >Main contract</th>
 		                        <!--   <th   class="tfoot1" >Contact Details </th>-->
 		                         <th id="dvnfltr">Division</th>
-		                         <th  class="tfoot1" >Remarks</th>
+		                         
 		                         <th   class="tfoot1" width="30">Week</th>
+		                         <th  class="tfoot1" >Remarks</th>
+		                          <th width="90" id="statusfootss">Status</th>
+		                         <th width="90"  class="tfoot1" >Location</th>
 		                         <th   class="tfoot1"  width="67">Updated on </th>
 		                      <c:if test="${fjtuser.role eq 'mkt'}">   <th   class="tfoot1"   width="35">Action</th></c:if>
 		                    </tr>
@@ -399,7 +511,7 @@ color:#008ac1;
 				      <div class="modal-content">
 				        <div class="modal-header">
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
-				          <h4 class="modal-title">Enter Under Design Details</h4>
+				        <h4 class="modal-title">Enter Major Projects Details</h4>
 				        </div>
 				        <div class="modal-body">
 				          
@@ -409,37 +521,31 @@ color:#008ac1;
                <div class="row">  
                <div class="col-md-8">
                 <div class="form-group">
-                  <label for="mktOpportunity">Opportunity</label>
-                  <textarea class="form-control" rows="3" id="mktOpportunity" placeholder="Enter Opportunity " name="mktOpportunity" required></textarea>
-             
+                   <label for="mktOpportunity">Major Projects Name<span>*</span></label>
+                  <input type="text" class="form-control"  id="mktOpportunity" placeholder="Enter Major Projects Name " name="mktOpportunity" required>
                 </div>          
                 <div class="form-group">
-                  <label for="mktContact">Leads</label>
-                  <input type="text" class="form-control" id="mktContact" placeholder="Enter Contact Details" name="mktContact" >
+                  <label for="mktContact">Main Contact Details<span>*</span></label>
+                  <input type="text" class="form-control" id="mktContact" placeholder="Enter Contact Details" name="mktContact" required>
                 </div>
-                   <div class="form-group" >
-                  <label>Division</label>
-                   <select class="form-control" name="mkDivn" required>
-                  <option value="" >Select Division</option>
-                    <c:forEach var="dvnLst"  items="${DLFCL}" >
-                    <option value="${dvnLst.divn_code}">${dvnLst.divn_name}</option>
-                    </c:forEach>
-                    
-                  </select>
-                </div>  
+                 
+                  <div class="form-group">
+                  <label for="clientInput">Client<span>*</span></label>
+                 <input type="text"  class="form-control" id="clientInput" name="mktClient" placeholder="Enter client name" required/>
+                </div>
+                  
                  <div class="form-group">
-                  <label for="mktLocation">Main Contractor</label>  
-                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Main Contractor Details" name="mktMainCont" value="${mktLst.mainContractor}">
+                  <label for="mktLocation">Main Contractor<span>*</span></label>  
+                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Main Contractor Details" name="mktMainCont" value="${mktLst.mainContractor}" required>
                 </div>
-                 <div class="form-group">
-                  <label for="mktLocation">MEP Contractor</label>  
-                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}">
-                </div>
+                 
+                 <label for="clientInput">Remarks<span>*</span></label>
+                  <input type="text"  class="form-control" id="clientInput" name="mktRmrk" placeholder="Enter remarks name"  required/>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                  <label>Status</label>
-                  <select class="form-control" name="mkstatus" >
+                  <label>Status<span>*</span></label>
+                  <select class="form-control" name="mkstatus"  required>
                     <option value="">Select Status</option>
                     <option value="Concept">Concept</option>
                     <option value="Design">Design</option>
@@ -447,17 +553,30 @@ color:#008ac1;
 <!--                     <option value="JIH">JIH</option> -->
                   </select>
                 </div>
+                   <div class="form-group">
+                    <label>Division<span>*</span></label>
+                    <select class="form-control" id="mktDivn" multiple="multiple" name="mktDivn" required>
+                        <option value="" disabled>Select Division</option>
+                        <c:forEach var="dvnLst" items="${DLFCL}">
+                            <option value="${dvnLst.divn_code}">${dvnLst.divn_name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
                 <input type="hidden" value="Consultant" name="mkLeads"/>
                
-			     <div class="form-group" id="productDiv">
+			    <!--  <div class="form-group" id="productDiv">
 			       <select  class="form-control form-control-sm"  style="width: 100%;"   id="productsOpt" multiple="multiple"  name="prodct" required>
 			        </select>
-			     </div>
+			     </div> -->
                
                
                  <div class="form-group">
-                  <label for="mktLocation">Location</label>         
-                  <input type="text" class="form-control" id="mktLocation" placeholder="Enter Location Details" name="mktLocation" >
+                  <label for="mktLocation">Location<span>*</span></label>         
+                  <input type="text" class="form-control" id="mktLocation" placeholder="Enter Location Details" name="mktLocation"  required>
+                </div>
+                <div class="form-group">
+                  <label for="mktLocation">MEP Contractor<span>*</span></label>  
+                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}" required>
                 </div>
                  <input type="hidden" value="${currWeek}" name="mktWeek" />
                 </div>
@@ -502,6 +621,8 @@ color:#008ac1;
 <script src="././resources/dist/js/adminlte.min.js"></script>
 <!-- page script start -->
 <script>
+ // Check the selected value of status before sending it
+
 $(document).ready(function() {
 	 $('#laoding').hide();
 	if ( window.history.replaceState ) {//script to avoid page resubmission of form on reload
@@ -516,7 +637,7 @@ $(document).ready(function() {
 	   
 	   /*----------------*/
 	   $('#processOne').submit(function(evnt) {
-		 if ((confirm('Are You sure, You Want to add new under design details!'))) { 
+		 if ((confirm('Are You sure, You Want to add a New Major Project!'))) { 
 			 preLoader();
 			 return true;
 			 }
@@ -539,8 +660,8 @@ $(document).ready(function() {
 	            {
 	                extend: 'excelHtml5',
 	                text:      '<i class="fa fa-cloud-download" style="color: green; font-size: 1.5em;">Export</i>',
-	                filename: "Project Under Design Details - ${CURR_YR}",
-	                title: "Project Under Design Details -  ${CURR_YR}",
+	                filename: "Major Projects Details - ${CURR_YR}",
+	                title: "Major Projects Details -  ${CURR_YR}",
 	                messageTop: 'The information in this file is copyright to Faisal Jassim Group.',
 	                exportOptions: {
 	                    columns: ':not(:last-child)',
@@ -551,7 +672,7 @@ $(document).ready(function() {
            "createdRow": function ( row, data, index ) {      
            },
            initComplete: function () {
-               this.api().columns([1,3,4]).every( function () {
+               this.api().columns([1,2,3,4]).every( function () {
                    var column = this;
                    var selectVal;
                    var selectDefault="Select";
@@ -592,10 +713,11 @@ $(document).ready(function() {
 	        	 url: 'ProjectLeads',
 	        	 data: {octjf: "dlcav"},
 		  		 success: function(data) {
+		  			 alert(data);
 			     var op="";
 			     var outdate="";
 		  			var output="<table id='all-table' class='table table-bordered small'><thead><tr>"+"<th>#</th><th>Consultant</th><th>Product</th><th>Status</th>"+
-		  			 "<th>Division</th><th>Remarks</th><th>Last Updated</th><th>Action</th></tr></thead><tbody>";
+		  			 "<th>Division</th><th>Remarks</th><th>Client</th><th>Last Updated</th><th>Action</th></tr></thead><tbody>";
 		  			 var j=0;for (var i in data) { 
 		  				if(data[i].updated_date == '' || data[i].updated_date == undefined){
 		  					outdate=$.trim(data[i].created_date.substring(0, 10)).split("-").reverse().join("/");
@@ -603,7 +725,8 @@ $(document).ready(function() {
 		  						outdate=$.trim(data[i].updated_date);
 		  						}
 		  				 j=j+1; output+="<tr><td>"+j+"</td><td><span>" + $.trim(data[i].conslt_name)+ "</span></td>"+
-		  			 "<td>" + $.trim(data[i].product)+ "</td><td>" + $.trim(data[i].status) + "</td>"+ "<td>" +$.trim(data[i].division)+ "</td><td>" + $.trim(data[i].remarks )+ "</td>"+		  
+		  			 "<td>" + $.trim(data[i].product)+ "</td><td>" + $.trim(data[i].status) + "</td>"+ "<td>" +$.trim(data[i].division)+ "</td><td>" + $.trim(data[i].remarks )+ "</td>"+
+		  			"<td>" + $.trim(data[i].client) + "</td>"+
 					 "<td>" +outdate+ "</td>"+
 		  			 "<td>"+
 		  			"<a href='#'  id='cedt' class='btn btn-primary btn-xs' data-backdrop='static' data-keyboard='false' data-toggle='modal' data-target='#editCDtls"+$.trim(data[i].cnslt_id)+"' >"+
@@ -662,13 +785,18 @@ $(document).ready(function() {
 			  }else{alert("Please fill all data's");}
        }); 
 	   
+	   $( table.table().container() ).on( 'keyup', 'tfoot input', function () {
+		   table
+	        .column( $(this).parent().index()+':visible' )
+	        .search( "^" + this.value, true, false, true )
+	        .draw();
+	    } );
 	   
-	   
-	   $('#statusfoot select.filter > option:first-child')
+	   $('#statusfootss select.filter > option:first-child')
 	    .text('Select By Status');
 	   
 	   $('#ldsfoot select.filter > option:first-child')
-	    .text('Select By Leads');
+	    .text('Select By Main Contact');
 	   
 	   $('#dvnfltr select.filter > option:first-child')
 	    .text('Select By Division');
@@ -735,12 +863,16 @@ function getProducts(){
 	  	  else{$('#productsOpt').empty();}
 	    });
 }
+
+$('#newUnderDsgn').on('hidden.bs.modal', function () {
+    $(this).find('form')[0].reset();   
+});
 function getSeletedval(){
 	
-    var selectedValues = [];    
+  /*   var selectedValues = [];    
     $("#productsOpt :selected").each(function(){
         selectedValues.push($(this).val()); 
-    });
+    }); */
     return true;
     //alert(selectedValues);
    

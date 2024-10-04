@@ -630,7 +630,7 @@ var projects,  projects1, projectsfrRmdr,fdocId,fprojectName,fparty,fregOptnSts=
                                        sd=null;
                                     }                                   
                                    
-                                    int regltnBackDays = 5; // 3 days back day allowed
+                                    int regltnBackDays = 3; // 3 days back day allowed
                                     //commented as part of adding holidays to regularisation backdays.
                                   /*  if(j == 4 || j == 5 || j == 6){
                                     	regltnBackDays = 5; // 5 days back day allowed                                    	
