@@ -571,7 +571,7 @@ public class Logistic {
 	public Logistic(String id, String shipmentTerm, String shipmentMode, int noOfContainers, String exFactoryDate,
 			String contactDetails, String pickLocation, String divnRemarks, String divnUpdatedBy, String divnEmpName,
 			String poNumber, String poDate, String supplier, String finalDestination, String reExport,
-			String candFETADate) {
+			String candFETADate, String company, String paymentTerm) {
 		super();
 		// division updation
 		this.id = id;
@@ -590,6 +590,8 @@ public class Logistic {
 		this.finalDestination = finalDestination;
 		this.reExport = reExport;
 		this.candFETADate = candFETADate;
+		this.company = company;
+		this.paymentTerms = paymentTerm;
 	}
 
 	public Logistic(String id, String expTimeDeparture, String expTimeArrival, String logisticRemark,
