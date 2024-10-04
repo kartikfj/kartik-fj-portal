@@ -21,6 +21,8 @@ import beans.MarketingLeads;
 import beans.MktSalesLeads;
 import beans.MysqlDBConnectionPool;
 import beans.OrclDBConnectionPool;
+import beans.SSLMail;
+import beans.fjtcouser;
 
 public class MarketingLeadsDbUtil {
 
@@ -35,36 +37,91 @@ public class MarketingLeadsDbUtil {
 		try {
 			myCon = con.getMysqlConn();
 
-			String sql = "insert into marketing(oprtunity, status, location, leads, contact, product, remark, main_contractor, mep_contractor, updated_year, updated_by,week, updated_date, created_date) values(?,?,?,?,?,?,?,?,?,?,?,?,sysdate(),sysdate())";
+			String sql = "INSERT INTO marketing(oprtunity, status, location, leads, contact, product, remark, main_contractor, mep_contractor, updated_year, updated_by, week, created_date, updated_date, marketing_location, client) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(), sysdate(), ?, ?)";
 
-			// very important
-			myStmt = myCon.prepareStatement(sql);
+			// Prepare the statement
+			myStmt = myCon.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-			// set the param values for the student
-			myStmt.setString(1, theMLData.getOpt());
-			myStmt.setString(2, theMLData.getStatus());
-			myStmt.setString(3, theMLData.getLocation());
-			myStmt.setString(4, theMLData.getLeads());
-			myStmt.setString(5, theMLData.getContactDtls());
-			myStmt.setString(6, theMLData.getProducts());
-			myStmt.setString(7, theMLData.getRemarks());
-			myStmt.setString(8, theMLData.getMainContractor());
-			myStmt.setString(9, theMLData.getMepContractor());
-			myStmt.setString(10, theMLData.getUpdatedYr());
-			myStmt.setString(11, theMLData.getUpdatedBy());
-			myStmt.setString(12, theMLData.getUpdtdWeek());
+			// Set the parameter values in the correct order
+			myStmt.setString(1, theMLData.getOpt()); // Opportunity
+			myStmt.setString(2, theMLData.getStatus()); // Status
+			myStmt.setString(3, theMLData.getLocation()); // Location
+			myStmt.setString(4, theMLData.getLeads()); // Leads
+			myStmt.setString(5, theMLData.getContactDtls()); // Contact
+			myStmt.setString(6, theMLData.getProducts()); // Product (mapped to divisions)
+			myStmt.setString(7, theMLData.getRemarks()); // Remark
+			myStmt.setString(8, theMLData.getMainContractor());// Main Contractor
+			myStmt.setString(9, theMLData.getMepContractor()); // MEP Contractor
+			myStmt.setString(10, theMLData.getUpdatedYr()); // Updated Year
+			myStmt.setString(11, theMLData.getUpdatedBy()); // Updated By (Employee ID)
+			myStmt.setString(12, theMLData.getUpdtdWeek()); // Week
+			myStmt.setString(13, theMLData.getLocation()); // Marketing Location
+			myStmt.setString(14, theMLData.getClient()); // Client
 
-			// execute sql query
+			// Execute the SQL query
 			myStmt.execute();
+			// get lead id dynamically
+			myRes = myStmt.getGeneratedKeys();
+			if (myRes.next()) {
+				int leadId = myRes.getInt(1); // Retrieve the generated lead ID
+				System.out.println("Inserted lead with ID: " + leadId);
+				sendMarketingLeadApprovalEmail(theMLData, leadId);
+			} else {
+				System.out.println("Failed to retrieve the generated lead ID.");
+			}
 
 		} finally {
-			// close jdbc objects
-
+			// Close JDBC objects
 			close(myStmt, myRes);
 			con.closeConnection();
-
 		}
+	}
 
+	private void sendMarketingLeadApprovalEmail(MarketingLeads theMLData, int id) {
+		try {
+			fjtcouser fusr = new fjtcouser();
+			String message = "Dear Krikor,<br><br>" + "Please check the details of New Major Project<br>" + "<br><br>";
+			String msg = "<!DOCTYPE html><html><head>" + "<style>"
+					+ "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
+					+ "table { border-collapse: collapse;  width: 100%; max-width: 500px; margin: 0 auto; background-color: #fff; }"
+					+ "th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }"
+					+ "th { background-color: #f4f4f4; }" + "p { font-size: 16px; color: #333; margin: 0 0 16px; }"
+					+ ".column1 { width: 10%; font-weight: bold; }" + // Column for labels with bold text
+					".column2 { width: 20%; }" + // Column for details
+					"</style>" + "</head>" + "<body>" + "<p>" + message + "</p>" + "<table>" + "<tr>"
+					+ "<td class='column1'>Major Project</td>" + "<td class='column2'>" + theMLData.getOpt() + "</td>"
+					+ "</tr>" + "<tr>" + "<td class='column1'>Status</td>" + "<td class='column2'>"
+					+ theMLData.getStatus() + "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Location</td>"
+					+ "<td class='column2'>" + theMLData.getLocation() + "</td>" + "</tr>" + "<tr>"
+					+ "<td class='column1'>Division</td>" + "<td class='column2'>" + theMLData.getProducts() + "</td>"
+					+ "</tr>" + "<tr>" + "<td class='column1'>Main Contractor</td>" + "<td class='column2'>"
+					+ theMLData.getMainContractor() + "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Client</td>"
+					+ "<td class='column2'>" + theMLData.getClient() + "</td>" + "</tr>" + "</table>"
+					+ " <br/> <br/><p><a href='" + fusr.getUrlAddress() + "MajorProjectApproval?leadId=" + id
+					+ "' style='padding: 10px 15px; background-color: green; color: white; text-decoration: none; border-radius: 5px;'>Approve</a></p>"
+					+ "</body></html>";
+			String toAddress = "";
+			try {
+				toAddress = getPOCTeamMailIds("COO");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			SSLMail sslmail = new SSLMail();
+			if (msg != null) {
+				sslmail.setToaddr(toAddress);
+				sslmail.setMessageSub("Major Projects Approval Notification");
+				sslmail.setMessagebody(msg);
+				int emailStatus = sslmail.sendMail(fusr.getUrlAddress()); // Modify with your SMTP settings
+				System.out.println("successfully send the email notification: " + emailStatus);
+			} else {
+				System.out.println("error in email generation:");
+			}
+		} catch (Exception e) {
+			System.out.println("Error sending approval email.");
+			e.printStackTrace();
+		}
 	}
 
 	public List<MarketingLeads> getMarketingLeadsDetails(String currYear) throws SQLException {
@@ -108,6 +165,8 @@ public class MarketingLeadsDbUtil {
 				String updateWeek_tmp = myRes.getString(13);
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -119,7 +178,8 @@ public class MarketingLeadsDbUtil {
 
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
-						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus);
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client, approved);
 				// System.out.println("goal_list"+goal_id);
 				// add this to a array list of AppraisalHr
 				marketLeadsList.add(tempmarketLeadsList);
@@ -135,8 +195,7 @@ public class MarketingLeadsDbUtil {
 		}
 	}
 
-	public List<MarketingLeads> getAllMarketingLeadsDetailsforSalesEng(String currYear, String companyCode,
-			String divnCode) throws SQLException {
+	public List<MarketingLeads> getMarketingLeadsDetailsFltr(String currYear) throws SQLException {
 		int currentYear = Integer.parseInt(currYear);
 		int prevYear = currentYear - 1;
 		List<MarketingLeads> marketLeadsList = new ArrayList<>();
@@ -151,14 +210,12 @@ public class MarketingLeadsDbUtil {
 			myCon = con.getMysqlConn();
 
 			// Execute sql stamt
-			String sql = "SELECT * from marketing where YEAR(created_date) in(?,?) and product in(?,?,'AD')  order by updated_date desc ";
+			String sql = "SELECT * from marketing where YEAR(created_date) in (?,?)  AND isApproved = 'yes'  order by updated_date desc ";
 			myStmt = myCon.prepareStatement(sql);
 
 			// set the param values for the student
 			myStmt.setInt(1, prevYear);
 			myStmt.setInt(2, currentYear);
-			myStmt.setString(3, companyCode);
-			myStmt.setString(4, divnCode);
 			// Execute a SQL query
 			myRes = myStmt.executeQuery();
 
@@ -179,6 +236,8 @@ public class MarketingLeadsDbUtil {
 				String updateWeek_tmp = myRes.getString(13);
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -190,7 +249,83 @@ public class MarketingLeadsDbUtil {
 
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
-						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus);
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client, approved);
+				// System.out.println("goal_list"+goal_id);
+				// add this to a array list of AppraisalHr
+				marketLeadsList.add(tempmarketLeadsList);
+
+			}
+			return marketLeadsList;
+
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			con.closeConnection();
+
+		}
+	}
+
+	public List<MarketingLeads> getAllMarketingLeadsDetailsforSalesEng(String currYear) throws SQLException {
+		int currentYear = Integer.parseInt(currYear);
+		int prevYear = currentYear - 1;
+		List<MarketingLeads> marketLeadsList = new ArrayList<>();
+		String oppStatus = "";
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		try {
+
+			// Get Connection
+			myCon = con.getMysqlConn();
+
+			// Execute sql stamt
+			// String sql = "SELECT * from marketing where YEAR(created_date) in(?,?) and
+			// product in(?,?,'AD') order by updated_date desc ";
+			String sql = "SELECT * from marketing where YEAR(created_date) in(?,?) and isApproved = 'yes'  order by updated_date desc ";
+			myStmt = myCon.prepareStatement(sql);
+
+			// set the param values for the student
+			myStmt.setInt(1, prevYear);
+			myStmt.setInt(2, currentYear);
+			// myStmt.setString(3, companyCode);
+			// myStmt.setString(4, divnCode);
+			// Execute a SQL query
+			myRes = myStmt.executeQuery();
+
+			// Process the result set
+			while (myRes.next()) {
+				String mktid = myRes.getString(1);
+				String opt_temp = myRes.getString(2);
+				String status_temp = myRes.getString(3);
+				String location_temp = myRes.getString(4);
+				String leads_temp = myRes.getString(5);
+				String contact_temp = myRes.getString(6);
+				String product_temp = myRes.getString(7);
+				String remark_temp = myRes.getString(8);
+				String main_contra_temp = myRes.getString(9);
+				String mep_contra_temp = myRes.getString(10);
+				String update_year_temp = myRes.getString(11);
+				String updateby_temp = myRes.getString(12);
+				String updateWeek_tmp = myRes.getString(13);
+				String created_date_temp = myRes.getString(14);
+				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
+				try {
+					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
+
+					// System.out.println(oppStatus);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
+						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client, approved);
 				// System.out.println("goal_list"+goal_id);
 				// add this to a array list of AppraisalHr
 				marketLeadsList.add(tempmarketLeadsList);
@@ -224,15 +359,11 @@ public class MarketingLeadsDbUtil {
 					+ " WHERE week BETWEEN (select max(week) from  newfjtco.marketing  "
 					+ " where updated_year=YEAR(sysdate()))-3 AND (select max(week) from  newfjtco.marketing  "
 					+ " where updated_year=YEAR(sysdate()))  " + " and updated_year= ? "
-					+ " order by updated_date desc ";
+					+ " order by isApproved,updated_date asc";
+
 			myStmt = myCon.prepareStatement(sql);
-
-			// set the param values for the student
 			myStmt.setString(1, currentYear);
-			// Execute a SQL query
 			myRes = myStmt.executeQuery();
-
-			// Process the result set
 			while (myRes.next()) {
 				String mktid = myRes.getString(1);
 				String opt_temp = myRes.getString(2);
@@ -249,6 +380,8 @@ public class MarketingLeadsDbUtil {
 				String updateWeek_tmp = myRes.getString(13);
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -260,7 +393,8 @@ public class MarketingLeadsDbUtil {
 
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
-						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus);
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client, approved);
 
 				marketLeadsList.add(tempmarketLeadsList);
 
@@ -275,8 +409,7 @@ public class MarketingLeadsDbUtil {
 		}
 	}
 
-	public List<MarketingLeads> getMarketingLeadsforLast2Week_Sales_Eng(String currentYear, String companyCode,
-			String divnCode) throws SQLException {
+	public List<MarketingLeads> getMarketingLeadsforLast2WeekFlterData(String currentYear) throws SQLException {
 		List<MarketingLeads> marketLeadsList = new ArrayList<>();
 		String oppStatus = "";
 
@@ -293,14 +426,14 @@ public class MarketingLeadsDbUtil {
 			String sql = " SELECT * FROM marketing  "
 					+ " WHERE week BETWEEN (select max(week) from  newfjtco.marketing  "
 					+ " where updated_year=YEAR(sysdate()))-3 AND (select max(week) from  newfjtco.marketing  "
-					+ " where updated_year=YEAR(sysdate()))  " + " and  updated_year= ?  and product in(?,?,'AD')  "
+					+ " where updated_year=YEAR(sysdate()))  " + " and updated_year= ? " + " AND isApproved = 'yes' "
 					+ " order by updated_date desc ";
+			// String sql= "SELECT * FROM FJPORTAL.MARKETING_SALES_USERS where EMPID = ?
+
 			myStmt = myCon.prepareStatement(sql);
 
 			// set the param values for the student
 			myStmt.setString(1, currentYear);
-			myStmt.setString(2, companyCode);
-			myStmt.setString(3, divnCode);
 			// Execute a SQL query
 			myRes = myStmt.executeQuery();
 
@@ -321,6 +454,8 @@ public class MarketingLeadsDbUtil {
 				String updateWeek_tmp = myRes.getString(13);
 				String created_date_temp = myRes.getString(14);
 				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
 				try {
 					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
 
@@ -332,7 +467,81 @@ public class MarketingLeadsDbUtil {
 
 				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
 						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
-						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus);
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client, approved);
+
+				marketLeadsList.add(tempmarketLeadsList);
+
+			}
+			return marketLeadsList;
+
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			con.closeConnection();
+
+		}
+	}
+
+	public List<MarketingLeads> getMarketingLeadsforLast2Week_Sales_Eng(String currentYear) throws SQLException {
+		List<MarketingLeads> marketLeadsList = new ArrayList<>();
+		String oppStatus = "";
+
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		try {
+
+			// Get Connection
+			myCon = con.getMysqlConn();
+
+			// Execute sql stamt
+			String sql = " SELECT * FROM marketing  "
+					+ " WHERE week BETWEEN (select max(week) from  newfjtco.marketing  "
+					+ " where updated_year=YEAR(sysdate()))-3 AND (select max(week) from  newfjtco.marketing  "
+					+ " where updated_year=YEAR(sysdate()))  " + " and  updated_year= ?  and isApproved = 'yes'  "
+					+ " order by updated_date desc ";
+
+			myStmt = myCon.prepareStatement(sql);
+
+			// set the param values for the student
+			myStmt.setString(1, currentYear);
+			// Execute a SQL query
+			myRes = myStmt.executeQuery();
+
+			// Process the result set
+			while (myRes.next()) {
+				String mktid = myRes.getString(1);
+				String opt_temp = myRes.getString(2);
+				String status_temp = myRes.getString(3);
+				String location_temp = myRes.getString(4);
+				String leads_temp = myRes.getString(5);
+				String contact_temp = myRes.getString(6);
+				String product_temp = myRes.getString(7);
+				String remark_temp = myRes.getString(8);
+				String main_contra_temp = myRes.getString(9);
+				String mep_contra_temp = myRes.getString(10);
+				String update_year_temp = myRes.getString(11);
+				String updateby_temp = myRes.getString(12);
+				String updateWeek_tmp = myRes.getString(13);
+				String created_date_temp = myRes.getString(14);
+				String updatedate_temp = myRes.getString(15);
+				String client = myRes.getString(17);
+				String approved = myRes.getString(18);
+				try {
+					oppStatus = dateDiffStatus(updatedate_temp, created_date_temp);
+
+					// System.out.println(oppStatus);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				MarketingLeads tempmarketLeadsList = new MarketingLeads(mktid, opt_temp, status_temp, location_temp,
+						leads_temp, contact_temp, product_temp, remark_temp, main_contra_temp, mep_contra_temp,
+						update_year_temp, updateby_temp, updateWeek_tmp, created_date_temp, updatedate_temp, oppStatus,
+						client, approved);
 
 				marketLeadsList.add(tempmarketLeadsList);
 
@@ -368,7 +577,7 @@ public class MarketingLeadsDbUtil {
 		try {
 			myCon = con.getMysqlConn();
 
-			String sql = "update marketing set oprtunity = ?, status =?, location =?, leads =?, contact =?, product =?, remark =?, main_contractor = ?, mep_contractor = ?, updated_year =?, updated_by =?, week=?, updated_date = sysdate() "
+			String sql = "update marketing set oprtunity = ?, status =?, location =?, leads =?, contact =?, product =?, remark =?, main_contractor = ?, mep_contractor = ?, updated_year =?, updated_by =?, week=?, updated_date = sysdate(),client=? "
 					+ " where id = ? ";
 
 			// very important
@@ -387,10 +596,17 @@ public class MarketingLeadsDbUtil {
 			myStmt.setString(10, theMLData.getUpdatedYr());
 			myStmt.setString(11, theMLData.getUpdatedBy());
 			myStmt.setString(12, theMLData.getUpdtdWeek());
-			myStmt.setString(13, theMLData.getId());
-
+			myStmt.setString(13, theMLData.getClient());
+			myStmt.setString(14, theMLData.getId());
 			// execute sql query
 			myStmt.execute();
+			// int emailStatus = sslMail.sendMail(); // Modify with your SMTP
+			// settings
+			// sendMarketingLeadApprovalEmail(theMLData, 1);
+
+			System.out.println("Failed to send approval email.");
+
+			System.out.println("Approval email sent successfully.");
 
 		} finally {
 			// close jdbc objects
@@ -422,6 +638,108 @@ public class MarketingLeadsDbUtil {
 
 		}
 
+	}
+
+	public boolean updateApproveMarketingLeads(String mlId) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		MarketingLeads leadData = getMarketingLeadById(mlId);
+		int logupdate = 0;
+		fjtcouser fusr = new fjtcouser();
+		try {
+			myCon = con.getMysqlConn();
+			String sql = "update marketing set isApproved=?" + " where id = ? ";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, "yes");
+			myStmt.setString(2, mlId);
+			logupdate = myStmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("SQL Exception: " + e.getMessage());
+			e.printStackTrace();
+			return false;
+		} finally {
+			close(myStmt, null);
+			con.closeConnection();
+		}
+
+		if (leadData != null && logupdate == 1) {
+			String message = "Dear POC Team,<br><br>" + " A New Major Project has been Approved<br>"
+					+ "Full Detail of the project is available in FJPORTAL.<br><br>";
+
+			String messageBody = "<!DOCTYPE html><html><head>" + "<style>"
+					+ "body { font-family: Arial, sans-serif; margin: 0; padding: 0; }"
+					+ "table { border-collapse: collapse; width: 100%; max-width: 600px; margin: 0 auto; background-color: #fff; }"
+					+ "th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }"
+					+ "th { background-color: #f4f4f4; }" + "p { font-size: 16px; color: #333; margin: 0 0 16px; }"
+					+ ".column1 { width: 20%; vertical-align: top; font-weight: bold; }" + ".column2 { width: 80%; }"
+					+ "</style>" + "</head>" + "<body>" + "<p>" + message + "</p>" + "<table>"
+					// + "<tr><td class='column1'>Lead ID</td>" + "<td class='column2'>" +
+					// leadData.getId() + "</td>" + "</tr>"
+					+ "<tr>" + "<td class='column1'>Major Project</td>" + "<td class='column2'>" + leadData.getOpt()
+					+ "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Main Contactor</td>" + "<td class='column2'>"
+					+ leadData.getMainContractor() + "</td>" + "</tr>" + "<tr>"
+					+ "<td class='column1'>MEP Contactor</td>" + "<td class='column2'>" + leadData.getMepContractor()
+					+ "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Status</td>" + "<td class='column2'>"
+					+ leadData.getStatus() + "</td>" + "</tr>" + "<tr>" + "<td class='column1'>Location</td>"
+					+ "<td class='column2'>" + leadData.getLocation() + "</td>" + "</tr>" + "</table>"
+					+ "</body></html>";
+
+			String toAddress = "";
+			try {
+				toAddress = getPOCTeamMailIds("POC");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			SSLMail sslmail = new SSLMail();
+			if (messageBody != null) {
+				sslmail.setToaddr(toAddress);
+				sslmail.setMessageSub("Marketing Major Project Approved Notification");
+				sslmail.setMessagebody(messageBody);
+				int emailStatus = sslmail.sendMail(fusr.getUrlAddress()); // Modify with your SMTP settings
+				System.out.println("successfully send the email notification: " + emailStatus);
+			} else {
+				System.out.println("error in email generation:");
+			}
+		}
+		return true;
+	}
+
+	public MarketingLeads getMarketingLeadById(String leadId) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		MarketingLeads marketingLeadData = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+
+		try {
+			myCon = con.getMysqlConn();
+			String sql = "SELECT * FROM marketing WHERE id = ?";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, leadId);
+
+			myRs = myStmt.executeQuery();
+
+			if (myRs.next()) {
+				// Using the constructor to set values from the database
+				marketingLeadData = new MarketingLeads(myRs.getString("id"), myRs.getString("oprtunity"),
+						myRs.getString("status"), myRs.getString("location"), myRs.getString("leads"),
+						myRs.getString("contact"), myRs.getString("product"), myRs.getString("remark"),
+						myRs.getString("main_contractor"), myRs.getString("mep_contractor"),
+						myRs.getString("updated_year"), myRs.getString("updated_by"), myRs.getString("week"),
+						myRs.getString("created_date"), myRs.getString("updated_date"), "Some Status",
+						myRs.getString("client"), myRs.getString("isApproved"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(myStmt, myRs);
+			con.closeConnection();
+		}
+
+		return marketingLeadData;
 	}
 
 	/*
@@ -1501,5 +1819,90 @@ public class MarketingLeadsDbUtil {
 			orcl.closeConnection();
 		}
 
+	}
+
+	public String checkForExtraPrivileges(String empCode) {
+
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		Connection mcon = con.getMysqlConn();
+		ResultSet rs = null;
+		PreparedStatement psmt = null;
+		String extraPrev = null;
+		String usrsql = "select  extraPrev from fjtcouser where user_id =?";
+		try {
+			psmt = mcon.prepareStatement(usrsql);
+			psmt.setString(1, empCode);
+			rs = psmt.executeQuery();
+			if (rs.next()) {
+				extraPrev = rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				psmt.close();
+				con.closeConnection();
+
+			} catch (SQLException e) {
+				System.out.println("Exception in closing DB resources");
+			}
+		}
+		return extraPrev;
+	}
+
+	public String getPOCTeamMailIds(String userType) throws SQLException {
+
+		String mailAddresses = "";
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		MysqlDBConnectionPool con = new MysqlDBConnectionPool();
+		try {
+			myCon = con.getMysqlConn();
+			String sql = " select emailid from  emailconf where usagetype = ? ";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, userType);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				mailAddresses = myRes.getString(1);
+			}
+			return mailAddresses;
+
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			con.closeConnection();
+
+		}
+	}
+
+	public boolean checkLoggedinUserisPOCUser(String empcode) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		boolean isPOCUser = false;
+		try {
+			myCon = orcl.getOrclConn();
+			String sql = "SELECT *FROM MARKETING_SALES_USERS WHERE EMPID = ? ";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, empcode);
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				isPOCUser = true;
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Exception checkLoggedinUserisPOCUser");
+			e.printStackTrace();
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+
+		}
+		return isPOCUser;
 	}
 }

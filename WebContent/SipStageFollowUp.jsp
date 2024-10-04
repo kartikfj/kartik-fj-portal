@@ -208,7 +208,7 @@ div.dt-buttons{
 					  <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li>   
 					 <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
                </c:when>
-               <c:when test="${!empty fjtuser.subordinatelist and fjtuser.sales_code ne null}">
+               <c:when test="${fjtuser.salesDMYn ge 1 and fjtuser.sales_code ne null}">
                       <c:if test="${fjtuser.role eq 'gm'}">
 			      		 <li><a href="SipBranchPerformance"><i class="fa fa-building-o"></i><span>Branch Performance</span></a></li>
 			      	</c:if>
@@ -225,9 +225,9 @@ div.dt-buttons{
 					  <li><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li>
 					  <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
 					  <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
-               </c:when>
-               <c:when test="${fjtuser.sales_code ne null and empty fjtuser.subordinatelist}">
-	                <li><a href="sip.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>	               
+               </c:when>                            
+               <c:otherwise>
+               		<li><a href="sip.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>	               
 <!-- 	                <li><a href="SipJihDues"><i class="fa fa-table"></i><span>JIH Dues</span></a></li>  -->
 <!-- 	                <li><a href="SipLOIDues"><i class="fa fa-table"></i><span>LOI Dues</span></a></li>   -->					 
 	                <li class="active"><a href="SipStageFollowUpController"><i class="fa fa-database"></i><span>Stage Follow-Up</span></a></li>
@@ -237,6 +237,7 @@ div.dt-buttons{
 	                <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
                </c:when>              
                <c:otherwise>				
+
                </c:otherwise>               
               </c:choose>                            
 		</ul>

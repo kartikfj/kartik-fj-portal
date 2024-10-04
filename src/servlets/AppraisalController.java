@@ -49,7 +49,7 @@ public class AppraisalController extends HttpServlet {
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, SQLException {
-		request.setCharacterEncoding("UTF-8"); // this for character encoding , handle special characters
+		request.setCharacterEncoding("UTF-8"); // this for character encoding , handle special characterss
 		response.setCharacterEncoding("UTF-8");// this for character encoding , handle special characters
 		fjtcouser emp_id = (fjtcouser) request.getSession().getAttribute("fjtuser");
 

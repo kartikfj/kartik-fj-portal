@@ -10,8 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse; 
- 
+import javax.servlet.http.HttpServletResponse;
+
 import beans.ConsultantLeads;
 import beans.MarketingLeads;
 import beans.fjtcouser;
@@ -43,20 +43,22 @@ public class MktProjectUnderDesign extends HttpServlet {
 			String emp_code = fjtuser.getEmp_code();
 			String theDataFromHr = request.getParameter("octjf");
 			String userRole = fjtuser.getRole();
+			String extraPrev = marketingLeadsDbUtil.checkForExtraPrivileges(emp_code);
+
 			if (theDataFromHr == null) {
 				theDataFromHr = "list";
 			}
 			switch (theDataFromHr) {
 			case "list":
 				try {
-					goToMarketingLeads(request, response, userRole);
+					goToMarketingLeads(request, response, userRole, extraPrev);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
 			case "dlmav":
 				try {
-					viewAllMarketingLeadsDetail(request, response, userRole);
+					viewAllMarketingLeadsDetail(request, response, userRole, extraPrev);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -70,21 +72,28 @@ public class MktProjectUnderDesign extends HttpServlet {
 				break;
 			case "delete":
 				try {
-					deleteMarketingLeads(request, response, userRole);
+					deleteMarketingLeads(request, response, userRole, extraPrev);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case "approved":
+				try {
+					approvedMarketingLeads(request, response, userRole, extraPrev);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
 			case "UPDATE":
 				try {
-					updateMarketingLeads(request, response, emp_code, userRole);
+					updateMarketingLeads(request, response, emp_code, userRole, extraPrev);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
 			case "etadputkm":// update marketing
 				try {
-					createMarketingLeads(request, response, emp_code, userRole);
+					createMarketingLeads(request, response, emp_code, userRole, extraPrev);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -106,7 +115,7 @@ public class MktProjectUnderDesign extends HttpServlet {
 				break;
 			default:
 				try {
-					goToMarketingLeads(request, response, userRole);
+					goToMarketingLeads(request, response, userRole, extraPrev);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -114,27 +123,21 @@ public class MktProjectUnderDesign extends HttpServlet {
 		}
 	}
 
-	private void viewAllMarketingLeadsDetail(HttpServletRequest request, HttpServletResponse response, String userRole)
-			throws SQLException, ServletException, IOException {
+	private void viewAllMarketingLeadsDetail(HttpServletRequest request, HttpServletResponse response, String userRole,
+			String extraPrev) throws SQLException, ServletException, IOException {
 		String currYear = Calendar.getInstance().get(Calendar.YEAR) + "";
-
 		List<ConsultantLeads> divisonList = marketingLeadsDbUtil.getAllDivisionList();
 		request.setAttribute("DLFCL", divisonList);
-
-		if (userRole.equals("mkt") || userRole.equals("mg")) {
+		if (userRole.equals("mg") || (extraPrev != null && extraPrev.equals("Yes"))) {
 			List<MarketingLeads> mktAll_Details = marketingLeadsDbUtil.getMarketingLeadsDetails(currYear);
 			request.setAttribute("MLAD", mktAll_Details);
 			request.setAttribute("MLWD", mktAll_Details);
 		} else {
-			fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
-			String companyCode = fjtuser.getEmp_com_code();
-			String divnCode = fjtuser.getEmp_divn_code();
-			List<MarketingLeads> mktWeek_Details = marketingLeadsDbUtil.getAllMarketingLeadsDetailsforSalesEng(currYear,
-					companyCode, divnCode);
+			List<MarketingLeads> mktWeek_Details = marketingLeadsDbUtil
+					.getAllMarketingLeadsDetailsforSalesEng(currYear);
 			request.setAttribute("MLWD", mktWeek_Details);
 		}
-
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/marketing/ProjectUD.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/marketing/majorProjects.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -183,15 +186,22 @@ public class MktProjectUnderDesign extends HttpServlet {
 		dispatcher.forward(request, response);
 	}
 
-	private void deleteMarketingLeads(HttpServletRequest request, HttpServletResponse response, String userRole)
-			throws SQLException, ServletException, IOException {
+	private void deleteMarketingLeads(HttpServletRequest request, HttpServletResponse response, String userRole,
+			String extraPrev) throws SQLException, ServletException, IOException {
 		String mlId = request.getParameter("mktli");
 		marketingLeadsDbUtil.deleteUpdateMarketingLeads(mlId);
-		goToMarketingLeads(request, response, userRole);
+		goToMarketingLeads(request, response, userRole, extraPrev);
+	}
+
+	private void approvedMarketingLeads(HttpServletRequest request, HttpServletResponse response, String userRole,
+			String extraPrev) throws SQLException, ServletException, IOException {
+		String mlId = request.getParameter("mgappr");
+		marketingLeadsDbUtil.updateApproveMarketingLeads(mlId);
+		goToMarketingLeads(request, response, userRole, extraPrev);
 	}
 
 	private void updateMarketingLeads(HttpServletRequest request, HttpServletResponse response, String emp_code,
-			String userRole) throws SQLException, ServletException, IOException {
+			String userRole, String extraPrev) throws SQLException, ServletException, IOException {
 		String mlId = request.getParameter("mktli");
 		String oportunity = request.getParameter("mktOpportunity");
 		String status = request.getParameter("mkstatus");
@@ -204,62 +214,69 @@ public class MktProjectUnderDesign extends HttpServlet {
 		String mepCont = request.getParameter("mktMepCont");
 		String week = request.getParameter("mktWeek");
 		String emp_ID = emp_code;
+		String client = request.getParameter("mktClient");
 		String currYear = Calendar.getInstance().get(Calendar.YEAR) + "";
 		MarketingLeads mkt_Details = new MarketingLeads(mlId, oportunity, status, location, leads, contact, division,
-				product, mainCont, mepCont, currYear, emp_ID, week, 0);
+				product, mainCont, mepCont, currYear, emp_ID, week, 0, client);
+		System.out.print("marketikng : " + mkt_Details.getClient());
 		marketingLeadsDbUtil.editUpdateMarketingLeads(mkt_Details);
-		goToMarketingLeads(request, response, userRole);
+		goToMarketingLeads(request, response, userRole, extraPrev);
 
 	}
 
 	private void createMarketingLeads(HttpServletRequest request, HttpServletResponse response, String empployee_Code,
-			String userRole) throws ServletException, IOException, SQLException {
+			String userRole, String extraPrev) throws ServletException, IOException, SQLException {
 		String products = "";
 		String oportunity = request.getParameter("mktOpportunity");
 		String status = request.getParameter("mkstatus");
 		String location = request.getParameter("mktLocation");
 		String leads = request.getParameter("mkLeads");
 		String contact = request.getParameter("mktContact");
-		String division = request.getParameter("mkDivn");// division from front end
-		// String remark=request.getParameter("mktRmrk");
-		String[] product_lists = request.getParameterValues("prodct");
-		if (product_lists.length > 0) {
-			products = String.join(", ", product_lists);
+		// String division = request.getParameter("mkDivn");// division from front end
+		String[] division_list = request.getParameterValues("mktDivn");
+		String divisions = "";
+		if (division_list != null && division_list.length > 0) {
+			divisions = String.join(", ", division_list);
+			System.out.println("Received divisions from frontend:");
+			for (String division : division_list) {
+				System.out.println("Division: " + division);
+			}
 		}
+		String remark = request.getParameter("mktRmrk");
+		String client = request.getParameter("mktClient");
+		// String remark=request.getParameter("mktRmrk");
+		/*
+		 * String[] product_lists = request.getParameterValues("prodct"); if
+		 * (product_lists.length > 0) { products = String.join(", ", product_lists); }
+		 */
 		String mainCont = request.getParameter("mktMainCont");
 		String mepCont = request.getParameter("mktMepCont");
 		String week = request.getParameter("mktWeek");
 		String emp_ID = empployee_Code;
 		String currYear = Calendar.getInstance().get(Calendar.YEAR) + "";
-		MarketingLeads mkt_Details = new MarketingLeads(oportunity, status, location, leads, contact, division,
-				products, mainCont, mepCont, currYear, emp_ID, week, 0);
+		MarketingLeads mkt_Details = new MarketingLeads("", oportunity, status, location, leads, contact, divisions,
+				remark, mainCont, mepCont, currYear, emp_ID, week, client);
 		marketingLeadsDbUtil.insertNewMarketingLeads(mkt_Details);
-
-		List<ConsultantLeads> divisonList = marketingLeadsDbUtil.getAllDivisionList();
-		request.setAttribute("DLFCL", divisonList);
-
-		goToMarketingLeads(request, response, userRole);
+		goToMarketingLeads(request, response, userRole, extraPrev);
 
 	}
 
-	private void goToMarketingLeads(HttpServletRequest request, HttpServletResponse response, String userRole)
-			throws ServletException, IOException, SQLException {
+	private void goToMarketingLeads(HttpServletRequest request, HttpServletResponse response, String userRole,
+			String extraPrev) throws ServletException, IOException, SQLException {
 		String currYear = Calendar.getInstance().get(Calendar.YEAR) + "";
 		List<ConsultantLeads> divisonList = marketingLeadsDbUtil.getAllDivisionList();
+		fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
 		request.setAttribute("DLFCL", divisonList);
-		if (userRole.equals("mkt") || userRole.equals("mg")) {
+
+		if (userRole.equals("mg") || (extraPrev != null && extraPrev.equals("Yes"))) {
 			List<MarketingLeads> mktWeek_Details = marketingLeadsDbUtil.getMarketingLeadsforLast2Week(currYear);
 			request.setAttribute("MLWD", mktWeek_Details);
-		} else {
-			fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
-			String companyCode = fjtuser.getEmp_com_code();
-			String divnCode = fjtuser.getEmp_divn_code();
+		} else if (marketingLeadsDbUtil.checkLoggedinUserisPOCUser(fjtuser.getEmp_code())) {
 			List<MarketingLeads> mktWeek_Details = marketingLeadsDbUtil
-					.getMarketingLeadsforLast2Week_Sales_Eng(currYear, companyCode, divnCode);
+					.getMarketingLeadsforLast2Week_Sales_Eng(currYear);
 			request.setAttribute("MLWD", mktWeek_Details);
 		}
-
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/marketing/ProjectUD.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/marketing/majorProjects.jsp");
 		dispatcher.forward(request, response);
 
 	}
