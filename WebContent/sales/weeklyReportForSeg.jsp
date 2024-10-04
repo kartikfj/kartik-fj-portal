@@ -121,11 +121,14 @@ table.dataTable thead th{    padding: 3px 8px !important;}
              <c:when test="${fjtuser.role eq 'mg' and fjtuser.sales_code ne null}"> 
       		     <li><a href="SipBranchPerformance"><i class="fa fa-building-o"></i><span>Branch Performance</span></a></li> 
                  <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>SE Perf.</span></a></li>
+                 <li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
 				 <li><a href="DisionInfo.jsp"><i class="fa fa-line-chart"></i><span>Sub Division Perf.</span></a></li>
 				 <li><a href="CompanyInfo.jsp?empcode=${DFLTDMCODE}"><i class="fa fa-pie-chart"></i><span>Division 	Perf.</span></a></li>
 				 <li><a href="SipUserActivity"><i class="fa fa-user"></i><span>SE Activity History</span></a></li>
 <!-- 				 <li><a href="SipJihDues"><i class="fa fa-table"></i><span>JIH Dues</span></a></li>    -->
+				 <li><a href="SipStageFollowUpController"><i class="fa fa-database"></i><span>Stage Follow-Up</span></a></li> 
 				 <li class="active"><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li>
+				 <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
 				 <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>Home</span></a></li>   
                </c:when>
                <c:when test="${fjtuser.salesDMYn eq 1  and fjtuser.sales_code ne null}">

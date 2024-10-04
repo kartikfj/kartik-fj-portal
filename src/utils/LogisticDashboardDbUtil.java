@@ -66,7 +66,8 @@ public class LogisticDashboardDbUtil {
 					+ " ETD,ETA,LOG_REMARKS, "
 					+ " LOG_UPD_BY,  (SELECT EMP_NAME FROM FJPORTAL.PM_EMP_KEY WHERE EMP_CODE = LOG_UPD_BY AND ROWNUM = 1 ) LOG_EMP_NAME,LOG_UPD_DT, "
 					+ " FULLGRN, REFERENCE, FINAL_DEST, SHIP_DOC_STAT, RE_EXPORT,DELIVERY_STATUS "
-					+ " FROM FJPORTAL.LOG_DB_TXN WHERE NVL(FULLGRN,'N')='Y'  ORDER BY " + orderCodition + ", PONO DESC";
+					+ " FROM FJPORTAL.LOG_DB_TXN WHERE NVL(FULLGRN,'N')='Y'  ORDER BY LINE_NO , " + orderCodition
+					+ ", PONO DESC";
 			myStmt = myCon.createStatement();
 			myRes = myStmt.executeQuery(sql);
 			while (myRes.next()) {
@@ -120,18 +121,7 @@ public class LogisticDashboardDbUtil {
 	}
 
 	public List<Logistic> getCompletePODetails(String divnCode) throws SQLException {
-		String orderCodition = "";
-		if (divnCode.equalsIgnoreCase("FN")) {
-//			orderCodition = " (CASE WHEN DIVN_UPD_DT IS NULL  " + 
-//					" THEN ADD_MONTHS(SYSDATE, -24) " + 
-//					" ELSE DIVN_UPD_DT  " + 
-//					" END) DESC";
-			orderCodition = " EX_FAC_DATE ASC";
-		} else if (divnCode.equalsIgnoreCase("LG")) {
-			orderCodition = " EX_FAC_DATE ASC";
-		} else {
-			orderCodition = " EX_FAC_DATE ASC";
-		}
+
 		List<Logistic> poList = new ArrayList<>();
 		Connection myCon = null;
 		Statement myStmt = null;
@@ -145,9 +135,9 @@ public class LogisticDashboardDbUtil {
 					+ " FIN_UPD_BY,  (SELECT EMP_NAME FROM FJPORTAL.PM_EMP_KEY WHERE EMP_CODE = FIN_UPD_BY AND ROWNUM = 1 ) FIN_EMP_NAME,FIN_UPD_DT, "
 					+ " ETD,ETA,LOG_REMARKS, "
 					+ " LOG_UPD_BY,  (SELECT EMP_NAME FROM FJPORTAL.PM_EMP_KEY WHERE EMP_CODE = LOG_UPD_BY AND ROWNUM = 1 ) LOG_EMP_NAME,LOG_UPD_DT, "
-					+ " FULLGRN, REFERENCE, FINAL_DEST, SHIP_DOC_STAT, RE_EXPORT,DELIVERY_STATUS "
+					+ " FULLGRN, REFERENCE, FINAL_DEST, SHIP_DOC_STAT, RE_EXPORT,DELIVERY_STATUS,NOMINATED_ON,FREIGHT_AMT,INSURANCE_AMT,FORWARDER_NAME,CURRENCY,LINE_NO  "
 					+ " FROM FJPORTAL.LOG_DB_TXN WHERE NVL(FULLGRN,'N')='N' AND EX_FAC_DATE IS NOT NULL ORDER BY "
-					+ orderCodition + ", PONO DESC";
+					+ " PONO , LINE_NO,  EX_FAC_DATE ASC";
 			myStmt = myCon.createStatement();
 			myRes = myStmt.executeQuery(sql);
 			while (myRes.next()) {
@@ -184,12 +174,19 @@ public class LogisticDashboardDbUtil {
 				String shipDocsStatus = myRes.getString(31);
 				String reExport = myRes.getString(32);
 				String deliverystatus = myRes.getString(33);
+				String nominatedOn = myRes.getString(34);
+				int freightCharges = myRes.getInt(35);
+				int insuranceCharges = myRes.getInt(36);
+				String forwardedName = myRes.getString(37);
+				String currencyType = myRes.getString(38);
+				int lineNo = myRes.getInt(39);
 				Logistic tempPoList = new Logistic(id, company, poNumber, poDate, supplier, paymentTerms, shipmentTerm,
 						shipmentMode, noOfContainers, exFactoryDate, contactDetails, pickLocation, divnRemarks,
 						divnUpdatedBy, divnEmpName, divnUpdatedDate, paymentStatus, finRemarks, finUpdatedBy,
 						finEmpName, finUpdatedDate, expTimeDeparture, expTimeArrival, logisticRemark, logisticUpdBy,
 						logEmpName, logisticUpdDate, fullGrn, reference, finalDestination, shipDocsStatus, reExport,
-						deliverystatus);
+						deliverystatus, nominatedOn, currencyType, freightCharges, insuranceCharges, forwardedName,
+						lineNo);
 				poList.add(tempPoList);
 			}
 			return poList;
@@ -201,11 +198,6 @@ public class LogisticDashboardDbUtil {
 	}
 
 	public List<Logistic> getPODetailsforTXNCode(String empCode) throws SQLException {
-//		String orderCodition = " (CASE WHEN EX_FAC_DATE IS NULL  " + 
-//				" THEN ADD_MONTHS(SYSDATE, -24) " + 
-//				" ELSE EX_FAC_DATE  " + 
-//				" END) DESC"; 
-		String orderCondition = " EX_FAC_DATE ASC";
 		List<Logistic> poList = new ArrayList<>();
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
@@ -219,11 +211,11 @@ public class LogisticDashboardDbUtil {
 					+ " FIN_UPD_BY,  (SELECT EMP_NAME FROM FJPORTAL.PM_EMP_KEY WHERE EMP_CODE = FIN_UPD_BY AND ROWNUM = 1 ) FIN_EMP_NAME, FIN_UPD_DT, "
 					+ " ETD,ETA, LOG_REMARKS, "
 					+ " LOG_UPD_BY,  (SELECT EMP_NAME FROM FJPORTAL.PM_EMP_KEY WHERE EMP_CODE = LOG_UPD_BY AND ROWNUM = 1 ) LOG_EMP_NAME,LOG_UPD_DT, "
-					+ " FULLGRN, REFERENCE, FINAL_DEST, SHIP_DOC_STAT, RE_EXPORT, DELIVERY_STATUS"
+					+ " FULLGRN, REFERENCE, FINAL_DEST, SHIP_DOC_STAT, RE_EXPORT, DELIVERY_STATUS, NOMINATED_ON,FREIGHT_AMT,INSURANCE_AMT,FORWARDER_NAME,CURRENCY,LINE_NO "
 					+ " FROM FJPORTAL.LOG_DB_TXN WHERE "
 					+ " REGEXP_LIKE (PONO, (SELECT LISTAGG(PO_CODE,'|') WITHIN GROUP (ORDER BY PO_CODE) list"
-					+ "  FROM LOG_DB_DIVN_EMP  WHERE EMP_CODE = ?  ), 'i') " + " AND  NVL(FULLGRN,'N')='N' ORDER BY   "
-					+ orderCondition + ", PONO DESC";
+					+ "  FROM LOG_DB_DIVN_EMP  WHERE EMP_CODE = ?  ), 'i') " + " AND  NVL(FULLGRN,'N')='N' ORDER BY  "
+					+ " PONO , LINE_NO, EX_FAC_DATE ASC";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, empCode);
 			myRes = myStmt.executeQuery();
@@ -261,12 +253,19 @@ public class LogisticDashboardDbUtil {
 				String shipDocsStatus = myRes.getString(31);
 				String reExport = myRes.getString(32);
 				String deliveryStatus = myRes.getString(33);
+				String nominatedOn = myRes.getString(34);
+				int freightCharges = myRes.getInt(35);
+				int insuranceCharges = myRes.getInt(36);
+				String forwardedName = myRes.getString(37);
+				String currencyType = myRes.getString(38);
+				int lineNo = myRes.getInt(39);
 				Logistic tempPoList = new Logistic(id, company, poNumber, poDate, supplier, paymentTerms, shipmentTerm,
 						shipmentMode, noOfContainers, exFactoryDate, contactDetails, pickLocation, divnRemarks,
 						divnUpdatedBy, divnEmpName, divnUpdatedDate, paymentStatus, finRemarks, finUpdatedBy,
 						finEmpName, finUpdatedDate, expTimeDeparture, expTimeArrival, logisticRemark, logisticUpdBy,
 						logEmpName, logisticUpdDate, fullGrn, reference, finalDestination, shipDocsStatus, reExport,
-						deliveryStatus);
+						deliveryStatus, nominatedOn, currencyType, freightCharges, insuranceCharges, forwardedName,
+						lineNo);
 				poList.add(tempPoList);
 			}
 			return poList;
@@ -278,7 +277,7 @@ public class LogisticDashboardDbUtil {
 	}
 
 	public List<Logistic> getPODetailsforTXNCodeForDM(String dmCode) throws SQLException {
-		String orderCondition = " EX_FAC_DATE ASC";
+
 		List<Logistic> poList = new ArrayList<>();
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
@@ -286,17 +285,17 @@ public class LogisticDashboardDbUtil {
 		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
 		try {
 			myCon = orcl.getOrclConn();
-			String sql = " SELECT PH_SYS_ID, COMP, PONO, PO_DATE, SUPPLIER, PMT_TERMS, TERMS_SHIP, MODE_SHIP, CONTAINER, EX_FAC_DATE, CONT_DET, PICK_LOCN, DIVN_REMARKS, "
+			String sql = "SELECT PH_SYS_ID, COMP, PONO, PO_DATE, SUPPLIER, PMT_TERMS, TERMS_SHIP, MODE_SHIP, CONTAINER, EX_FAC_DATE, CONT_DET, PICK_LOCN, DIVN_REMARKS, "
 					+ "  DIVN_UPD_BY, (SELECT EMP_NAME FROM FJPORTAL.PM_EMP_KEY WHERE EMP_CODE = DIVN_UPD_BY AND ROWNUM = 1 ) DIV_EMP_NAME,DIVN_UPD_DT,  "
 					+ "  PAYMENT_STAT, FIN_REMARKS, "
 					+ "  FIN_UPD_BY,  (SELECT EMP_NAME FROM FJPORTAL.PM_EMP_KEY WHERE EMP_CODE = FIN_UPD_BY AND ROWNUM = 1 ) FIN_EMP_NAME, FIN_UPD_DT, "
 					+ " ETD,ETA, LOG_REMARKS, "
 					+ " LOG_UPD_BY,  (SELECT EMP_NAME FROM FJPORTAL.PM_EMP_KEY WHERE EMP_CODE = LOG_UPD_BY AND ROWNUM = 1 ) LOG_EMP_NAME,LOG_UPD_DT, "
-					+ " FULLGRN, REFERENCE, FINAL_DEST, SHIP_DOC_STAT, RE_EXPORT, DELIVERY_STATUS "
+					+ " FULLGRN, REFERENCE, FINAL_DEST, SHIP_DOC_STAT, RE_EXPORT, DELIVERY_STATUS, NOMINATED_ON,FREIGHT_AMT,INSURANCE_AMT,FORWARDER_NAME,CURRENCY  "
 					+ " FROM FJPORTAL.LOG_DB_TXN WHERE "
 					+ " REGEXP_LIKE (PONO, (SELECT LISTAGG(PO_CODE,'|') WITHIN GROUP (ORDER BY PO_CODE) list"
 					+ "  FROM LOG_DB_DIVN_EMP  WHERE DM_CODE = ?  ), 'i') " + " AND  NVL(FULLGRN,'N')='N' ORDER BY   "
-					+ orderCondition + ", PONO DESC";
+					+ " PONO , LINE_NO, EX_FAC_DATE ASC";
 			myStmt = myCon.prepareStatement(sql);
 			myStmt.setString(1, dmCode);
 			myRes = myStmt.executeQuery();
@@ -334,12 +333,17 @@ public class LogisticDashboardDbUtil {
 				String shipDocsStatus = myRes.getString(31);
 				String reExport = myRes.getString(32);
 				String deliveryStatus = myRes.getString(33);
+				String nominatedOn = myRes.getString(34);
+				int freightCharges = myRes.getInt(35);
+				int insuranceCharges = myRes.getInt(36);
+				String forwardedName = myRes.getString(37);
+				String currencyType = myRes.getString(38);
 				Logistic tempPoList = new Logistic(id, company, poNumber, poDate, supplier, paymentTerms, shipmentTerm,
 						shipmentMode, noOfContainers, exFactoryDate, contactDetails, pickLocation, divnRemarks,
 						divnUpdatedBy, divnEmpName, divnUpdatedDate, paymentStatus, finRemarks, finUpdatedBy,
 						finEmpName, finUpdatedDate, expTimeDeparture, expTimeArrival, logisticRemark, logisticUpdBy,
 						logEmpName, logisticUpdDate, fullGrn, reference, finalDestination, shipDocsStatus, reExport,
-						deliveryStatus);
+						deliveryStatus, nominatedOn, currencyType, freightCharges, insuranceCharges, forwardedName);
 				poList.add(tempPoList);
 			}
 			return poList;
@@ -363,8 +367,13 @@ public class LogisticDashboardDbUtil {
 		}
 	}
 
-	public int updatePODetailsByDivision(Logistic poDetails) {
+	public int updatePODetailsByDivision(Logistic poDetails, String lineNO) {
+		int convertLine = Integer.parseInt(lineNO);
+
+		System.out.println(convertLine);
+		System.out.println("came");
 		String id = decrypt(poDetails.getId());
+		System.out.println(id);
 		int logType = -2;
 		Connection myCon = null;
 		PreparedStatement myStmt = null;
@@ -375,27 +384,30 @@ public class LogisticDashboardDbUtil {
 			if (myCon == null)
 				return -2;
 
-			String sql = " UPDATE FJPORTAL.LOG_DB_TXN  "
-					+ " SET TERMS_SHIP = ?, MODE_SHIP =?, CONTAINER = ?, EX_FAC_DATE = ?, CONT_DET=?, PICK_LOCN=?, DIVN_REMARKS=?, FINAL_DEST = ?,  DIVN_UPD_DT  = SYSDATE, DIVN_UPD_BY = ?,  RE_EXPORT = ? , CFDATE = ? "
-					+ " WHERE PH_SYS_ID = ?  AND NVL(FULLGRN,'N')='N'  AND LOG_UPD_BY IS NULL";
+			String sql = " UPDATE FJPORTAL.LOG_DB_TXN  " + " SET "
+			// + "TERMS_SHIP = ?,"
+					+ " MODE_SHIP =?, CONTAINER = ?, EX_FAC_DATE = ?, CONT_DET=?, PICK_LOCN=?, DIVN_REMARKS=?, FINAL_DEST = ?,  DIVN_UPD_DT  = SYSDATE, DIVN_UPD_BY = ?,  RE_EXPORT = ?  "
+					// + "CFDATE = ? "
+					+ " WHERE PH_SYS_ID = ? AND LINE_NO=? AND NVL(FULLGRN,'N')='N'  AND LOG_UPD_BY IS NULL";
 			// + "AND FIN_UPD_BY IS NULL AND LOG_UPD_BY IS NULL ";// Removed condition as
 			// per mngment dcsn
 			myStmt = myCon.prepareStatement(sql);
-			myStmt.setString(1, poDetails.getShipmentTerm());
-			myStmt.setString(2, poDetails.getShipmentMode());
-			myStmt.setInt(3, poDetails.getNoOfContainers());
-			myStmt.setDate(4, getSqlDate(poDetails.getExFactoryDate()));
-			myStmt.setString(5, poDetails.getContactDetails());
-			myStmt.setString(6, poDetails.getPickLocation());
-			myStmt.setString(7, poDetails.getDivnRemarks());
-			myStmt.setString(8, poDetails.getFinalDestination());
-			myStmt.setString(9, poDetails.getDivnUpdatedBy());
-			myStmt.setString(10, poDetails.getReExport());
-			myStmt.setDate(11, getSqlDate(poDetails.getCandFETADate()));
-			myStmt.setString(12, id);
-
+			System.out.println("come2");
+			// myStmt.setString(1, poDetails.getShipmentTerm());
+			myStmt.setString(1, poDetails.getShipmentMode());
+			myStmt.setInt(2, poDetails.getNoOfContainers());
+			myStmt.setDate(3, getSqlDate(poDetails.getExFactoryDate()));
+			myStmt.setString(4, poDetails.getContactDetails());
+			myStmt.setString(5, poDetails.getPickLocation());
+			myStmt.setString(6, poDetails.getDivnRemarks());
+			myStmt.setString(7, poDetails.getFinalDestination());
+			myStmt.setString(8, poDetails.getDivnUpdatedBy());
+			myStmt.setString(9, poDetails.getReExport());
+			// myStmt.setDate(11, getSqlDate(poDetails.getCandFETADate()));
+			myStmt.setString(10, id);
+			myStmt.setInt(11, convertLine);
 			logType = myStmt.executeUpdate();
-			// System.out.println("LOG VALUE : "+logType);
+			System.out.println("LOG VALUE : " + logType);
 		} catch (SQLException ex) {
 			logType = -2;
 			System.out.println("Exception in closing DB resources at the time updating division user po details by "
@@ -403,6 +415,7 @@ public class LogisticDashboardDbUtil {
 			ex.printStackTrace();
 		} finally {
 			// close jdbc objects
+			System.out.println("data is updated");
 			close(myStmt, myRes);
 			orcl.closeConnection();
 			// System.out.println("Updated and closed db Successfully ");
@@ -424,7 +437,7 @@ public class LogisticDashboardDbUtil {
 
 			String sql = " UPDATE FJPORTAL.LOG_DB_TXN   "
 					+ " SET PAYMENT_STAT = ?, FIN_REMARKS = ?, FIN_UPD_DT  = SYSDATE, FIN_UPD_BY = ? "
-					+ " WHERE PH_SYS_ID = ?  AND NVL(FULLGRN,'N')='N' "
+					+ " WHERE PH_SYS_ID = ? AND NVL(FULLGRN,'N')='N' "
 					// + "AND DIVN_UPD_BY IS NOT NULL AND LOG_UPD_BY IS NULL ";// commented as per
 					// no checs nooded expect divn entry, added below condition
 					+ "  AND DIVN_UPD_BY IS NOT NULL ";
@@ -450,7 +463,9 @@ public class LogisticDashboardDbUtil {
 		return logType;
 	}
 
-	public int updatePODetailsByLogistic(Logistic poDetails) {
+	public int updatePODetailsByLogistic(Logistic poDetails, String lineNO) {
+		int convertLine = Integer.parseInt(lineNO);
+
 		String id = decrypt(poDetails.getId());
 		int logType = -2;
 		Connection myCon = null;
@@ -464,8 +479,8 @@ public class LogisticDashboardDbUtil {
 			// removed reference number as it is not a editable field and added status of
 			// delivery as per logistics team
 			String sql = " UPDATE FJPORTAL.LOG_DB_TXN   "
-					+ " SET ETD = ?, ETA = ?, LOG_REMARKS=?,   LOG_UPD_DT  = SYSDATE, LOG_UPD_BY = ? , DELIVERY_STATUS=?, SHIP_DOC_STAT = ?"
-					+ " WHERE PH_SYS_ID = ?  AND NVL(FULLGRN,'N')='N' "
+					+ " SET ETD = ?, ETA = ?, LOG_REMARKS=?,   LOG_UPD_DT  = SYSDATE, LOG_UPD_BY = ? , DELIVERY_STATUS=?, SHIP_DOC_STAT = ?, NOMINATED_ON = ?,FREIGHT_AMT = ?,INSURANCE_AMT = ? , FORWARDER_NAME = ?, CURRENCY = ?"
+					+ " WHERE PH_SYS_ID = ?  AND LINE_NO=?  AND NVL(FULLGRN,'N')='N' "
 					// + "AND FIN_UPD_BY IS NOT NULL AND DIVN_UPD_BY IS NOT NULL "; // commented as
 					// per no checs nooded expect divn entry, added below condition
 					+ "  AND DIVN_UPD_BY IS NOT NULL ";
@@ -477,10 +492,16 @@ public class LogisticDashboardDbUtil {
 			// myStmt.setString(5, poDetails.getReference());
 			myStmt.setString(5, poDetails.getDeliveryStatus());
 			myStmt.setString(6, poDetails.getShipDocStatus());
-			myStmt.setString(7, id);
+			myStmt.setDate(7, getSqlDate(poDetails.getNominatedOn()));
+			myStmt.setInt(8, poDetails.getFreightCharges());
+			myStmt.setInt(9, poDetails.getInsuranceCharges());
+			myStmt.setString(10, poDetails.getForwardedName());
+			myStmt.setString(11, poDetails.getCurrency());
+			myStmt.setString(12, id);
+			myStmt.setInt(13, convertLine);
 
 			logType = myStmt.executeUpdate();
-			// System.out.println("LOG VALUE : "+logType);
+			System.out.println("updatePODetailsByLogistic LOG VALUE : " + logType);
 		} catch (SQLException ex) {
 			logType = -2;
 			System.out.println("Exception in closing DB resources at the time updating Logistic user po details by "
@@ -781,4 +802,170 @@ public class LogisticDashboardDbUtil {
 		return retval;
 	}
 
+	public Boolean checkForEntryInDB(Logistic poDetails, String lineNo) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		int lineCompare = Integer.parseInt(lineNo);
+		Boolean recordExists = false;
+		try {
+			myCon = orcl.getOrclConn();
+			String sql = " SELECT *  FROM LOG_DB_TXN  WHERE PH_SYS_ID = ? AND LINE_NO = ?  AND NVL(FULLGRN,'N')='N'";
+			myStmt = myCon.prepareStatement(sql);
+			int vals = Integer.parseInt(poDetails.getId());
+			System.out.print(vals);
+			System.out.print(poDetails.getLineNo());
+			myStmt.setInt(1, vals);
+			myStmt.setInt(2, lineCompare);
+
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				recordExists = true;
+			}
+			return recordExists;
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
+
+	public int checkForEntryInDBANDGETMAX(Logistic poDetails) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		int retval = 0;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		Boolean recordExists = false;
+		try {
+			myCon = orcl.getOrclConn();
+			String sql = " SELECT MAX(LINE_NO) LINE_NO FROM LOG_DB_TXN where PH_SYS_ID = ? AND NVL(FULLGRN,'N')='N'";
+			myStmt = myCon.prepareStatement(sql);
+			int vals = Integer.parseInt(poDetails.getId());
+
+			System.out.print(poDetails.getLineNo());
+			myStmt.setInt(1, vals);
+			// myStmt.setInt(2, poDetails.getLineNo());
+
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				retval = myRes.getInt(1);
+				retval = retval + 1;
+
+			}
+			return retval;
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
+
+	public int getMaxLine(String sysId) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		int retval = 0;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+		Boolean recordExists = false;
+		try {
+			myCon = orcl.getOrclConn();
+			String sql = " SELECT MAX(LINE_NO) LINE_NO FROM LOG_DB_TXN where PH_SYS_ID = ? AND NVL(FULLGRN,'N')='N'";
+			myStmt = myCon.prepareStatement(sql);
+			int vals = Integer.parseInt(sysId);
+
+			myStmt.setInt(1, vals);
+			// myStmt.setInt(2, poDetails.getLineNo());
+
+			myRes = myStmt.executeQuery();
+			while (myRes.next()) {
+				retval = myRes.getInt(1);
+				retval = retval + 1;
+
+			}
+			return retval;
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
+
+	public int insertPODetailsByDivision(Logistic poDetails, int setMaximumLineNumber) {
+		String id = decrypt(poDetails.getId());
+		System.out.println(setMaximumLineNumber);
+		int logType = -2;
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes1 = null;
+
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+
+		try {
+			myCon = orcl.getOrclConn();
+
+			// Second Query: Insert Purchase Order Details
+			String sql = "INSERT INTO FJPORTAL.LOG_DB_TXN (PH_SYS_ID, COMP, PONO, PO_DATE, SUPPLIER, PMT_TERMS, "
+					+ "TERMS_SHIP, MODE_SHIP, CONTAINER, EX_FAC_DATE, CONT_DET, PICK_LOCN, DIVN_REMARKS, FINAL_DEST, "
+					+ "DIVN_UPD_DT, DIVN_UPD_BY, RE_EXPORT, FULLGRN, REFERENCE, LINE_NO) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, SYSDATE, ?, ?, 'N', ?, ?)";
+
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setString(1, poDetails.getId());
+			myStmt.setString(2, poDetails.getCompany());
+			myStmt.setString(3, poDetails.getPoNumber());
+			myStmt.setDate(4, getSqlDate(poDetails.getPoDate()));
+			myStmt.setString(5, poDetails.getSupplier());
+			myStmt.setString(6, poDetails.getPaymentTerms());
+			myStmt.setString(7, poDetails.getShipmentTerm());
+			myStmt.setString(8, poDetails.getShipmentMode());
+			myStmt.setInt(9, poDetails.getNoOfContainers());
+			myStmt.setDate(10, getSqlDate(poDetails.getExFactoryDate()));
+			myStmt.setString(11, poDetails.getContactDetails());
+			myStmt.setString(12, poDetails.getPickLocation());
+			myStmt.setString(13, poDetails.getDivnRemarks());
+			myStmt.setString(14, poDetails.getFinalDestination());
+			myStmt.setString(15, poDetails.getDivnUpdatedBy());
+			myStmt.setString(16, poDetails.getReExport());
+			myStmt.setString(17, poDetails.getId());
+			myStmt.setInt(18, setMaximumLineNumber);
+
+			logType = myStmt.executeUpdate();
+			System.out.println("LOG VALUE : " + logType);
+		} catch (SQLException ex) {
+			logType = -2;
+			System.out.println("Exception in closing DB resources at the time updating division user po details by "
+					+ poDetails.getDivnUpdatedBy() + "  for id  " + id + " log = " + logType);
+			ex.printStackTrace();
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes1); // Close ResultSet and PreparedStatement for the first query
+			orcl.closeConnection(); // Close the DB connection
+			// System.out.println("Updated and closed db Successfully ");
+		}
+		return logType;
+	}
+
+	public int deletePO(int sysId, int lineNo) throws SQLException {
+		Connection myCon = null;
+		PreparedStatement myStmt = null;
+		ResultSet myRes = null;
+		int retval = 0;
+		OrclDBConnectionPool orcl = new OrclDBConnectionPool();
+
+		try {
+			myCon = orcl.getOrclConn();
+			String sql = " DELETE FROM LOG_DB_TXN WHERE PH_SYS_ID=? AND LINE_NO=?";
+			myStmt = myCon.prepareStatement(sql);
+			myStmt.setInt(1, sysId);
+			myStmt.setInt(2, lineNo);
+			retval = myStmt.executeUpdate();
+			return retval;
+		} finally {
+			// close jdbc objects
+			close(myStmt, myRes);
+			orcl.closeConnection();
+		}
+	}
 }

@@ -79,7 +79,22 @@ public class LogisticImportPOController extends HttpServlet {
 					e.printStackTrace();
 				}
 				break;
-
+			case "getMax":
+				try {
+					System.out.println("request came");
+					getMax(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case "dletee":
+				try {
+					System.out.println("request came");
+					deletePO(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
 			default:
 				try {
 					checkUserLogisticPortalPermission(request, response, employeeCode, division, userRole);
@@ -124,10 +139,31 @@ public class LogisticImportPOController extends HttpServlet {
 		}
 	}
 
+	private void getMax(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		try {
+			int getMax = 0;
+			String requestId = request.getParameter("requestId");
+
+			request.setAttribute("maxLineNumber", getMax);
+			// Alternatively, you can send a JSON response
+			getMax = logisticDashboardDbUtil.getMaxLine(requestId);
+			response.setContentType("application/json");
+			response.getWriter().write("{\"maxLineNumber\":" + getMax + "}");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.sendRedirect("logout.jsp");
+		} finally {
+			System.out.println("done");
+
+		}
+	}
+
 	// 2. update division user details.
 	private void updateDivisionPoDetails(HttpServletRequest request, HttpServletResponse response, String empCode,
 			String division, String emailId, String empName) throws IOException, ServletException, SQLException {
 		int successVal = 0;
+		int setMaximumLineNumber = 0;
 		if (!division.equalsIgnoreCase("FN") && !division.equalsIgnoreCase("LG")
 				&& !division.equalsIgnoreCase("KSALG")) {
 			String id = request.getParameter("podd0");
@@ -136,7 +172,6 @@ public class LogisticImportPOController extends HttpServlet {
 			String contact = request.getParameter("podd3");
 			String location = request.getParameter("podd4");
 			String remarks = request.getParameter("podd5");
-
 			String poNumber = request.getParameter("podd6");
 			String poDate = request.getParameter("podd7");
 			String supplier = request.getParameter("podd8");
@@ -148,6 +183,15 @@ public class LogisticImportPOController extends HttpServlet {
 			String reExport = request.getParameter("podd13");
 			String reference = request.getParameter("podl4");
 			String candFETADate = request.getParameter("podd15");
+			String lineNO = request.getParameter("podd16");
+			String paymentTerm = request.getParameter("podd17");
+			String company = request.getParameter("podd18");
+			/*
+			 * System.out.printf(id + " " + containers + " " + exFactDate + " " + contact +
+			 * " " + location + " " + remarks + "" + poNumber + " " + poDate + " " +
+			 * supplier + " " + shipmentMode + " " + finalDestination + " " + actionType +
+			 * " " + reExport, reference, candFETADate);
+			 */
 			if (reExport.equalsIgnoreCase("true") && reExport.length() == 4) {
 				reExport = "Y";
 			} else {
@@ -157,14 +201,25 @@ public class LogisticImportPOController extends HttpServlet {
 					&& !exFactDate.isEmpty() && !contact.isEmpty() && !location.isEmpty()) {
 				Logistic poDetails = new Logistic(id, shipmentTerm, shipmentMode, containers, exFactDate, contact,
 						location, remarks, empCode, empName, poNumber, poDate, supplier, finalDestination, reExport,
-						candFETADate);
+						candFETADate, company, paymentTerm);
 				if (actionType == 0 || actionType == 1) {
-					successVal = logisticDashboardDbUtil.updatePODetailsByDivision(poDetails);
+					Boolean isRecordExists = logisticDashboardDbUtil.checkForEntryInDB(poDetails, lineNO);
+					System.out.println(isRecordExists);
+					if (isRecordExists) {
+						successVal = logisticDashboardDbUtil.updatePODetailsByDivision(poDetails, lineNO);
+					} else {
+						setMaximumLineNumber = logisticDashboardDbUtil.checkForEntryInDBANDGETMAX(poDetails);
+						if (setMaximumLineNumber > 1) {
+							successVal = logisticDashboardDbUtil.insertPODetailsByDivision(poDetails,
+									setMaximumLineNumber);
+							System.out.print("inserted data data");
+						}
+					}
 				}
-
 				if (successVal == 1) {
 					logisticDashboardDbUtil.sendmailToLogisticTeam(poDetails, emailId, actionType, reference);
 				}
+
 			} else {
 				successVal = 40; // logistic team already take action or entry restricted
 			}
@@ -207,19 +262,31 @@ public class LogisticImportPOController extends HttpServlet {
 			String remarks = request.getParameter("podl3");
 			String reference = request.getParameter("podl4");
 			String poNumber = request.getParameter("podl5");
-			String divnEmpCode = request.getParameter("podl6");
+			String divnEmpCode = empCode;
 			String divnEmpName = request.getParameter("podl7");
 			String shipDocStatus = request.getParameter("podl8");
 			String deliveryStatus = request.getParameter("podl9");
+			String nominatedOn = request.getParameter("podl10");
+			String currencyType = request.getParameter("podl11");
+			int freightCharges = request.getParameter("podl12") != null
+					? Integer.parseInt(request.getParameter("podl12"))
+					: 0;
+			int insuranceCharges = request.getParameter("podl13") != null
+					? Integer.parseInt(request.getParameter("podl13"))
+					: 0;
+			String forwardedName = request.getParameter("podl14");
+			String lineNO = request.getParameter("podd15");
 			Logistic poDetails = new Logistic(id, expTimeDeparture, expTimeArrival, remarks, empCode, reference,
-					logEmpName, poNumber, divnEmpCode, divnEmpName, shipDocStatus, deliveryStatus);
+					logEmpName, poNumber, divnEmpCode, divnEmpName, shipDocStatus, deliveryStatus, nominatedOn,
+					currencyType, freightCharges, insuranceCharges, forwardedName);
 			if (!divnEmpCode.isEmpty() && divnEmpCode != null && divnEmpCode != "" && divnEmpCode.length() == 7) {
-				successVal = logisticDashboardDbUtil.updatePODetailsByLogistic(poDetails);
+				successVal = logisticDashboardDbUtil.updatePODetailsByLogistic(poDetails, lineNO);
 			}
 
 			if (successVal == 1) {
 				logisticDashboardDbUtil.sendMailToDivisionTeam(poDetails);
 			}
+
 			response.setContentType("text/html;charset=UTF-8");
 			response.getWriter().write("" + successVal);
 		} else {
@@ -261,6 +328,30 @@ public class LogisticImportPOController extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/logistic/importPO.jsp");
 		dispatcher.forward(request, response);
 
+	}
+
+	private void deletePO(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		try {
+			String sydId = request.getParameter("podf0");
+			String lineNo = request.getParameter("podf1");
+			int physisId = 0;
+			int lineNUmber = 0;
+			if (sydId != null)
+				physisId = Integer.parseInt(sydId);
+			if (lineNo != null)
+				lineNUmber = Integer.parseInt(lineNo);
+			int logUpdate = logisticDashboardDbUtil.deletePO(physisId, lineNUmber);
+			response.setContentType("application/json");
+			response.getWriter().write("" + logUpdate);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.sendRedirect("logout.jsp");
+		} finally {
+			System.out.println("done");
+
+		}
 	}
 
 	@Override

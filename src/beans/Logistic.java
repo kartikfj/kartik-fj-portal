@@ -39,6 +39,12 @@ public class Logistic {
 	private String reExport = null;
 	private String deliveryStatus = null;
 	private String candFETADate = null;
+	private String nominatedOn = null;
+	private String currency = null;
+	private int freightCharges = 0;
+	private int insuranceCharges = 0;
+	private String forwardedName = null;
+	private int lineNo = 0;
 
 	public int getUserPermission() {
 		return userPermission;
@@ -312,6 +318,54 @@ public class Logistic {
 		this.candFETADate = candFETADate;
 	}
 
+	public String getNominatedOn() {
+		return nominatedOn;
+	}
+
+	public void setNominatedOn(String nominatedOn) {
+		this.nominatedOn = nominatedOn;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public int getFreightCharges() {
+		return freightCharges;
+	}
+
+	public void setFreightCharges(int freightCharges) {
+		this.freightCharges = freightCharges;
+	}
+
+	public int getInsuranceCharges() {
+		return insuranceCharges;
+	}
+
+	public void setInsuranceCharges(int insuranceCharges) {
+		this.insuranceCharges = insuranceCharges;
+	}
+
+	public String getForwardedName() {
+		return forwardedName;
+	}
+
+	public void setForwardedName(String forwardedName) {
+		this.forwardedName = forwardedName;
+	}
+
+	public int getLineNo() {
+		return lineNo;
+	}
+
+	public void setLineNo(int lineNo) {
+		this.lineNo = lineNo;
+	}
+
 	public Logistic(String id, String company, String poNumber, String poDate, String supplier, String paymentTerms,
 			String shipmentTerm, String shipmentMode, int noOfContainers, String exFactoryDate, String contactDetails,
 			String pickLocation, String divnRemarks, String divnUpdatedBy, String divnEmpName, String divnUpdatedDate,
@@ -354,6 +408,107 @@ public class Logistic {
 		this.shipDocStatus = shipDocStatus;
 		this.reExport = reExport;
 		this.deliveryStatus = deliveryStatus;
+	}
+
+	public Logistic(String id, String company, String poNumber, String poDate, String supplier, String paymentTerms,
+			String shipmentTerm, String shipmentMode, int noOfContainers, String exFactoryDate, String contactDetails,
+			String pickLocation, String divnRemarks, String divnUpdatedBy, String divnEmpName, String divnUpdatedDate,
+			String paymentStatus, String finRemarks, String finUpdatedBy, String finEmpName, String finUpdatedDate,
+			String expTimeDeparture, String expTimeArrival, String logisticRemark, String logisticUpdBy,
+			String logEmpName, String logisticUpdDate, String fullGrn, String reference, String finalDestination,
+			String shipDocStatus, String reExport, String deliveryStatus, String nominatedOn, String currencyType,
+			int freightCharges, int insuranceCharges, String forwardedName, int lineNo) {
+		// get all po details
+		super();
+		this.id = id;
+		this.company = company;
+		this.poNumber = poNumber;
+		this.poDate = poDate;
+		this.supplier = supplier;
+		this.paymentTerms = paymentTerms;
+		this.shipmentTerm = shipmentTerm;
+		this.shipmentMode = shipmentMode;
+		this.noOfContainers = noOfContainers;
+		this.exFactoryDate = exFactoryDate;
+		this.contactDetails = contactDetails;
+		this.pickLocation = pickLocation;
+		this.divnRemarks = divnRemarks;
+		this.divnUpdatedBy = divnUpdatedBy;
+		this.divnEmpName = divnEmpName;
+		this.divnUpdatedDate = divnUpdatedDate;
+		this.paymentStatus = paymentStatus;
+		this.finRemarks = finRemarks;
+		this.finUpdatedBy = finUpdatedBy;
+		this.finEmpName = finEmpName;
+		this.finUpdatedDate = finUpdatedDate;
+		this.expTimeDeparture = expTimeDeparture;
+		this.expTimeArrival = expTimeArrival;
+		this.logisticRemark = logisticRemark;
+		this.logisticUpdBy = logisticUpdBy;
+		this.logEmpName = logEmpName;
+		this.logisticUpdDate = logisticUpdDate;
+		this.fullGrn = fullGrn;
+		this.reference = reference;
+		this.finalDestination = finalDestination;
+		this.shipDocStatus = shipDocStatus;
+		this.reExport = reExport;
+		this.deliveryStatus = deliveryStatus;
+		this.nominatedOn = nominatedOn;
+		this.currency = currencyType;
+		this.freightCharges = freightCharges;
+		this.insuranceCharges = insuranceCharges;
+		this.forwardedName = forwardedName;
+		this.lineNo = lineNo;
+	}
+
+	public Logistic(String id, String company, String poNumber, String poDate, String supplier, String paymentTerms,
+			String shipmentTerm, String shipmentMode, int noOfContainers, String exFactoryDate, String contactDetails,
+			String pickLocation, String divnRemarks, String divnUpdatedBy, String divnEmpName, String divnUpdatedDate,
+			String paymentStatus, String finRemarks, String finUpdatedBy, String finEmpName, String finUpdatedDate,
+			String expTimeDeparture, String expTimeArrival, String logisticRemark, String logisticUpdBy,
+			String logEmpName, String logisticUpdDate, String fullGrn, String reference, String finalDestination,
+			String shipDocStatus, String reExport, String deliveryStatus, String nominatedOn, String currencyType,
+			int freightCharges, int insuranceCharges, String forwardedName) {
+		// get all po details
+		super();
+		this.id = id;
+		this.company = company;
+		this.poNumber = poNumber;
+		this.poDate = poDate;
+		this.supplier = supplier;
+		this.paymentTerms = paymentTerms;
+		this.shipmentTerm = shipmentTerm;
+		this.shipmentMode = shipmentMode;
+		this.noOfContainers = noOfContainers;
+		this.exFactoryDate = exFactoryDate;
+		this.contactDetails = contactDetails;
+		this.pickLocation = pickLocation;
+		this.divnRemarks = divnRemarks;
+		this.divnUpdatedBy = divnUpdatedBy;
+		this.divnEmpName = divnEmpName;
+		this.divnUpdatedDate = divnUpdatedDate;
+		this.paymentStatus = paymentStatus;
+		this.finRemarks = finRemarks;
+		this.finUpdatedBy = finUpdatedBy;
+		this.finEmpName = finEmpName;
+		this.finUpdatedDate = finUpdatedDate;
+		this.expTimeDeparture = expTimeDeparture;
+		this.expTimeArrival = expTimeArrival;
+		this.logisticRemark = logisticRemark;
+		this.logisticUpdBy = logisticUpdBy;
+		this.logEmpName = logEmpName;
+		this.logisticUpdDate = logisticUpdDate;
+		this.fullGrn = fullGrn;
+		this.reference = reference;
+		this.finalDestination = finalDestination;
+		this.shipDocStatus = shipDocStatus;
+		this.reExport = reExport;
+		this.deliveryStatus = deliveryStatus;
+		this.nominatedOn = nominatedOn;
+		this.currency = currencyType;
+		this.freightCharges = freightCharges;
+		this.insuranceCharges = insuranceCharges;
+		this.forwardedName = forwardedName;
 	}
 
 	public Logistic(int userPermission, String txnCode) {
@@ -416,7 +571,7 @@ public class Logistic {
 	public Logistic(String id, String shipmentTerm, String shipmentMode, int noOfContainers, String exFactoryDate,
 			String contactDetails, String pickLocation, String divnRemarks, String divnUpdatedBy, String divnEmpName,
 			String poNumber, String poDate, String supplier, String finalDestination, String reExport,
-			String candFETADate) {
+			String candFETADate, String company, String paymentTerm) {
 		super();
 		// division updation
 		this.id = id;
@@ -435,6 +590,33 @@ public class Logistic {
 		this.finalDestination = finalDestination;
 		this.reExport = reExport;
 		this.candFETADate = candFETADate;
+		this.company = company;
+		this.paymentTerms = paymentTerm;
+	}
+
+	public Logistic(String id, String expTimeDeparture, String expTimeArrival, String logisticRemark,
+			String logisticUpdBy, String reference, String logEmpName, String poNumber, String divnUpdatedBy,
+			String divnEmpName, String shipDocStatus, String deliveryStatus, String nominatedOn, String currency,
+			int freightCharges, int insuranceCharges, String forwardedName) {
+		super();
+		// logistc updation
+		this.id = id;
+		this.expTimeDeparture = expTimeDeparture;
+		this.expTimeArrival = expTimeArrival;
+		this.logisticRemark = logisticRemark;
+		this.logisticUpdBy = logisticUpdBy;
+		this.reference = reference;
+		this.logEmpName = logEmpName;
+		this.poNumber = poNumber;
+		this.divnUpdatedBy = divnUpdatedBy;
+		this.divnEmpName = divnEmpName;
+		this.shipDocStatus = shipDocStatus;
+		this.deliveryStatus = deliveryStatus;
+		this.nominatedOn = nominatedOn;
+		this.currency = currency;
+		this.freightCharges = freightCharges;
+		this.insuranceCharges = insuranceCharges;
+		this.forwardedName = forwardedName;
 	}
 
 	public String getReExport() {

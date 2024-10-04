@@ -97,7 +97,17 @@
 			      </div>
 			    </div>
 			  </div>
-  
+  			  <div class="col-sm-3">
+			    <div class="card">
+			      <div class="card-body">
+			        <h6 class="card-title">Employee Evaluation</h6>
+			        <form id="myDownloadServlet" action="DownloadQueries" method="post">	
+				        <input type="hidden" id="fileName" name = 'fileName' value="Employee Evaluation.docx" />
+						<input type="submit" id="btnDownload" name="btnDownload" class="btn btn-sm btn-success" value="Download" />
+					</form>
+			      </div>
+			    </div>
+			  </div>
 		</div>
 
 			

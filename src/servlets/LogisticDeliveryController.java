@@ -64,6 +64,7 @@ public class LogisticDeliveryController extends HttpServlet {
 				break;
 			case "updudea":// update division user data entry action
 				try {
+					System.out.println("data came here");
 					String emailId = fjtuser.getEmailid();
 					updateDivisionDeliveryDetails(request, response, employeeCode, division, emailId, empname);
 				} catch (Exception e) {

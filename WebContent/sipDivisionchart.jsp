@@ -2065,7 +2065,7 @@ function selectHandler() {
              <c:when test="${fjtuser.role eq 'mg' and fjtuser.sales_code ne null}"> 
       		 	 <li><a href="SipBranchPerformance"><i class="fa fa-building-o"></i><span>Branch Performance</span></a></li> 
                  <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>
-                 <li><a href="SalesManagerInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Manager Performance</span></a></li>
+                 <li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
 				 <li class="active"><a href="DisionInfo.jsp"><i class="fa fa-line-chart"></i><span>Sub Division Performance</span></a></li>
 				 <li><a href="CompanyInfo.jsp?empcode=${DFLTDMCODE}"><i class="fa fa-pie-chart"></i><span>Division 	Performance</span></a></li>
 				 <li><a href="SipUserActivity"><i class="fa fa-table"></i><span>SE Activity History</span></a></li>

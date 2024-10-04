@@ -1011,9 +1011,11 @@ $('#mrInfJihLstGrpTbl').DataTable( {
       <ul class="sidebar-menu" data-widget="tree">
       		<c:if test="${fjtuser.role eq 'mg' or fjtuser.role eq 'gm'}">
       		 <li><a href="SipBranchPerformance"><i class="fa fa-building-o"></i><span>Branch Performance</span></a></li>
-      		 <li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
       		</c:if>
              <li   class="active"><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>
+             <c:if test="${fjtuser.role eq 'mg' or fjtuser.role eq 'gm'}">      		
+      			 <li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
+      		 </c:if>
               <c:if test="${isAllowed eq 'Yes' || fjtuser.salesDMYn ge 1}">
       		 		<li><a href="SalesManagerInfo.jsp"><i class="fa fa-building-o"></i><span>Sales Manager Performance</span></a></li>
       			</c:if>
