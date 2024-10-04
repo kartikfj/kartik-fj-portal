@@ -1406,6 +1406,54 @@ public class SipChartDbUtil {
 
 	}
 
+	// SALES PERFORMANCE SUMMARY
+	public Map<String, List<SalesmanPerformance>> getSEPerformance(String smCode, String sYear, String smEmpCode)
+			throws SQLException {
+		// List<SalesmanPerformance> performanceList = new ArrayList<>();
+		Connection connection = null;
+		Map<String, List<SalesmanPerformance>> smMap = new HashMap<String, List<SalesmanPerformance>>();
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		OrclDBConnectionPool orcle = new OrclDBConnectionPool();
+		try {
+			connection = orcle.getOrclConn();
+
+			String sql = "SELECT SMCODE, SRNO, PERF_TTL, VALUE, SMT_YEAR, QUARTER FROM ORION.sm_new_perf "
+					+ "WHERE SMCODE = ? AND SMT_YEAR = ? " + "AND QUARTER IN ('Q1', 'Q2', 'Q3', 'Q4') "
+					+ "ORDER BY CASE WHEN QUARTER = 'Q1' THEN 1 WHEN QUARTER = 'Q2' THEN 2 WHEN QUARTER = 'Q3' THEN 3 WHEN QUARTER = 'Q4' THEN 4 END, "
+					+ "SRNO";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, smCode);
+			// preparedStatement.setString(2, smEmpCode);
+			preparedStatement.setString(2, sYear);
+
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				String smcode = resultSet.getString(1);
+				String srN0 = resultSet.getString(2);
+				String perf_ttl = resultSet.getString(3);
+				int value = resultSet.getInt(4);
+				int smtYr = resultSet.getInt(5);
+				String quarter = resultSet.getString("QUARTER");
+
+				SalesmanPerformance tempPerformance = new SalesmanPerformance(smcode, srN0, perf_ttl, value, smtYr);
+				// performanceList.add(tempList);
+				// Add the performance data to the corresponding quarter in the map
+				smMap.computeIfAbsent(quarter, k -> new ArrayList<>()).add(tempPerformance);
+
+				// smMap.put(perf_ttl, tempList);
+
+			}
+
+		} finally {
+			close(preparedStatement, resultSet);
+			orcle.closeConnection();
+		}
+
+		return smMap;
+
+	}
+
 	// CUSTOMER VISIT COUNT FOR DASHBAORD
 	public List<CustomerVisit> getSalesEngineerCustoVisitCounts(String salesEmpCode, String year) throws SQLException {
 		List<CustomerVisit> visitCounts = new ArrayList<>();
