@@ -185,4 +185,10 @@ public class SalesmanPerformance {
 
 	}
 
+	@Override
+	public String toString() {
+		return "SalesmanPerformance{" + "smCode='" + smCode + '\'' + ", srNo='" + srNo + '\'' + ", perf_ttl='"
+				+ perf_ttl + '\'' + ", value=" + value + ", smtYr=" + smtYr + '}';
+	}
+
 }

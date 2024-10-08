@@ -162,6 +162,13 @@ public class SipJihvSummary {
 		this.sid = sid;
 	}
 
+	public SipJihvSummary(String salesman_code, String salesman_name, int sid) {
+		super();
+		this.salesman_code = salesman_code;
+		this.salesman_name = salesman_name;
+		this.sid = sid;
+	}
+
 	public String getSalesman_emp_code() {
 		return salesman_emp_code;
 	}
@@ -178,4 +185,9 @@ public class SipJihvSummary {
 		this.sm_division = sm_division;
 	}
 
+	@Override
+	public String toString() {
+		return "SipJihvSummary{" + "salesman_code='" + salesman_code + '\'' + ", salesman_name='" + salesman_name + '\''
+				+ ", sid=" + sid + '}';
+	}
 }

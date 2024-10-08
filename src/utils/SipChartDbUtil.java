@@ -1412,6 +1412,7 @@ public class SipChartDbUtil {
 		// List<SalesmanPerformance> performanceList = new ArrayList<>();
 		Connection connection = null;
 		Map<String, List<SalesmanPerformance>> smMap = new HashMap<String, List<SalesmanPerformance>>();
+
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		OrclDBConnectionPool orcle = new OrclDBConnectionPool();
@@ -1451,6 +1452,63 @@ public class SipChartDbUtil {
 		}
 
 		return smMap;
+
+	}
+
+	// AllSALES PERFORMANCE SUMMARY
+	public Map<SipJihvSummary, Map<String, List<SalesmanPerformance>>> getMSEPerformance(String sYear, String smEmpCode)
+			throws SQLException {
+		// List<SalesmanPerformance> performanceList = new ArrayList<>();
+		Connection connection = null;
+		Map<SipJihvSummary, Map<String, List<SalesmanPerformance>>> smDataMap = new HashMap<>();
+		int sno = 0;
+		List<SipJihvSummary> theSalesEngList = getSalesEngListfor_Dm(smEmpCode);
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		OrclDBConnectionPool orcle = new OrclDBConnectionPool();
+		try {
+			connection = orcle.getOrclConn();
+
+			String sql = "SELECT SMCODE, SRNO, PERF_TTL, VALUE, SMT_YEAR, QUARTER FROM ORION.sm_new_perf "
+					+ "WHERE SMCODE = ? AND SMT_YEAR = ? " + "AND QUARTER IN ('Q1', 'Q2', 'Q3', 'Q4') "
+					+ "ORDER BY CASE WHEN QUARTER = 'Q1' THEN 1 WHEN QUARTER = 'Q2' THEN 2 WHEN QUARTER = 'Q3' THEN 3 WHEN QUARTER = 'Q4' THEN 4 END, "
+					+ "SRNO";
+			preparedStatement = connection.prepareStatement(sql);
+
+			for (SipJihvSummary data : theSalesEngList) {
+				System.out.print(data.getSalesman_code());
+				sno++;
+				preparedStatement.setString(1, data.getSalesman_code());
+				// preparedStatement.setString(2, smEmpCode);
+				preparedStatement.setString(2, sYear);
+				Map<String, List<SalesmanPerformance>> smMapQuater = new HashMap<String, List<SalesmanPerformance>>();
+
+				resultSet = preparedStatement.executeQuery();
+				while (resultSet.next()) {
+					String smcode = resultSet.getString(1);
+					String srN0 = resultSet.getString(2);
+					String perf_ttl = resultSet.getString(3);
+					int value = resultSet.getInt(4);
+					int smtYr = resultSet.getInt(5);
+					String quarter = resultSet.getString("QUARTER");
+
+					SalesmanPerformance tempPerformance = new SalesmanPerformance(smcode, srN0, perf_ttl, value, smtYr);
+					// performanceList.add(tempList);
+					// Add the performance data to the corresponding quarter in the map
+					smMapQuater.computeIfAbsent(quarter, k -> new ArrayList<>()).add(tempPerformance);
+				}
+				SipJihvSummary summary = new SipJihvSummary(data.getSalesman_emp_code(), data.getSalesman_name(), sno);
+
+				// smMap.put(perf_ttl, tempList);
+				smDataMap.put(summary, smMapQuater);
+			}
+
+		} finally {
+			close(preparedStatement, resultSet);
+			orcle.closeConnection();
+		}
+
+		return smDataMap;
 
 	}
 

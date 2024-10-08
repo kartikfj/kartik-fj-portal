@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 
+import beans.SalesmanPerformance;
 import beans.SipDStage2LostSummary;
 import beans.SipDivBillingSummary;
 import beans.SipDivBookingSummary;
@@ -37,6 +39,7 @@ import beans.SipDivStage2LostDetails;
 import beans.SipDivisionOutstandingRecivablesDtls;
 import beans.SipDmListForManagementDashboard;
 import beans.SipJihvDetails;
+import beans.SipJihvSummary;
 import beans.SipLayer2SubDivisionLevelBillingDetailsYTD;
 import beans.SipLayer2SubDivisionLevelBookingDetailsYTD;
 import beans.SipLayer4_Pdc_On_Hand;
@@ -85,6 +88,7 @@ public class SipDivisionChartController extends HttpServlet {
 			throws ServletException, IOException, SQLException {
 		fjtcouser fjtuser = (fjtcouser) request.getSession().getAttribute("fjtuser");
 		System.out.println("SECODE " + fjtuser.getSales_code());
+		System.out.println("empcode" + fjtuser.getEmp_code());
 		if (fjtuser.getEmp_code() == null || fjtuser.getSales_code() == null) {
 			response.sendRedirect("logout.jsp");
 		} else {
@@ -120,6 +124,16 @@ public class SipDivisionChartController extends HttpServlet {
 			// System.out.println("DM CODE"+dm_Emp_Code);
 
 			switch (theSipCode) {
+			case "SEM_perf":// Salesman Performance details
+				try {
+					System.out.println("request came");
+					getSEPerformanceData(request, response, dm_Emp_Code);
+					System.out.println(dm_Emp_Code);
+					System.out.println("request came3");
+				} catch (Exception e) {
+					e.printStackTrace();// TODO: handle exception
+				}
+				break;
 			case "sip_dafult":// job in hand volume summary default display
 				try {
 					getAllFeatures(request, response, dm_Emp_Code);
@@ -292,6 +306,53 @@ public class SipDivisionChartController extends HttpServlet {
 				}
 			}
 		}
+	}
+
+	private void getSEPerformanceData(HttpServletRequest request, HttpServletResponse response, String dm_Emp_Code)
+			throws SQLException, IOException, JsonIOException {
+		// Salesman Performance details
+		String smCode = request.getParameter("dmCode");
+		// System.out.println(smCode);
+
+		String sYear = request.getParameter("c2");
+		System.out.println(sYear);
+		// String segEmplCode = sipChartDbUtil.getEmployeeCodeBySalesCode(smCode);
+		Map<SipJihvSummary, Map<String, List<SalesmanPerformance>>> smDataMap = sipChartDbUtil.getMSEPerformance(sYear,
+				smCode);
+		System.out.println("this is sales man code" + dm_Emp_Code);
+		for (Map.Entry<SipJihvSummary, Map<String, List<SalesmanPerformance>>> entry : smDataMap.entrySet()) {
+			SipJihvSummary salesManCode = entry.getKey();
+			Map<String, List<SalesmanPerformance>> quaterMap = entry.getValue();
+			System.out.println("Salesman Code: " + salesManCode.getSalesman_code());
+			System.out.println("Salesman Name: " + salesManCode.getSalesman_name());
+			System.out.println("Salesman no: " + salesManCode.getSid());
+			for (Map.Entry<String, List<SalesmanPerformance>> quarterEntry : quaterMap.entrySet()) {
+				String quarter = quarterEntry.getKey();
+				System.out.println("quarter vale" + quarter);
+
+				List<SalesmanPerformance> performances = quarterEntry.getValue();
+
+				// System.out.println("Quarter: " + quarter);
+				for (SalesmanPerformance performance : performances) {
+					System.out.println("SMCode: " + performance.getSmCode() + ", SRNO: " + performance.getSrNo()
+							+ ", Perf_Ttl: " + performance.getPerf_ttl() + ", Value: " + performance.getValue()
+							+ ", Year: " + performance.getSmtYr());
+				}
+
+			}
+		}
+		// Serialize the smDataMap to JSON and send it to the client
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		Gson gson = new Gson();
+		String jsonResponse = gson.toJson(smDataMap);
+
+		// Set the response type and send the JSON response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(jsonResponse);
+		// Use Gson to convert the map into JSON
+
 	}
 
 	private void getBillingDetailsYtd(HttpServletRequest request, HttpServletResponse response)
