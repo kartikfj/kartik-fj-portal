@@ -226,7 +226,7 @@ var _method = "POST";
 </script>
 <!-- page script END -->
 </body>
-</c:when>
+
 <c:otherwise>
         <body onload="window.top.location.href='logout.jsp'">                     
         </body>  

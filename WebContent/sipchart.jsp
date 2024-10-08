@@ -7,6 +7,14 @@
 <html>
 <head>   
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+
 <style>
 .modal-subtitle2 {  
     font-weight: bold !important;
@@ -1105,6 +1113,7 @@ $('#s1dexport').DataTable( {
 					 <input type="hidden" name="salesEngName" id="salesEngName"/>
 <!--    					<button type="submit" id="sf" class="btn btn-primary" onclick="sm_view_details();">View</button> -->
 					<button type="button"  id="seperfdiv" class="btn btn-sm btn-primary"   onclick="sm_performance_details();"><i class="fa fa-share" aria-hidden="true"></i> PERFORMANCE</button>  
+					<button type="button"  id="seperfdiv" class="btn btn-sm btn-primary"   onclick="SE_performance_details();"><i class="fa fa-share" aria-hidden="true"></i> Sales PERFORMANCE</button>  
 				</form>
 				
 				</div> <div class="col-md-4 col-xs-12" style="width:26%;float:right;">
@@ -2715,7 +2724,7 @@ $('#s1dexport').DataTable( {
 							</div>
 							<!-- /.modal-dialog -->
 						</div>				
-						<div id="laoding" class="loader" ><img src="resources/images/wait.gif"></div>
+						<!-- <div id="laoding" class="loader" ><img src="resources/images/wait.gif"></div> -->
        
        
        
@@ -3365,6 +3374,538 @@ $(document).ready(function() {
 	    $("#help-modal").draggable({ handle: ".modal-header" });
 	    $("#myModal").draggable({ handle: ".modal-header" });
 } );
+function SE_performance_details() {
+	$('#laoding-rcvbl').hide();
+	$('#laoding').show(); 
+	//$('#laoding').show(); 
+	var ytdCustTarget = ${WKLYTRGT*currWeek};
+	var smCodeName = $("#scode option:selected").text(); 
+	var smCode = $("#scode option:selected").val();
+	console.log('this is sm',smCode);
+	var sYear = $("#syear option:selected").val();
+	 $("#salesman_performance_modal .modal-title").html(smCodeName);  	  
+	var exTtl = 'Salesman Performance - '+smCodeName;
+	var subTtl =  'Year - '+${CURR_YR}+',  Week - '+${currWeek};	
+	var fileName = 'Salesman Performance '+smCodeName; 
+	var printttl = 'Salesman Performance '+smCodeName +'<br/>  Week - '+${currWeek} + ' and Year - '+${CURR_YR} +'<br/>'; 
+	var ttl = 'Salesman Performance '+smCodeName +' and  week - '+${currWeek} + ' and Year - '+${CURR_YR}; 
+	$("#salesman_performance_modal .modal-title").html(exTtl);
+	$("#salesman_performance_modal .modal-subtitle").html(subTtl);
+	var q1billing=0,q1gpQuater=0,q1gpAvg=0,q1stage3=0,q1bookingAvg=0,q1stage4=0,q1orderAvg=0,q1totalRecivable=0,q1above120=0;
+	var q2billing=0,q2gpQuater=0,q2gpAvg=0,q2stage3=0,q2bookingAvg=0,q2stage4=0,q2orderAvg=0,q2totalRecivable=0,q2above120=0;
+	var q3billing=0,q3gpQuater=0,q3gpAvg=0,q3stage3=0,q3bookingAvg=0,q3stage4=0,q3orderAvg=0,q3totalRecivable=0,q3above120=0;
+	var q4billing=0,q4gpQuater=0,q4gpAvg=0,q4stage3=0,q4bookingAvg=0,q4stage4=0,q4orderAvg=0,q4totalRecivable=0,q4above120=0;
+
+	var ytdCustTarget = ${WKLYTRGT*currWeek};
+	var smCodeName = $("#scode option:selected").text(); 
+//	var smCode = 'FJ372';
+	
+    // Define smCode and CURR_YR (replace with actual values)
+  //  var smCode = $("#smCodeInput").val(); // Assuming an input field with id smCodeInput
+    var CURR_YR = new Date().getFullYear(); // Current Year
+
+    $.ajax({
+        type: 'POST',
+        url: 'sip',  // Adjust URL if needed
+        data: {
+            fjtco: "SE_perf",
+            c1: smCode,
+            c2: CURR_YR
+        },
+        success: function(response) {
+        	
+                 
+                 $.each(response, function(key, valueArray) {
+                     console.log(key); // This will log 'Q1', 'Q2', etc.
+                 	switch ($.trim(key)) {
+					case 'Q1':
+						 $.each(valueArray, function(index, item) {
+	                         // Now you can access each item in the array
+	                         console.log("Index: " + index); // Index within the array (0, 1, 2, ...)
+	                         console.log("Title: " + item.perf_ttl);  // Access perf_ttl
+	                         console.log("Code: " +  item.smCode);    // Access smCode
+	                         console.log("Year: " +  item.smtYr);     // Access smtYr
+	                         console.log("Serial No: " + item.srNo); // Access srNo
+	                         console.log("Value: " + item.value);    // Access value
+
+	                 		switch ($.trim(item.srNo)) {
+	                 		  case "1": // total billing target
+	                 			  q1billing = item.value;
+	                 		    break; 
+	                 		  case "2": // billing gp target
+	                 			  q1gpQuater = item.value;
+	                 		  case "3": // weekly billing target
+	                 			  q1gpAvg = ((q1gpQuater/q1billing)*100).toFixed(2) + "%";
+	                 		    break; 
+	                 		  case "4": // actual weekly Billing
+	                 			  q1stage3 = item.value;
+	                 		    break; 
+	                 		  case "5": // YTD Billing target
+	                 			  q1bookingAvg = item.value;
+	                 		    break; 
+	                 		 case "6": // YTD Billing GP target
+	                 			 q1stage4 = item.value;
+	                 		    break; 
+	                 		  case "7": // YTD Billing GP target
+	                 			 q1orderAvg = item.value;
+	                 		    break; 
+	                 		  case "8":// Total Booking Target
+	                 			 q1totalRecivable = item.value;
+	                 		    break; 
+	                 		  case "9": // Weekly Booking Target
+	                 			 q1above120 =  item.value;
+	                 		    break; 
+	                 		    default:
+	                 			     break;
+	                 		}
+						 });    
+	                    break;     
+					case 'Q2':
+						 $.each(valueArray, function(index, item) {
+	                         // Now you can access each item in the array
+	                         console.log("Index: " + index); // Index within the array (0, 1, 2, ...)
+	                         console.log("Title: " + item.perf_ttl);  // Access perf_ttl
+	                         console.log("Code: " +  item.smCode);    // Access smCode
+	                         console.log("Year: " +  item.smtYr);     // Access smtYr
+	                         console.log("Serial No: " + item.srNo); // Access srNo
+	                         console.log("Value: " + item.value);    // Access value
+
+	                 		switch ($.trim(item.srNo)) {
+	                 		  case "1": // total billing target
+	                 			  q2billing = item.value;
+	                 		    break; 
+	                 		  case "2": // billing gp target
+	                 			  q2gpQuater = item.value;
+	                 		  case "3": // weekly billing target
+	                 			  q2gpAvg = ((q2gpQuater/q2billing)*100).toFixed(2) + "%";
+	                 		    break; 
+	                 		  case "4": // actual weekly Billing
+	                 			  q2stage3 = item.value;
+	                 		    break; 
+	                 		  case "5": // YTD Billing target
+	                 			  q2bookingAvg = item.value;
+	                 		    break; 
+	                 		 case "6": // YTD Billing GP target
+	                 			 q2stage4 = item.value;
+	                 		    break; 
+	                 		  case "7": // YTD Billing GP target
+	                 			 q2orderAvg = item.value;
+	                 		    break; 
+	                 		  case "8":// Total Booking Target
+	                 			 q2totalRecivable = item.value;
+	                 		    break; 
+	                 		  case "9": // Weekly Booking Target
+	                 			 q2above120 =  item.value;
+	                 		    break; 
+	                 		    default:
+	                 			     break;
+	                 		}
+						 }); 
+	                    break;     
+					case 'Q3':
+						 $.each(valueArray, function(index, item) {
+	                         // Now you can access each item in the array
+	                         console.log("Index: " + index); // Index within the array (0, 1, 2, ...)
+	                         console.log("Title: " + item.perf_ttl);  // Access perf_ttl
+	                         console.log("Code: " +  item.smCode);    // Access smCode
+	                         console.log("Year: " +  item.smtYr);     // Access smtYr
+	                         console.log("Serial No: " + item.srNo); // Access srNo
+	                         console.log("Value: " + item.value);    // Access value
+
+	                 		switch ($.trim(item.srNo)) {
+	                 		  case "1": // total billing target
+	                 			  q3billing = item.value;
+	                 		    break; 
+	                 		  case "2": // billing gp target
+	                 			  q3gpQuater = item.value;
+	                 		  case "3": // weekly billing target
+	                 			  q3gpAvg = ((q3gpQuater/q3billing)*100).toFixed(2) + "%";
+	                 		    break; 
+	                 		  case "4": // actual weekly Billing
+	                 			  q3stage3 = item.value;
+	                 		    break; 
+	                 		  case "5": // YTD Billing target
+	                 			  q3bookingAvg = item.value;
+	                 		    break; 
+	                 		 case "6": // YTD Billing GP target
+	                 			 q3stage4 = item.value;
+	                 		    break; 
+	                 		  case "7": // YTD Billing GP target
+	                 			 q3orderAvg = item.value;
+	                 		    break; 
+	                 		  case "8":// Total Booking Target
+	                 			 q3totalRecivable = item.value;
+	                 		    break; 
+	                 		  case "9": // Weekly Booking Target
+	                 			 q3above120 =  item.value;
+	                 		    break; 
+	                 		    default:
+	                 			     break;
+	                 		}
+						 }); 
+	                    break;     
+					case 'Q4':
+						 $.each(valueArray, function(index, item) {
+	                         // Now you can access each item in the array
+	                         console.log("Index: " + index); // Index within the array (0, 1, 2, ...)
+	                         console.log("Title: " + item.perf_ttl);  // Access perf_ttl
+	                         console.log("Code: " +  item.smCode);    // Access smCode
+	                         console.log("Year: " +  item.smtYr);     // Access smtYr
+	                         console.log("Serial No: " + item.srNo); // Access srNo
+	                         console.log("Value: " + item.value);    // Access value
+
+	                 		switch ($.trim(item.srNo)) {
+	                 		  case "1": // total billing target
+	                 			  q4billing = item.value;
+	                 		    break; 
+	                 		  case "2": // billing gp target
+	                 			  q4gpQuater = item.value;
+	                 		  case "3": // weekly billing target
+	                 			  q4gpAvg = ((q4gpQuater/q4billing)*100).toFixed(2) + "%";
+	                 		    break; 
+	                 		  case "4": // actual weekly Billing
+	                 			  q4stage3 = item.value;
+	                 		    break; 
+	                 		  case "5": // YTD Billing target
+	                 			  q4bookingAvg = item.value;
+	                 		    break; 
+	                 		 case "6": // YTD Billing GP target
+	                 			 q4stage4 = item.value;
+	                 		    break; 
+	                 		  case "7": // YTD Billing GP target
+	                 			 q4orderAvg = item.value;
+	                 		    break; 
+	                 		  case "8":// Total Booking Target
+	                 			 q4totalRecivable = item.value;
+	                 		    break; 
+	                 		  case "9": // Weekly Booking Target
+	                 			 q4above120 =  item.value;
+	                 		    break; 
+	                 		    default:
+	                 			     break;
+	                 		}
+						  });
+						 break;
+					default:
+        			     break;
+                     // Iterate over the array associated with each key
+                 	}
+                 });
+                 
+               /*   
+                 "<table id='salesman_performance_table' style='text-align:center; margin:auto; width:100%; font-size:12px; border-collapse:collapse;'>"
+                 + "<thead><tr style='background-color:#f2f2f2;'>"
+                 + "<th style='padding:5px; width:15%;' class='se-brr'>Key Parameters</th>"
+                 + "<th style='padding:5px;'>Proj.Q1</th><th>Actual Q1</th><th>Proj.Q2</th><th>Actual Q2</th>"
+                 + "<th>Proj.Q3</th><th>Actual Q3</th><th>Proj.Q4</th><th>Actual Q4</th>"
+                 + "<th>Actual Total YTD</th><th>Targ-YTD</th><th>Targ-for (12 months)</th><th>Variance %</th>"
+                 + "</tr></thead><tbody>"; */
+                 var currCal = new Date().toLocaleDateString(); 
+                 var output= "<table id='salesman_performance_table' style='text-align:center; margin: auto; width: 100%; font-size:10px; '><thead ><tr>"
+           		   +"<th class='se-brr' style='padding:5px; width:15%;'>Key Parmameters</th><th style='padding:5px; width:15%;'>Proj.Q1</th><th>Ac.Q1</th><th>Proj.Q1</th><th>Ac.Q2</th><th>Proj.Q2 </th><th>Ac.Q3</th><th>Proj.Q3</th><th>Ac.Q4</th><th>Proj.Q4</th><th>Total YTD</th><th>Targ-YTD</th><th style='padding:5px; width:15%;'>Targ-(12 months)</th><th style='padding:5px; width:15%;'>Varianc.%</th></tr></thead><tbody>";
+
+           		output += "<tr><td style='text-align:left;'class='se-brr'>Billing achieved</td><td>-</td><td style='text-align:right;'>" + formatNumber(Math.round(q1billing)) + "</td><td>-</td><td style='text-align:right;'>" + formatNumber(Math.round(q2billing)) + "</td><td>-</td><td style='text-align:right;'>" + formatNumber(Math.round(q3billing)) + "</td><td>-</td><td style='text-align:right;'>" + formatNumber(Math.round(q4billing)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+           		        + "<tr><td style='text-align:left;' class='se-brr'>Gross Profit</td><td>-</td><td>" + formatNumber(Math.round(q1gpQuater)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2gpQuater)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3gpQuater)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4gpQuater)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+           		        + "<tr><td style='text-align:left;' class='se-brr'>Avg Profit Ratio</td></td><td style='text-align:right;'>--</td><td style='text-align:right;'>" + q1gpAvg + "</td><td>-</td><td style='text-align:right;'>" + q2gpAvg + "</td><td>-</td><td style='text-align:right;'>" + q3gpAvg + "</td><td>-</td><td style='text-align:right;'>" + q4gpAvg + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+           		        + "<tr><td style='text-align:left;' class='se-brr'>Stage 3</td><td>-</td><td>" + formatNumber(Math.round(q1stage3)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2stage3)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3stage3)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4stage3)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+           		        + "<tr><td style='text-align:left;' class='se-brr'>Booking Avg Per Week - Q1 & Q2</td><td>-</td><td>" + formatNumber(Math.round(q1bookingAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2bookingAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3bookingAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4bookingAvg)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+           		        + "<tr><td style='text-align:left;' class='se-brr'>Stage 4</td><td>-</td><td>" + formatNumber(Math.round(q1stage4)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2stage4)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3stage4)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4stage4)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+           		        + "<tr><td style='text-align:left;' class='se-brr'>Order Rec.week Q1 & Q2</td><td>-</td><td>" + formatNumber(Math.round(q1orderAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2orderAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3orderAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4orderAvg)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+           		        + "<tr><td style='text-align:left;' class='se-brr'>Total Rec.Outstanding</td><td>-</td><td>" + formatNumber(Math.round(q1totalRecivable)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2totalRecivable)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3totalRecivable)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4totalRecivable)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+           		        + "<tr><td style='text-align:left;' class='se-brr'>Rec. above 120 days</td><td>-</td><td>" + formatNumber(q1above120) + "</td><td>-</td><td>" + formatNumber(q2above120) + "</td><td>-</td><td>" + formatNumber(q3above120) + "</td><td>-</td><td>" + formatNumber(q4above120) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+           		        + "<tr><td style='text-align:left;' class='se-brr'>DSO Avg</td><td>-</td><td></td><td>-</td><td></td><td>-</td><td></td><td>-</td><td></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>";
+	
+          				var subTtl1 = "<a href='#' data-toggle='modal' data-target='#help-modal'></a>";
+              			$("#salesman_performance_modal .modal-body").html(output);
+              			$("#salesman_performance_modal .modal-subtitle2").html(subTtl1);
+              			$("#salesman_performance_modal").modal("show");
+              			
+              			/*  $('.modal-dialog').draggable({
+          				      handle: ".modal-header"
+          				  });
+              	 */
+
+
+              		// Make modal draggable
+              	/* 	$('.modal-dialog').draggable({
+              		    handle: ".modal-header"
+              		}); */
+
+              		// Initialize DataTable once the modal is fully loaded
+              		$("#salesman_performance_table").DataTable({
+              		    dom: 'Bfrtip',
+              		    searching: false,
+              		    ordering: false,
+              		    paging: false,
+              		    info: false,
+              		  buttons: [
+              			  {
+              			      extend: 'excelHtml5',
+              			      text: '<i class="fa fa-file-excel-o" style="color: #1979a9; font-size: 1em;"> Export to Excel</i>',
+              			      filename: fileName,
+              			      title: ttl,
+              			      messageTop: 'File Processed on: ' + currCal + ' ,The information in this file is copyright to Faisal Jassim Group.',
+              			      exportOptions: {
+              			          modifier: {
+              			              page: 'all' // Export all data, not just visible rows
+              			          }
+              			      }
+              			  }
+              			  
+              			]
+
+              		        
+              		    
+              		});
+
+              		// Move buttons container
+              		$("#salesman_performance_table").DataTable().buttons().container().appendTo('.table-header');
+
+              		// Ensure event binding for the Download Excel button
+              		$(document).on('click', '#downloadExcel', function () {
+              		    $("#salesman_performance_table").DataTable().button('.buttons-excel').trigger();
+              		});
+
+          		
+          	},error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
+          	
+         
+       
+}
+
+function SE_performance_detailsss(){
+	$('#laoding').show(); 
+	var ytdCustTarget = ${WKLYTRGT*currWeek};
+	var smCodeName = $("#scode option:selected").text(); 
+	var smCode = $("#scode option:selected").val();
+	var sYear = $("#syear option:selected").val();
+	 $("#salesman_performance_modal .modal-title").html(smCodeName);  	  
+	var exTtl = 'Salesman Performance - '+smCodeName;
+	var subTtl =  'Year - '+${CURR_YR}+',  Week - '+${currWeek};	
+	//var fileName = 'Salesman Performance '+smCodeName; 
+	var printttl = 'Salesman Performance '+smCodeName +'<br/>  Week - '+${currWeek} + ' and Year - '+${CURR_YR} +'<br/>'; 
+	var ttl = 'Salesman Performance '+smCodeName +' and  week - '+${currWeek} + ' and Year - '+${CURR_YR}; 
+	$("#salesman_performance_modal .modal-title").html(exTtl);
+	$("#salesman_performance_modal .modal-subtitle").html(subTtl);
+	
+	$.ajax({ 
+	type: 'POST',
+	url: 'sip',  
+ 	data :{
+ 			fjtco:"SE_perf" ,
+ 			c1 : smCode,c2:${CURR_YR}
+ 			},
+	dataType: "json",
+	 
+	success : function(data){
+		$('#laoding').hide();
+		var outrecv = 0, bookingTarget = 0, bookingActual = 0, gpTarget = 0, gpActual = 0,  billingTarget = 0, billingActual = 0, prcntgeBilling = 0, stage2JIH = 0, stage3LOI = 0, stage4LPO = 0, stage5LOI = 0, weekBkTarget = 0, prcntgeBooking = 0,  prcntgeBilling = 0 , prcntgeGp = 0;
+		var ytdTargetBkng = 0, ytdTargetBlng = 0 , ytdTargetGp = 0 , ytdPrcntgeBkng = 0, ytdPrcntgeBlng = 0, ytdPrcntgeGp = 0, weekBlngTarget, stage1TENDER = 0, stage3LOI = 0, actualweeklyBilling = 0 , actualweeklyBooking = 0 , totalstage3and4 = 0 , stage3and4vsyearlybillingtarget = 0,converratio=0;
+		var ytdVistactuals = 0,JIHLostNoRepse = 0,avgweeklyorders=0;
+		
+		for(var i in data){
+		 
+		
+		switch ($.trim(data[i].srNo)) {
+		  case "1.0": // total billing target
+			  billingTarget = data[i].yrTot;
+		    break; 
+		  case "1.1": // billing gp target
+			  gpTarget = data[i].yrTot;
+		  case "1.2": // weekly billing target
+			  weekBlngTarget = data[i].yrTot;
+		    break; 
+		  case "1.3": // actual weekly Billing
+			  actualweeklyBilling = data[i].yrTot;
+		    break; 
+		  case "1.4": // YTD Billing target
+			  ytdTargetBlng = data[i].yrTot;
+		    break; 
+		  case "1.5": // YTD Billing GP target
+			  ytdTargetGp = data[i].yrTot;
+		    break; 
+		  case "2.0":// Total Booking Target
+			  bookingTarget = data[i].yrTot;
+		    break; 
+		  case "2.1": // Weekly Booking Target
+			  weekBkTarget = data[i].yrTot;
+		    break; 
+		  case "2.2": // actual weekly booking
+			  actualweeklyBooking = data[i].yrTot;
+		    break; 
+		  case "2.3": // YTD Booking Target
+			  ytdTargetBkng = data[i].yrTot;
+		    break; 
+		  case "3": // STAGE 1(Tender)
+			  stage1TENDER = data[i].yrTot;
+		    break;
+		  case "3.1": // STAGE 2(JIH)
+			  stage2JIH = data[i].yrTot;
+		    break;
+		  case "4": // STAGE3 (LOI)
+			  //stage3LOI = data[i].yrTot;
+			  bookingActual = data[i].yrTot;
+		    break;
+		  case "4.1": // YTD Booking Perc
+			  ytdPrcntgeBkng = data[i].yrTot; 
+		    break;
+		  case "5": // STAGE3 (LOI)
+			  stage3LOI = data[i].yrTot;
+		    break;
+		  case "5.1": // Stage 4 (LPO)
+			  stage4LPO = data[i].yrTot;
+		    break;
+		  case "5.2": // total stage 3 & 4
+			  totalstage3and4 = data[i].yrTot;
+		    break;
+		  case "5.3": // Stage 3 & 4 vs yearly billing target
+			  stage3and4vsyearlybillingtarget = data[i].yrTot;
+		    break;
+		  case "5.4": //average weekly orders(s4)
+			  avgweeklyorders = data[i].yrTot;
+		    break;
+		  case "6": // stage 5 ytd
+			  stage5LOI = data[i].yrTot;
+			  billingActual = data[i].yrTot;
+		    break;
+		  case "6.1":  // GP billing YTD
+			  gpActual = data[i].yrTot;
+		    break; 
+		  case "6.2": // YTD billing percentge
+			  ytdPrcntgeBlng = data[i].yrTot;
+		    break; 
+		  case "7": // outstanding receivable
+			  outrecv = data[i].yrTot;
+		  break;
+		  case "8": // Conversion Ratio
+			  converratio = data[i].yrTot;
+			  break;
+		  case "9": // Cust visit targets
+			  ytdVistactuals = data[i].yrTot;
+	    	break; 
+		  case "10": // total JIH LOST VALUE
+			  totJIHLostVal = data[i].yrTot;
+		  break;
+		  case "10.1": // total JIH LOST VALUE with no reason
+			  JIHLostNoRepse = data[i].yrTot;
+		  break;
+		  default:
+			     break;
+		}
+	} 
+		prcntgeBooking = percentageCal(bookingActual, bookingTarget);
+		prcntgeBilling = percentageCal(billingActual, billingTarget);
+		prcntgeGp = percentageCal(gpActual, gpTarget);
+		ytdPrcntgeGp = percentageCal(gpActual, ytdTargetGp);
+		ytdCustVistit = percentageCal(ytdVistactuals,ytdCustTarget);
+		if(ytdPrcntgeBkng >= 100){
+			percentageachievedbooking = 100;
+		}else{
+			percentageachievedbooking = Math.round(percentageCal(ytdPrcntgeBkng,100));
+		}
+		if(ytdPrcntgeBlng >= 100){
+			percentageachievedbilling = 100;
+		}else{
+			percentageachievedbilling = Math.round(percentageCal(ytdPrcntgeBlng,100));
+		}
+		if(ytdCustVistit >= 100){
+			percentageachievedcustvisit = 100;
+		}else{
+			percentageachievedcustvisit = Math.round(percentageCal(ytdCustVistit,100));
+		}
+		if(ytdPrcntgeGp >= 100){
+			percentageachievedgeGp = 100;
+		}else{
+			percentageachievedgeGp =  Math.round(percentageCal(ytdPrcntgeGp,100));
+		}
+		var jihpercentage = totJIHLostVal !== 0 ? (JIHLostNoRepse / totJIHLostVal) * 100 : 0;
+		if (totJIHLostVal == 0 && JIHLostNoRepse == 0) {
+		    jihpercentage = 0; 
+		}
+		if(jihpercentage <= 10){
+			jihpercentageval= 10;
+		}else{
+			jihpercentageval=0;
+		}
+		var billing120actual = ${aging90120 + aging120180 + aging181};
+		var billingactual = (billing120actual/billingActual)*100;
+		if(billingactual <= 5){
+			billingactualtotalper= 20;
+		}else{
+			billingactualtotalper=0;
+		}
+		var weeklytarget = ${WKLYTRGT};
+		if(weeklytarget > 0){
+			totpercentageachievedcustvisit = (percentageachievedcustvisit*5)/100;
+		}else{
+			totpercentageachievedcustvisit = 5;
+		}
+		var output= "<table id='salesman_performance_table' style='text-align:center; margin-left: auto; margin-right: auto;width: auto;'><thead ><tr>"
+ 		   +"<th class='se-brr'>Key Parmameters</th><th>Salesman Code</th><th>Projection Q1</th><th>Actual Q1</th><th>Projection Q1</th><th>Actual Q2</th><th>Projection Q2 </th><th>Actual Q3</th><th>Projection Q3</th><th>Actual Q4</th><th>Projection Q4</th><th>Actual Total YTD</th><th>Target YTD</th><th>Target for (12 months)</th><th>Variance %</th></tr></thead><tbody>";
+ 	    output+= "<tr><td style='text-align:left;'class='se-brr'>Billing achieved during quater</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage1TENDER))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Gross Profit generated during quater</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage2JIH))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +  "<tr><td style='text-align:left;' class='se-brr'>Average Gross Profit Ratio </td><td style='text-align:right;'>"+formatNumber(Math.round(bookingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBkng))+"</td><td style='text-align:right;'>"+ formatNumber(Math.round(bookingActual)) + "</td><td>"+formatNumber(prcntgeBooking)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBkng+ "</td><td style='text-align:right;'>"+percentageachievedbooking+ "</td><td style='text-align:right;'>"+10+ "</td><td style='text-align:right;'>"+(percentageachievedbooking*10)/100+"</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Stage 3 </td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBooking))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Booking Average Per Week -Q1 & Q2</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(stage4LPO))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Stage 4 </td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(avgweeklyorders))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Order Received average per weeek Q1 & Q2 </td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(billingTarget))+"</td><td style='text-align:right;'>"+formatNumber(Math.round(ytdTargetBlng))+"</td><td style='text-align:right;background-color:#F08080;font-weight: bold;'>"+ formatNumber(Math.round(billingActual)) + "</td><td>"+formatNumber(prcntgeBilling)+ "</td><td style='text-align:right;'>"+ytdPrcntgeBlng+ "</td><td style='text-align:right;'>"+percentageachievedbilling+ "</td><td style='text-align:right;'>"+5+ "</td><td style='text-align:right;'>"+(percentageachievedbilling*5)/100+"</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Total Receivables Outstanding</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(actualweeklyBilling))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>Receivables above 120 days</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td style='text-align:right;'>"+${WKLYTRGT*currWeek}+ "</td><td style='text-align:right;'>"+formatNumber(ytdVistactuals)+ "</td><td>-</td><td>"+formatNumber(ytdCustVistit)+"</td><td style='text-align:right;'>"+percentageachievedcustvisit+ "</td><td style='text-align:right;'>"+5+"</td><td style='text-align:right;'>"+totpercentageachievedcustvisit+"</td></tr>"
+				 +	"<tr><td style='text-align:left;' class='se-brr'>DSO on average basis</td><td>-</td><td>-</td><td style='text-align:right;'>"+formatNumber(Math.round(totJIHLostVal))+ "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>";
+			
+				var subTtl1 =  'Conversion Ratio - '+formatNumber(converratio) +"<a href='#' data-toggle='modal' data-target='#help-modal'> <i class='fa fa-info-circle pull-right' style='color: #2196f3;font-size: 15px;padding-right: 75%;'></i></a>";
+    			$("#salesman_performance_modal .modal-body").html(output);
+    			$("#salesman_performance_modal .modal-subtitle2").html(subTtl1);
+    			$("#salesman_performance_modal").modal("show");
+    			
+    			 $('.modal-dialog').draggable({
+				      handle: ".modal-header"
+				  });
+    	
+    			$("#salesman_performance_table").DataTable( {
+    				dom: 'Bfrtip',
+    				searching: false,
+    			    ordering:  false,
+    			    paging: false,
+    			    info: false,
+    			   
+    			     buttons: [
+    			         {
+    			            extend: 'excelHtml5',
+    			             text:      '<i class="fa fa-file-excel-o" style="color: #1979a9; font-size: 1em;">Export</i>',    			            
+    			             filename: fileName,
+    			             title: ttl,
+    			             messageTop: 'File Processed on : ${currCal} ,The information in this file is copyright to Faisal Jassim Group.'
+    			         },
+    			         {
+    			        	    extend: 'print', 
+    			        	    exportOptions: {
+    			        	        stripHtml: false
+    			        	    },
+    			        	    text:      '<i class="fa fa-print" style="color: #1979a9; font-size: 1em;">Print</i>', 
+    			        	    title: printttl + " Conversion Ratio: "+formatNumber(converratio),
+    			        	    customize: (win) => {
+    			        	    	$(win.document.head).append('<style>h1 { font-size: 14px; }</style>'); // Adjust the font size of the title    			        	    	
+    			        	        $(win.document.body).css("height", "auto").css("min-height", "0");
+    			        	        $(win.document.body).find( 'table' ).addClass( 'compact' ).css( 'font-size', 'inherit' );
+//     			        	        $(win.document.body).find('table').css({
+//     			        	            'border-collapse': 'collapse',
+//     			        	            'border': '1px solid black'
+//     			        	        });
+    			        	        $(win.document.body).find('th, td').css('border', '1px solid black');
+    			        	       
+    			        	    }
+     			         }
+    			      
+    			       
+    			    ]
+    			 } );
+    			
+		
+	},error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
+	
+}
 //sales performance summary
 function sm_performance_details(){
 	$('#laoding').show(); 

@@ -1095,6 +1095,8 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 					 <input type="hidden" name="salesEngName" id="salesEngName"/>
 <!--    					<button type="submit" id="sf" class="btn btn-sm btn-primary" onclick="sm_view_details();">View</button> -->
 					<button type="button"  id="seperfdiv" class="btn btn-sm btn-primary"   onclick="sm_performance_details();"><i class="fa fa-share" aria-hidden="true"></i> PERFORMANCE</button>
+					<!-- <button type="button"  id="seperfdiv" class="btn btn-sm btn-primary"   onclick="SE_performance_details();"><i class="fa fa-share" aria-hidden="true"></i> Sales PERFORMANCE</button>   -->
+		
 				</form> 
 				 </div>
 				<div class="col-md-4 col-xs-12" style="width:26%;float:right;">
@@ -2091,9 +2093,14 @@ $('#mrInfJihLstGrpTbl').DataTable( {
 								          		<h5 class="modal-subtitle2"  id="sm_h1"> </h5>
 <!-- 								          		<a href="#" data-toggle="modal" data-target="#help-modal"> <i class="fa fa-info-circle pull-right" style="color: #2196f3;font-size: 20px;margin-top: 4px;"></i></a>   -->
 					 </div>  
-					<div class="modal-body">										
+					<div class="modal-body">	
+					   <div id="performanceButtonContainer"></div>
+                <!-- Other modal content -->
+                <div id="salesman_performance_modal_content"></div>									
 					</div>
 					<div class="modal-footer" style="text-align:left;">
+						<button type="button"  id="seperfdiv" class="btn btn-sm btn-primary"   onclick="SE_performance_details();"><i class="fa fa-share" aria-hidden="true"></i> Sales PERFORMANCE</button>  
+		
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					</div>
 				</div>
@@ -3410,9 +3417,302 @@ $('#jihvexport').DataTable( {
 
 },error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
 }
+function SE_performance_details() {
+	$('#laoding-rcvbl').hide();
+	$('#laoding').show(); 
+	//$('#laoding').show(); 
+	var ytdCustTarget = ${WKLYTRGT*currWeek};
+	var smCodeName = $("#scode option:selected").text(); 
+	var smCode = $("#scode option:selected").val();
+	console.log('this is sm',smCode);
+	var sYear = $("#syear option:selected").val();
+	 $("#salesman_performance_modal .modal-title").html(smCodeName);  	  
+	var exTtl = 'Salesman Performance - '+smCodeName;
+	var subTtl =  'Year - '+${CURR_YR}+',  Week - '+${currWeek};	
+	var fileName = 'Salesman Performance '+smCodeName; 
+	var printttl = 'Salesman Performance '+smCodeName +'<br/>  Week - '+${currWeek} + ' and Year - '+${CURR_YR} +'<br/>'; 
+	var ttl = 'Salesman Performance '+smCodeName +' and  week - '+${currWeek} + ' and Year - '+${CURR_YR}; 
+	$("#salesman_performance_modal .modal-title").html(exTtl);
+	$("#salesman_performance_modal .modal-subtitle").html(subTtl);
+	var q1billing=0,q1gpQuater=0,q1gpAvg=0,q1stage3=0,q1bookingAvg=0,q1stage4=0,q1orderAvg=0,q1totalRecivable=0,q1above120=0;
+	var q2billing=0,q2gpQuater=0,q2gpAvg=0,q2stage3=0,q2bookingAvg=0,q2stage4=0,q2orderAvg=0,q2totalRecivable=0,q2above120=0;
+	var q3billing=0,q3gpQuater=0,q3gpAvg=0,q3stage3=0,q3bookingAvg=0,q3stage4=0,q3orderAvg=0,q3totalRecivable=0,q3above120=0;
+	var q4billing=0,q4gpQuater=0,q4gpAvg=0,q4stage3=0,q4bookingAvg=0,q4stage4=0,q4orderAvg=0,q4totalRecivable=0,q4above120=0;
+
+	var ytdCustTarget = ${WKLYTRGT*currWeek};
+	var smCodeName = $("#scode option:selected").text(); 
+//	var smCode = 'FJ372';
+	
+    // Define smCode and CURR_YR (replace with actual values)
+  //  var smCode = $("#smCodeInput").val(); // Assuming an input field with id smCodeInput
+    var CURR_YR = new Date().getFullYear(); // Current Year
+
+    $.ajax({
+        type: 'POST',
+        url: 'sip',  // Adjust URL if needed
+        data: {
+            fjtco: "SE_perf",
+            c1: smCode,
+            c2: CURR_YR
+        },
+        success: function(response) {
+        	
+                 
+                 $.each(response, function(key, valueArray) {
+                     console.log(key); // This will log 'Q1', 'Q2', etc.
+                 	switch ($.trim(key)) {
+					case 'Q1':
+						 $.each(valueArray, function(index, item) {
+	                         // Now you can access each item in the array
+	                         console.log("Index: " + index); // Index within the array (0, 1, 2, ...)
+	                         console.log("Title: " + item.perf_ttl);  // Access perf_ttl
+	                         console.log("Code: " +  item.smCode);    // Access smCode
+	                         console.log("Year: " +  item.smtYr);     // Access smtYr
+	                         console.log("Serial No: " + item.srNo); // Access srNo
+	                         console.log("Value: " + item.value);    // Access value
+
+	                 		switch ($.trim(item.srNo)) {
+	                 		  case "1": // total billing target
+	                 			  q1billing = item.value;
+	                 		    break; 
+	                 		  case "2": // billing gp target
+	                 			  q1gpQuater = item.value;
+	                 		  case "3": // weekly billing target
+	                 			  q1gpAvg = ((q1gpQuater/q1billing)*100).toFixed(2) + "%";
+	                 		    break; 
+	                 		  case "4": // actual weekly Billing
+	                 			  q1stage3 = item.value;
+	                 		    break; 
+	                 		  case "5": // YTD Billing target
+	                 			  q1bookingAvg = item.value;
+	                 		    break; 
+	                 		 case "6": // YTD Billing GP target
+	                 			 q1stage4 = item.value;
+	                 		    break; 
+	                 		  case "7": // YTD Billing GP target
+	                 			 q1orderAvg = item.value;
+	                 		    break; 
+	                 		  case "8":// Total Booking Target
+	                 			 q1totalRecivable = item.value;
+	                 		    break; 
+	                 		  case "9": // Weekly Booking Target
+	                 			 q1above120 =  item.value;
+	                 		    break; 
+	                 		    default:
+	                 			     break;
+	                 		}
+						 });    
+	                    break;     
+					case 'Q2':
+						 $.each(valueArray, function(index, item) {
+	                         // Now you can access each item in the array
+	                         console.log("Index: " + index); // Index within the array (0, 1, 2, ...)
+	                         console.log("Title: " + item.perf_ttl);  // Access perf_ttl
+	                         console.log("Code: " +  item.smCode);    // Access smCode
+	                         console.log("Year: " +  item.smtYr);     // Access smtYr
+	                         console.log("Serial No: " + item.srNo); // Access srNo
+	                         console.log("Value: " + item.value);    // Access value
+
+	                 		switch ($.trim(item.srNo)) {
+	                 		  case "1": // total billing target
+	                 			  q2billing = item.value;
+	                 		    break; 
+	                 		  case "2": // billing gp target
+	                 			  q2gpQuater = item.value;
+	                 		  case "3": // weekly billing target
+	                 			  q2gpAvg = ((q2gpQuater/q2billing)*100).toFixed(2) + "%";
+	                 		    break; 
+	                 		  case "4": // actual weekly Billing
+	                 			  q2stage3 = item.value;
+	                 		    break; 
+	                 		  case "5": // YTD Billing target
+	                 			  q2bookingAvg = item.value;
+	                 		    break; 
+	                 		 case "6": // YTD Billing GP target
+	                 			 q2stage4 = item.value;
+	                 		    break; 
+	                 		  case "7": // YTD Billing GP target
+	                 			 q2orderAvg = item.value;
+	                 		    break; 
+	                 		  case "8":// Total Booking Target
+	                 			 q2totalRecivable = item.value;
+	                 		    break; 
+	                 		  case "9": // Weekly Booking Target
+	                 			 q2above120 =  item.value;
+	                 		    break; 
+	                 		    default:
+	                 			     break;
+	                 		}
+						 }); 
+	                    break;     
+					case 'Q3':
+						 $.each(valueArray, function(index, item) {
+	                         // Now you can access each item in the array
+	                         console.log("Index: " + index); // Index within the array (0, 1, 2, ...)
+	                         console.log("Title: " + item.perf_ttl);  // Access perf_ttl
+	                         console.log("Code: " +  item.smCode);    // Access smCode
+	                         console.log("Year: " +  item.smtYr);     // Access smtYr
+	                         console.log("Serial No: " + item.srNo); // Access srNo
+	                         console.log("Value: " + item.value);    // Access value
+
+	                 		switch ($.trim(item.srNo)) {
+	                 		  case "1": // total billing target
+	                 			  q3billing = item.value;
+	                 		    break; 
+	                 		  case "2": // billing gp target
+	                 			  q3gpQuater = item.value;
+	                 		  case "3": // weekly billing target
+	                 			  q3gpAvg = ((q3gpQuater/q3billing)*100).toFixed(2) + "%";
+	                 		    break; 
+	                 		  case "4": // actual weekly Billing
+	                 			  q3stage3 = item.value;
+	                 		    break; 
+	                 		  case "5": // YTD Billing target
+	                 			  q3bookingAvg = item.value;
+	                 		    break; 
+	                 		 case "6": // YTD Billing GP target
+	                 			 q3stage4 = item.value;
+	                 		    break; 
+	                 		  case "7": // YTD Billing GP target
+	                 			 q3orderAvg = item.value;
+	                 		    break; 
+	                 		  case "8":// Total Booking Target
+	                 			 q3totalRecivable = item.value;
+	                 		    break; 
+	                 		  case "9": // Weekly Booking Target
+	                 			 q3above120 =  item.value;
+	                 		    break; 
+	                 		    default:
+	                 			     break;
+	                 		}
+						 }); 
+	                    break;     
+					case 'Q4':
+						 $.each(valueArray, function(index, item) {
+	                         // Now you can access each item in the array
+	                         console.log("Index: " + index); // Index within the array (0, 1, 2, ...)
+	                         console.log("Title: " + item.perf_ttl);  // Access perf_ttl
+	                         console.log("Code: " +  item.smCode);    // Access smCode
+	                         console.log("Year: " +  item.smtYr);     // Access smtYr
+	                         console.log("Serial No: " + item.srNo); // Access srNo
+	                         console.log("Value: " + item.value);    // Access value
+
+	                 		switch ($.trim(item.srNo)) {
+	                 		  case "1": // total billing target
+	                 			  q4billing = item.value;
+	                 		    break; 
+	                 		  case "2": // billing gp target
+	                 			  q4gpQuater = item.value;
+	                 		  case "3": // weekly billing target
+	                 			  q4gpAvg = ((q4gpQuater/q4billing)*100).toFixed(2) + "%";
+	                 		    break; 
+	                 		  case "4": // actual weekly Billing
+	                 			  q4stage3 = item.value;
+	                 		    break; 
+	                 		  case "5": // YTD Billing target
+	                 			  q4bookingAvg = item.value;
+	                 		    break; 
+	                 		 case "6": // YTD Billing GP target
+	                 			 q4stage4 = item.value;
+	                 		    break; 
+	                 		  case "7": // YTD Billing GP target
+	                 			 q4orderAvg = item.value;
+	                 		    break; 
+	                 		  case "8":// Total Booking Target
+	                 			 q4totalRecivable = item.value;
+	                 		    break; 
+	                 		  case "9": // Weekly Booking Target
+	                 			 q4above120 =  item.value;
+	                 		    break; 
+	                 		    default:
+	                 			     break;
+	                 		}
+						  });
+						 break;
+					default:
+        			     break;
+                     // Iterate over the array associated with each key
+                 	}
+                 });
+                 var currCal = new Date().toLocaleDateString(); 
+                 var output= "<table id='salesman_performance_table' style='text-align:center; margin: auto; width: 100%; font-size:10px; '><thead ><tr>"
+             		   +"<th class='se-brr' style='padding:5px; width:15%;'>Key Parmameters</th><th style='padding:5px; width:15%;'>Proj.Q1</th><th>Actual.Q1</th><th>Proj.Q1</th><th>Actual.Q2</th><th>Proj.Q2 </th><th>Actual.Q3</th><th>Proj.Q3</th><th>Actual.Q4</th><th>Proj.Q4</th><th>Total YTD</th><th>Targ-YTD</th><th style='padding:5px; width:15%;'>Targ-(12 months)</th><th style='padding:5px; width:15%;'>Varianc.%</th></tr></thead><tbody>";
+
+             		output += "<tr><td style='text-align:left;'class='se-brr'>Billing achieved</td><td>-</td><td style='text-align:right;'>" + formatNumber(Math.round(q1billing)) + "</td><td>-</td><td style='text-align:right;'>" + formatNumber(Math.round(q2billing)) + "</td><td>-</td><td style='text-align:right;'>" + formatNumber(Math.round(q3billing)) + "</td><td>-</td><td style='text-align:right;'>" + formatNumber(Math.round(q4billing)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+             		        + "<tr><td style='text-align:left;' class='se-brr'>Gross Profit</td><td>-</td><td>" + formatNumber(Math.round(q1gpQuater)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2gpQuater)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3gpQuater)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4gpQuater)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+             		        + "<tr><td style='text-align:left;' class='se-brr'>Avg Profit Ratio</td></td><td style='text-align:right;'>--</td><td style='text-align:right;'>" + q1gpAvg + "</td><td>-</td><td style='text-align:right;'>" + q2gpAvg + "</td><td>-</td><td style='text-align:right;'>" + q3gpAvg + "</td><td>-</td><td style='text-align:right;'>" + q4gpAvg + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+             		        + "<tr><td style='text-align:left;' class='se-brr'>Stage 3</td><td>-</td><td>" + formatNumber(Math.round(q1stage3)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2stage3)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3stage3)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4stage3)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+             		        + "<tr><td style='text-align:left;' class='se-brr'>Booking Avg Per Week - Q1 & Q2</td><td>-</td><td>" + formatNumber(Math.round(q1bookingAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2bookingAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3bookingAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4bookingAvg)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+             		        + "<tr><td style='text-align:left;' class='se-brr'>Stage 4</td><td>-</td><td>" + formatNumber(Math.round(q1stage4)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2stage4)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3stage4)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4stage4)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+             		        + "<tr><td style='text-align:left;' class='se-brr'>Order Rec.week Q1 & Q2</td><td>-</td><td>" + formatNumber(Math.round(q1orderAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2orderAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3orderAvg)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4orderAvg)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+             		        + "<tr><td style='text-align:left;' class='se-brr'>Total Rec.Outstanding</td><td>-</td><td>" + formatNumber(Math.round(q1totalRecivable)) + "</td><td>-</td><td>" + formatNumber(Math.round(q2totalRecivable)) + "</td><td>-</td><td>" + formatNumber(Math.round(q3totalRecivable)) + "</td><td>-</td><td>" + formatNumber(Math.round(q4totalRecivable)) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+             		        + "<tr><td style='text-align:left;' class='se-brr'>Rec. above 120 days</td><td>-</td><td>" + formatNumber(q1above120) + "</td><td>-</td><td>" + formatNumber(q2above120) + "</td><td>-</td><td>" + formatNumber(q3above120) + "</td><td>-</td><td>" + formatNumber(q4above120) + "</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>"
+             		        + "<tr><td style='text-align:left;' class='se-brr'>DSO Avg</td><td>-</td><td></td><td>-</td><td></td><td>-</td><td></td><td>-</td><td></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>";
+  	
+            		
+          				var subTtl1 = "<a href='#' data-toggle='modal' data-target='#help-modal'></a>";
+              			$("#salesman_performance_modal .modal-body").html(output);
+              			$("#salesman_performance_modal .modal-subtitle2").html(subTtl1);
+              			$("#salesman_performance_modal").modal("show");
+              			
+              			/*  $('.modal-dialog').draggable({
+          				      handle: ".modal-header"
+          				  });
+              	 */
+
+
+              		// Make modal draggable
+              	/* 	$('.modal-dialog').draggable({
+              		    handle: ".modal-header"
+              		}); */
+
+              		// Initialize DataTable once the modal is fully loaded
+              		$("#salesman_performance_table").DataTable({
+              		    dom: 'Bfrtip',
+              		    searching: false,
+              		    ordering: false,
+              		    paging: false,
+              		    info: false,
+              		  buttons: [
+              			  {
+              			      extend: 'excelHtml5',
+              			      text: '<i class="fa fa-file-excel-o" style="color: #1979a9; font-size: 1em;"> Export to Excel</i>',
+              			      filename: fileName,
+              			      title: ttl,
+              			      messageTop: 'File Processed on: ' + currCal + ' ,The information in this file is copyright to Faisal Jassim Group.',
+              			      exportOptions: {
+              			          modifier: {
+              			              page: 'all' // Export all data, not just visible rows
+              			          }
+              			      }
+              			  }
+              			  
+              			]
+
+              		        
+              		    
+              		});
+
+              		// Move buttons container
+              		$("#salesman_performance_table").DataTable().buttons().container().appendTo('.table-header');
+
+              		// Ensure event binding for the Download Excel button
+              		$(document).on('click', '#downloadExcel', function () {
+              		    $("#salesman_performance_table").DataTable().button('.buttons-excel').trigger();
+              		});
+
+          		
+          	},error:function(data,status,er) {$('#laoding').hide();  alert("please click again");}});
+          	
+         
+       
+}
+
 //sales performance summary
 function sm_performance_details(){
 	$('#laoding').show(); 
+//	<button type="button"  id="seperfdiv" class="btn btn-sm btn-primary"   onclick="SE_performance_details();"><i class="fa fa-share" aria-hidden="true"></i> Sales PERFORMANCE</button>  
+	
 	var ytdCustTarget = ${WKLYTRGT*currWeek};
 	var smCodeName = $("#scode option:selected").text(); 
 	var smCode = $("#scode option:selected").val(); 
@@ -3436,6 +3736,9 @@ function sm_performance_details(){
 	dataType: "json",
 	 
 	success : function(data){
+		   var buttonHtml = '<button type="button" id="seperfdiv" class="btn btn-sm btn-primary" onclick="SE_performance_details();">' +
+           '<i class="fa fa-share" aria-hidden="true"></i> Sales PERFORMANCE</button>';
+
 		$('#laoding').hide();
 		var outrecv = 0, bookingTarget = 0, bookingActual = 0, gpTarget = 0, gpActual = 0,  billingTarget = 0, billingActual = 0, prcntgeBilling = 0, stage2JIH = 0, stage3LOI = 0, stage4LPO = 0, stage5LOI = 0, weekBkTarget = 0, prcntgeBooking = 0,  prcntgeBilling = 0 , prcntgeGp = 0;
 		var ytdTargetBkng = 0, ytdTargetBlng = 0 , ytdTargetGp = 0 , ytdPrcntgeBkng = 0, ytdPrcntgeBlng = 0, ytdPrcntgeGp = 0, weekBlngTarget,  stage1TENDER = 0, stage3LOI = 0, actualweeklyBilling = 0 , actualweeklyBooking = 0, totalstage3and4 = 0 , stage3and4vsyearlybillingtarget = 0,converratio=0;

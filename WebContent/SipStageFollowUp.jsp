@@ -193,7 +193,7 @@ div.dt-buttons{
 		<section class="sidebar">
 		<!-- sidebar menu: : style can be found in sidebar.less -->
 		<ul class="sidebar-menu" data-widget="tree">  
-        	 <c:choose>
+        	
              <c:when test="${fjtuser.role eq 'mg' and fjtuser.sales_code ne null}"> 
       		 		 <li><a href="SipBranchPerformance"><i class="fa fa-building-o"></i><span>Branch Performance</span></a></li> 
       		 		 <li><a href="DmInfo.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>
@@ -235,8 +235,9 @@ div.dt-buttons{
 						<li><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li>
 						<li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
 	                <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
+
                </c:otherwise>               
-              </c:choose>                            
+     </c:choose>                            
 		</ul>
 	    </section>
 	    <!-- /.sidebar -->
@@ -3167,10 +3168,10 @@ function closeWindow(divId) {
 </script>
 <!-- page script END -->
 </body>
-</c:when>
+
 <c:otherwise>
         <body onload="window.top.location.href='logout.jsp'">                     
         </body>  
 </c:otherwise>
-</c:choose>
+
 </html>

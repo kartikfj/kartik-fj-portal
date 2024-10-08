@@ -301,6 +301,15 @@ public class SipController extends HttpServlet {
 					e.printStackTrace();// TODO: handle exception
 				}
 				break;
+			case "SE_perf":// Salesman Performance details
+				try {
+					System.out.println("request came");
+					getSEPerformanceData(request, response);
+					System.out.println("request came3");
+				} catch (Exception e) {
+					e.printStackTrace();// TODO: handle exception
+				}
+				break;
 			case "cvDoSegfcYrmth":
 				try {// Customer visit details of sales engineer for a custom month and year
 					getCustomeVisitailsofSegForMonth(request, response);
@@ -384,9 +393,38 @@ public class SipController extends HttpServlet {
 			throws SQLException, IOException, JsonIOException {
 		// Salesman Performance details
 		String smCode = request.getParameter("c1");
+		System.out.println(smCode);
 		String sYear = request.getParameter("c2");
 		String segEmplCode = sipChartDbUtil.getEmployeeCodeBySalesCode(smCode);
 		Map<String, SalesmanPerformance> smMap = sipChartDbUtil.getSmPerformance(smCode, sYear, segEmplCode);
+		response.setContentType("application/json");
+		new Gson().toJson(smMap, response.getWriter());
+		request.setAttribute("SM_MAP", smMap);
+
+	}
+
+	private void getSEPerformanceData(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException, JsonIOException {
+		// Salesman Performance details
+		String smCode = request.getParameter("c1");
+		System.out.println(smCode);
+
+		String sYear = request.getParameter("c2");
+		System.out.println(sYear);
+		String segEmplCode = sipChartDbUtil.getEmployeeCodeBySalesCode(smCode);
+		Map<String, List<SalesmanPerformance>> smMap = sipChartDbUtil.getSEPerformance(smCode, sYear, segEmplCode);
+		for (Map.Entry<String, List<SalesmanPerformance>> entry : smMap.entrySet()) {
+			String quarter = entry.getKey();
+			List<SalesmanPerformance> performances = entry.getValue();
+
+			System.out.println("Quarter: " + quarter);
+			for (SalesmanPerformance performance : performances) {
+				System.out.println("SMCode: " + performance.getSmCode() + ", SRNO: " + performance.getSrNo()
+						+ ", Perf_Ttl: " + performance.getPerf_ttl() + ", Value: " + performance.getValue() + ", Year: "
+						+ performance.getSmtYr());
+			}
+		}
+		System.out.println("request came 6");
 		response.setContentType("application/json");
 		new Gson().toJson(smMap, response.getWriter());
 		request.setAttribute("SM_MAP", smMap);
