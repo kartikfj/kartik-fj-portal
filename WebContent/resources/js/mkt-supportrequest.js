@@ -54,8 +54,8 @@ $(document).ready(function() {
         "info":     false,
         "searching": true,
         "lengthMenu": [[ 5, 10, 15, 25, -1], [ 5, 10, 15, 25, "All" ]], 
-         columnDefs:[{targets:[4,8,9, 10,12, 14,  15,   17, 18],className:"remove"},
-        {targets:[0,1, 2, 3, 5, 6, 7, 11,13 ,16],className:"truncate"}],
+         columnDefs:[{targets:[4,8,9, 10, 14,  15,   17, 18],className:"remove"},
+        {targets:[0,1, 2, 3, 5, 6, 7, 11,12,13 ,16],className:"truncate"}],
         createdRow: function(row){
            var td = $(row).find(".truncate");
            td.attr("title", td.html());

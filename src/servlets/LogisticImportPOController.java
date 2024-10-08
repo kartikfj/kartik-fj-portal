@@ -262,7 +262,7 @@ public class LogisticImportPOController extends HttpServlet {
 			String remarks = request.getParameter("podl3");
 			String reference = request.getParameter("podl4");
 			String poNumber = request.getParameter("podl5");
-			String divnEmpCode = empCode;
+			String divnEmpCode = request.getParameter("podl6");
 			String divnEmpName = request.getParameter("podl7");
 			String shipDocStatus = request.getParameter("podl8");
 			String deliveryStatus = request.getParameter("podl9");

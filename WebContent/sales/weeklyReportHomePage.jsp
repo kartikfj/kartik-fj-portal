@@ -142,18 +142,15 @@ table.dataTable thead th, table.dataTable thead td { padding: 6px 10px !importan
 					  <li class="active"><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li>
 					  <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
 					  <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
-               </c:when>             
-               <c:otherwise>
-               	 <li><a href="sip.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>	               
-<!-- 	                <li><a href="SipJihDues"><i class="fa fa-table"></i><span>JIH Dues</span></a></li>  -->
-<!-- 	                <li><a href="SipLOIDues"><i class="fa fa-table"></i><span>LOI Dues</span></a></li>   -->						
+               </c:when>
+               <c:otherwise>				
+					 <li><a href="sip.jsp"><i class="fa fa-dashboard"></i><span>Sales Engineers Performance</span></a></li>	               
+					<!-- 	                <li><a href="SipJihDues"><i class="fa fa-table"></i><span>JIH Dues</span></a></li>  -->
+					<!-- 	                <li><a href="SipLOIDues"><i class="fa fa-table"></i><span>LOI Dues</span></a></li>   -->						
 	                <li><a href="SipStageFollowUpController"><i class="fa fa-database"></i><span>Stage Follow-Up</span></a></li>
 	                 <li class="active"><a href="sipWeeklyReport"><i class="fa fa-bar-chart"></i><span>Weekly-Sales Report</span></a></li>
 	                 <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
 	                <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
-               </c:when>              
-               <c:otherwise>				
-
                </c:otherwise>               
               </c:choose>                            
 		</ul>

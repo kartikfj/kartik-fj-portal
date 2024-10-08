@@ -1721,6 +1721,7 @@ public class MarketingLeadsDbUtil {
 
 			// Process the result set
 			while (myRes.next()) {
+				String visitedBy = "";
 				String cnslt_name_temp = myRes.getString(1);
 				Date visit_date = myRes.getDate(2);
 				String visit_reason = myRes.getString(3);
@@ -1728,11 +1729,14 @@ public class MarketingLeadsDbUtil {
 				String meetingperson_details = myRes.getString(5);
 				String meeting_notes = myRes.getString(6);
 				String empcode = myRes.getString(8);
+				if (empcode != null) {
+					visitedBy = new fjtcouser().getEmpNameByUid(empcode);
+				}
 				String division = myRes.getString(9);
 				String product = myRes.getString(10);
 				String consultantType = myRes.getString(11);
 				ConsultantVisits tempConsultantVisitssList = new ConsultantVisits(cnslt_name_temp, visit_reason,
-						visit_date, noof_attendees, meetingperson_details, meeting_notes, empcode, division, product,
+						visit_date, noof_attendees, meetingperson_details, meeting_notes, visitedBy, division, product,
 						consultantType);
 				consultantVisits.add(tempConsultantVisitssList);
 

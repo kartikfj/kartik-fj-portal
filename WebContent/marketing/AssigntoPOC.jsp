@@ -433,15 +433,15 @@ $(document).ready(function() {
 //     });
     //getProducts();
     
-    $('#displayLeads').DataTable( {
+    $('#displayLeadss').DataTable( {
         dom: 'Bfrtip',
         "paging":   true,
         "ordering": false,
         "info":     false,
         "searching": true,
         "lengthMenu": [[ 5, 10, 15, 25, -1], [ 5, 10, 15, 25, "All" ]], 
-         columnDefs:[{targets:[4,8,9, 10,12, 14,  15,   17, 18],className:"remove"},
-        {targets:[0,1, 2, 3, 5, 6, 7, 11,13 ,16],className:"truncate"}],
+       //  columnDefs:[{targets:[4,8,9, 10,12, 14,  15,   17, 18],className:"remove"},
+        //{targets:[0,1, 2, 3, 5, 6, 7, 11,13 ,16],className:"truncate"}],
         createdRow: function(row){
            var td = $(row).find(".truncate");
            td.attr("title", td.html());
@@ -450,8 +450,8 @@ $(document).ready(function() {
             {
                 extend: 'excelHtml5',
                 text:      '<i class="fa fa-cloud-download" style="color: green; font-size: 1.5em;">Export</i>',
-                filename: "Support Request Details - "+currentYear,
-                title: "Support Request  Details -  "+currentYear,
+                filename: "Assigned to POC Details - "+currentYear,
+                title: "Assigned to POC  Details -  "+currentYear,
                 messageTop: 'The information in this file is copyright to Faisal Jassim Group.',
                 exportOptions: {
                     columns: ':not(:last-child)',
