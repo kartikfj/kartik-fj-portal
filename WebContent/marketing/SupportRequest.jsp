@@ -133,7 +133,9 @@
 	         <li><a href="MktDashboard"><i class="fa fa-dashboard"></i><span>Dashboard - Sales Leads</span></a></li>
 	         <li ><a href="SalesLeads"><i class="fa fa-pie-chart"></i><span>Sales Leads Details</span></a></li>
          </c:if>
-         <li><a href="AssignToPOC"><i class="fa fa-table"></i><span> Assign task to POC </span></a></li>
+          <c:if test="${!empty fjtuser.emp_code and  ( fjtuser.role eq 'mkt' || !empty service.rows)  and fjtuser.checkValidSession eq 1  }">
+         	<li><a href="AssignToPOC"><i class="fa fa-table"></i><span> Assign task to POC </span></a></li>
+         </c:if>
           <c:if test="${!empty service.rows}">  
          	<li class="active"><a href="SupportRequest"><i class="fa fa-table"></i><span> BDM Support Request </span></a></li>
          </c:if>         
@@ -174,14 +176,15 @@
                <table class="table table-hover small marketing-dtls-table" id="displayLeads" style="border-top: 1px solid #4a46465e !important;" >		        		 
 		       <thead>
 		        <tr>	
-		        <th width="35px;">Request Code</th><th  width="30px;">Type</th>	        			    
-		        <th width="45px;">Sales Eng.</th><th  width="40px;">Product</th><th>Division</th><th width="35px;">Contractor</th><th width="35px;">Consultant /Client</th>
-		        <th width="35px;">Project Details</th>
-		        <th width="40px;">Offer Value</th><th width="35px;"> SE Initial Remarks</th><th>SE Requested on </th>		        
-		        <th  width="45px;">Ack. Status by Mkt.</th>  
-		        <th  width="45px;">Ack. Remarks by Mkt.</th> 	      
-		        <th width="45px;">Mkt. Follow-Up Status</th><th width="45px;">Mkt. Follow-Up Remarks</th><th>Mkt. Follow-Up On</th><th width="45px;">SE Final Status</th><th width="45px;">SE Final Remarks</th> <th>SE Closed On</th> 
-		         <th  width="65">Action</th>
+		        <th>Request Code</th><th>Type</th>	        			    
+		        <th>Sales Eng.</th><th>Product</th><th>Division</th><th>Contractor</th><th>Consultant /Client</th>
+		        <th>Project Details</th>
+		        <th>Offer Value</th><th> SE Initial Remarks</th><th>SE Requested on </th>		        
+		        <th>Ack. Status by Mkt.</th> 
+		        <th>Accepted By</th>   
+		        <th>Ack. Remarks by Mkt.</th> 	      
+		        <th>Mkt. Follow-Up Status</th><th>Mkt. Follow-Up Remarks</th><th>Mkt. Follow-Up On</th><th>SE Final Status</th><th>SE Final Remarks</th> <th>SE Closed On</th> 
+		         <th>Action</th>
 		        </tr>
 		        </thead>
 		        <tbody>
@@ -212,6 +215,8 @@
 		        </c:otherwise>
 		        
 		        </c:choose>
+		        </td>
+		        <td>${requestList.support_accept_by}
 		        </td>
 		         <td>${requestList.support_accept_remarks}</td>		
 		        <td>

@@ -186,6 +186,9 @@ input.right {
 	         <li><a href="MktDashboard"><i class="fa fa-dashboard"></i><span>Dashboard - Sales Leads</span></a></li>
 	         <li ><a href="SalesLeads"><i class="fa fa-pie-chart"></i><span>Sales Leads Details</span></a></li>
          </c:if>
+          <c:if test="${!empty fjtuser.emp_code and  ( fjtuser.role eq 'mkt' || !empty service.rows)  and fjtuser.checkValidSession eq 1  }">
+         	<li><a href="AssignToPOC"><i class="fa fa-table"></i><span> Assign task to POC </span></a></li>
+         </c:if>
          <c:if test="${!empty service.rows}">  
          	<li><a href="SupportRequest"><i class="fa fa-table"></i><span> BDM Support Request </span></a></li>
          </c:if>        

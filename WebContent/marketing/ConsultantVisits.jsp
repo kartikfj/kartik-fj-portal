@@ -177,6 +177,9 @@ color:#008ac1;
 	         <li><a href="MktDashboard"><i class="fa fa-dashboard"></i><span>Dashboard - Sales Leads</span></a></li>
 	         <li ><a href="SalesLeads"><i class="fa fa-pie-chart"></i><span>Sales Leads Details</span></a></li>
          </c:if>
+          <c:if test="${!empty fjtuser.emp_code and  ( fjtuser.role eq 'mkt' || !empty service.rows)  and fjtuser.checkValidSession eq 1  }">
+         	<li><a href="AssignToPOC"><i class="fa fa-table"></i><span> Assign task to POC </span></a></li>
+         </c:if>
           <c:if test="${!empty service.rows}">  
          	<li><a href="SupportRequest"><i class="fa fa-table"></i><span> BDM Support Request </span></a></li>
          </c:if>        
@@ -236,7 +239,7 @@ color:#008ac1;
 		              <table class="table table-hover small marketing-dtls-table" id="displayLeads" style="border-top: 1px solid #4a46465e !important;" >		        		 
 		        		    <thead>
 		        			 <tr>		        			    
-		        				<th>Consultant</th><th>Consultant Type</th><th>Visit Date</th>   <th>Visit Reason</th>
+		        				<th>Consultant</th><th>Consultant Type</th><th>Visited By</th><th>Visit Date</th>   <th>Visit Reason</th>
 		           				<th>No.of Attendees</th><th>Division</th><th>Product</th><th>Meeting Person Details</th><th>Meeting Notes</th>
 		                     </tr>
 		                     </thead>
@@ -244,6 +247,7 @@ color:#008ac1;
 								<tbody> <c:forEach var="cnsltLst"  items="${VACLD}" > <tr>
 					             <td><p class="long-letters">${cnsltLst.conslt_name}</p></td>
 					              <td><p class="long-letters">${cnsltLst.consultantType}</p></td>
+					              <td><p class="long-letters">${cnsltLst.employee_Code}</p></td>
 					             <td><fmt:parseDate value="${cnsltLst.date}" var="theCDate"    pattern="yyyy-MM-dd" />
 					             <fmt:formatDate value="${theCDate}" pattern="dd-MM-YYYY"/></td> 
 					             <td><p class="long-letters">${cnsltLst.visit_reason}</p></td> 

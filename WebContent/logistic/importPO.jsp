@@ -420,7 +420,7 @@ $(function(){
  	                        $(api.column(colIdx).header()).index()
  	                    );
  	                    var title = $(cell).text();
- 	                   if (colIdx === 7) return;
+ 	                   if (colIdx === 6) return;
 
  	                    $(cell).html('<input type="text" placeholder="' + title + '" />');
  	 
@@ -661,8 +661,7 @@ function updateLogsticAction(id,button){
 	    const rowId = $(button).closest('tr').attr('id');
 	    var lineNo = rowId.split('_').pop();
 	    console.log("Row ID:", rowId);
-	    alert(lineNo);
-
+	   
 	    // Define a helper function to retrieve values or inner text, logging errors if elements are not found
 	    function getElementValueOrInnerText(elementId, isText = false) {
 	        var element = document.getElementById(elementId);
@@ -681,8 +680,8 @@ function updateLogsticAction(id,button){
 	    var reference = getElementValueOrInnerText('lgRef' + id + '_' + lineNo, true);
 	    var poNo = document.getElementById('poNo'+id+'').innerHTML;
 	   // var poNo = getElementValueOrInnerText('poNo' + id + '_' + lineNo);
-	    var divnEmpCode = getElementValueOrInnerText('divUpdByVal' + id +'').innerHTML;	   
-	    var divnEmpname = getElementValueOrInnerText('divUpdByName' + id +'').innerHTML;
+	    var divnEmpCode = $.trim(document.getElementById('divUpdByVal'+id+'').value);  
+		var divnEmpname = $.trim(document.getElementById('divUpdByName'+id+'').value);  
 	    var shipDocStatus = getElementValueOrInnerText('lgShipDoc' + id + '_' + lineNo);
 	    var deliveryStatus = getElementValueOrInnerText('lgDeliveryStatus' + id + '_' + lineNo);
 	    var nominatedOn = getElementValueOrInnerText('nominatedOn' + id + '_' + lineNo);
@@ -693,6 +692,7 @@ function updateLogsticAction(id,button){
 	    var suplrName = getElementValueOrInnerText('suplr' + id + '_' + lineNo);
 	    var paymentTerms = getElementValueOrInnerText('paymentTerms' + id + '_' + lineNo);
 	    var shipmentTerm = getElementValueOrInnerText('shipmentTerm' + id + '_' + lineNo);	
+
 	if(currencyType == null || currencyType == ''){
 		alert(" Please select Currency");		
 		return false;

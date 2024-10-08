@@ -15,6 +15,7 @@ import beans.MktSalesLeads;
 import beans.MktSupportRequest;
 import beans.MysqlDBConnectionPool;
 import beans.OrclDBConnectionPool;
+import beans.fjtcouser;
 
 public class MktSupportRequestDbUtil {
 
@@ -86,6 +87,7 @@ public class MktSupportRequestDbUtil {
 
 			// Process the result set
 			while (myRes.next()) {
+				String mktAcceptBy = "";
 				String mktid = myRes.getString(1);
 				String type_temp = myRes.getString(2);
 				String divn_temp = myRes.getString(3);
@@ -103,6 +105,9 @@ public class MktSupportRequestDbUtil {
 				String mktAccptRemarkss_temp = myRes.getString(14);
 				String mktAccptStatus_temp = myRes.getString(15);
 				String mktAcceptBy_temp = myRes.getString(16);
+				if (mktAcceptBy_temp != null) {
+					mktAcceptBy = new fjtcouser().getEmpNameByUid(mktAcceptBy_temp);
+				}
 				String mktAcceptOn_temp = myRes.getString(17);
 
 				String mktRemark_temp = myRes.getString(18);
@@ -116,7 +121,7 @@ public class MktSupportRequestDbUtil {
 				MktSupportRequest tempRequestList = new MktSupportRequest(mktid, type_temp, divn_temp, product_temp,
 						consultant_temp, contact_temp, offerVal_temp, projectDtls_tmp, initialSeRemarks_tmp,
 						seempCode_temp, seempName_temp, requestedOn_temp, requestedStatus_temp, mktAccptRemarkss_temp,
-						mktAccptStatus_temp, mktAcceptBy_temp, mktAcceptOn_temp, mktRemark_temp, mktfolloupBy_temp,
+						mktAccptStatus_temp, mktAcceptBy, mktAcceptOn_temp, mktRemark_temp, mktfolloupBy_temp,
 						mktActedOn_temp, mktfpStatus_temp, seRemarks_tmp, se_folloupOn_temp, se_folloupStatus_temp);
 				requestList.add(tempRequestList);
 
@@ -155,6 +160,7 @@ public class MktSupportRequestDbUtil {
 
 			// Process the result set
 			while (myRes.next()) {
+				String mktAcceptBy = "";
 				String mktid = myRes.getString(1);
 				String type_temp = myRes.getString(2);
 				String divn_temp = myRes.getString(3);
@@ -173,6 +179,9 @@ public class MktSupportRequestDbUtil {
 				String mktAccptStatus_temp = myRes.getString(15);
 				String mktAcceptBy_temp = myRes.getString(16);
 				String mktAcceptOn_temp = myRes.getString(17);
+				if (mktAcceptBy_temp != null) {
+					mktAcceptBy = new fjtcouser().getEmpNameByUid(mktAcceptBy_temp);
+				}
 
 				String mktRemark_temp = myRes.getString(18);
 				String mktfolloupBy_temp = myRes.getString(19);
@@ -186,7 +195,7 @@ public class MktSupportRequestDbUtil {
 				MktSupportRequest tempRequestList = new MktSupportRequest(mktid, type_temp, divn_temp, product_temp,
 						consultant_temp, contact_temp, offerVal_temp, projectDtls_tmp, initialSeRemarks_tmp,
 						seempCode_temp, seempName_temp, requestedOn_temp, requestedStatus_temp, mktAccptRemarkss_temp,
-						mktAccptStatus_temp, mktAcceptBy_temp, mktAcceptOn_temp, mktRemark_temp, mktfolloupBy_temp,
+						mktAccptStatus_temp, mktAcceptBy, mktAcceptOn_temp, mktRemark_temp, mktfolloupBy_temp,
 						mktActedOn_temp, mktfpStatus_temp, seRemarks_tmp, se_folloupOn_temp, se_folloupStatus_temp);
 				requestList.add(tempRequestList);
 
@@ -227,6 +236,7 @@ public class MktSupportRequestDbUtil {
 
 			// Process the result set
 			while (myRes.next()) {
+				String mktAcceptBy = "";
 				String mktid = myRes.getString(1);
 				String type_temp = myRes.getString(2);
 				String divn_temp = myRes.getString(3);
@@ -245,7 +255,9 @@ public class MktSupportRequestDbUtil {
 				String mktAccptStatus_temp = myRes.getString(15);
 				String mktAcceptBy_temp = myRes.getString(16);
 				String mktAcceptOn_temp = myRes.getString(17);
-
+				if (mktAcceptBy_temp != null) {
+					mktAcceptBy = new fjtcouser().getEmpNameByUid(mktAcceptBy_temp);
+				}
 				String mktRemark_temp = myRes.getString(18);
 				String mktfolloupBy_temp = myRes.getString(19);
 				String mktActedOn_temp = myRes.getString(20);
@@ -258,7 +270,7 @@ public class MktSupportRequestDbUtil {
 				MktSupportRequest tempRequestList = new MktSupportRequest(mktid, type_temp, divn_temp, product_temp,
 						consultant_temp, contact_temp, offerVal_temp, projectDtls_tmp, initialSeRemarks_tmp,
 						seempCode_temp, seempName_temp, requestedOn_temp, requestedStatus_temp, mktAccptRemarkss_temp,
-						mktAccptStatus_temp, mktAcceptBy_temp, mktAcceptOn_temp, mktRemark_temp, mktfolloupBy_temp,
+						mktAccptStatus_temp, mktAcceptBy, mktAcceptOn_temp, mktRemark_temp, mktfolloupBy_temp,
 						mktActedOn_temp, mktfpStatus_temp, seRemarks_tmp, se_folloupOn_temp, se_folloupStatus_temp);
 				requestList.add(tempRequestList);
 			}

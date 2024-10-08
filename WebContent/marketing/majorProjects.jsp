@@ -268,7 +268,7 @@ color:#008ac1;
 		                         <th>Main Contact</th>
 		                         <th>Division</th>	
 		                         <th>Client</th> 	                         
-		                         <th>Main Contractor</th>
+		                         <th>Consultant</th>
 		                         <th>MEP Contractor</th>
 		                         <th>Remarks</th>		                         
 		                         <th>Status</th>
@@ -409,7 +409,7 @@ color:#008ac1;
 		                  <input type="text" class="form-control"  id="mktOpportunity" placeholder="Enter Opportunity " name="mktOpportunity" value="${mktLst.opt}">		             
 		                </div>           
 		                <div class="form-group">
-		                  <label for="mktContact">Main Contact Details</label>
+		                  <label for="mktContact">Contact Details of Main Contact</label>
 		                  <input type="text" class="form-control" id="mktContact" placeholder="Enter Contact Details" name="mktContact" value="${mktLst.contactDtls}">
 		                </div>
 		                <div class="form-group">
@@ -418,8 +418,8 @@ color:#008ac1;
 		                </div>
                            
 		                 <div class="form-group">
-		                  <label for="mktLocation">Main Contractor</label>  
-		                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Main Contractor Details" name="mktMainCont" value="${mktLst.mainContractor}">
+		                  <label for="mktLocation">Consultant</label>  
+		                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Consultant Details" name="mktMainCont" value="${mktLst.mainContractor}">
 		                </div>
 		               
 		                  <div class="form-group">
@@ -525,7 +525,7 @@ color:#008ac1;
                   <input type="text" class="form-control"  id="mktOpportunity" placeholder="Enter Major Projects Name " name="mktOpportunity" required>
                 </div>          
                 <div class="form-group">
-                  <label for="mktContact">Main Contact Details<span>*</span></label>
+                  <label for="mktContact">Contact Details of Main Contact<span>*</span></label>
                   <input type="text" class="form-control" id="mktContact" placeholder="Enter Contact Details" name="mktContact" required>
                 </div>
                  
@@ -535,12 +535,14 @@ color:#008ac1;
                 </div>
                   
                  <div class="form-group">
-                  <label for="mktLocation">Main Contractor<span>*</span></label>  
-                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Main Contractor Details" name="mktMainCont" value="${mktLst.mainContractor}" required>
+                  <label for="mktLocation">Consultant<span>*</span></label>  
+                  <input type="text" class="form-control" id="mktMainCont" placeholder="Enter Consultant Details" name="mktMainCont" value="${mktLst.mainContractor}" required>
                 </div>
-                 
-                 <label for="clientInput">Remarks<span>*</span></label>
-                  <input type="text"  class="form-control" id="clientInput" name="mktRmrk" placeholder="Enter remarks name"  required/>
+                 <div class="form-group">
+                  <label for="mktLocation">MEP Contractor<span>*</span></label>  
+                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}" required>
+                </div>
+                
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
@@ -574,10 +576,8 @@ color:#008ac1;
                   <label for="mktLocation">Location<span>*</span></label>         
                   <input type="text" class="form-control" id="mktLocation" placeholder="Enter Location Details" name="mktLocation"  required>
                 </div>
-                <div class="form-group">
-                  <label for="mktLocation">MEP Contractor<span>*</span></label>  
-                  <input type="text" class="form-control" id="mktMepCont" placeholder="Enter  MEP Contractor Details" name="mktMepCont" value="${mktLst.mepContractor}" required>
-                </div>
+                 <label for="clientInput">Remarks<span>*</span></label>
+                  <input type="text"  class="form-control" id="clientInput" name="mktRmrk" placeholder="Enter remarks name"  required/>
                  <input type="hidden" value="${currWeek}" name="mktWeek" />
                 </div>
               </div>
