@@ -6,6 +6,9 @@ public class SalesmanPerformance {
 	private String smCode = null;
 	private String srNo = null;
 	private String perf_ttl = null;
+
+	private int value = 0;
+	private int smtYr = 0;
 	private String yrTot = null;
 	private String salesCode = null;
 	private String salesName = null;
@@ -18,6 +21,22 @@ public class SalesmanPerformance {
 	private String aging_4 = null;// 90-120
 	private String aging_5 = null;// 120-180
 	private String aging_6 = null;// >180
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
+
+	public int getSmtYr() {
+		return smtYr;
+	}
+
+	public void setSmtYr(int smtYr) {
+		this.smtYr = smtYr;
+	}
 
 	public String getSmCode() {
 		return smCode;
@@ -123,6 +142,15 @@ public class SalesmanPerformance {
 		this.aging_6 = aging_6;
 	}
 
+	public SalesmanPerformance(String smCode, String srNo, String perf_ttl, int value, int smtYr) {
+		super();
+		this.smCode = smCode;
+		this.srNo = srNo;
+		this.perf_ttl = perf_ttl;
+		this.value = value;
+		this.smtYr = smtYr;
+	}
+
 	public SalesmanPerformance(String smCode, String srNo, String perf_ttl, String yrTot) {
 		super();
 		this.smCode = smCode;
@@ -155,6 +183,12 @@ public class SalesmanPerformance {
 		this.aging_5 = aging_5;
 		this.aging_6 = aging_6;
 
+	}
+
+	@Override
+	public String toString() {
+		return "SalesmanPerformance{" + "smCode='" + smCode + '\'' + ", srNo='" + srNo + '\'' + ", perf_ttl='"
+				+ perf_ttl + '\'' + ", value=" + value + ", smtYr=" + smtYr + '}';
 	}
 
 }

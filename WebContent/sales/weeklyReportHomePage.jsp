@@ -152,7 +152,7 @@ table.dataTable thead th, table.dataTable thead td { padding: 6px 10px !importan
 	                 <li><a href="ProjectStatus"><i class="fa fa fa-bars"></i><span>Project Status</span></a></li> 
 	                <li><a href="homepage.jsp"><i class="fa fa-home"></i><span>HR Portal</span></a></li>
                </c:when>              
-               <c:otherwise>				
+               				
 
                </c:otherwise>               
               </c:choose>                            
@@ -229,7 +229,7 @@ var _method = "POST";
 </script>
 <!-- page script END -->
 </body>
-</c:when>
+
 <c:otherwise>
         <body onload="window.top.location.href='logout.jsp'">                     
         </body>  
